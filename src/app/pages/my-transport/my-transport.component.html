@@ -1,0 +1,105 @@
+<div class="clients-container">
+  <div class="header-section">
+    <h2>Registro de Transportes</h2>
+    <hr />
+    <button class="add-btn" (click)="openAddModal()">
+      <i class="fas fa-plus"></i> Añadir Transporte
+    </button>
+  </div>
+
+  <div class="table-container">
+    <table class="clients-table">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Clave</th>
+          <th>Nombre</th>
+          <th>Asientos</th>
+          <th>Chofer</th>
+          <th>Baño</th>
+          <th>Aire Acond.</th>
+          <th>Estado</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (transporte of transportes(); track transporte.id) {
+        <tr>
+          <td>{{ transporte.id }}</td>
+          <td>{{ transporte.clave }}</td>
+          <td>{{ transporte.nombre }}</td>
+          <td class="centered">{{ transporte.asientos }}</td>
+          <td>{{ transporte.chofer }}</td>
+          <td class="centered">{{ transporte.bano }}</td>
+          <td class="centered">{{ transporte.aire }}</td>
+          <td [class.rentado]="transporte.rentado === 'Sí'">{{ transporte.rentado }}</td>
+          <td class="actions">
+            <button class="edit-btn">Editar</button>
+            <button class="delete-btn">Eliminar</button>
+          </td>
+        </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+
+  @if (showModal) {
+  <div class="modal-overlay">
+    <div class="modal-content">
+      <h3>Agregar Nuevo Transporte</h3>
+      <form (submit)="addTransporte()">
+        <div class="form-group">
+          <label>Clave:</label>
+          <input [(ngModel)]="newTransporte.clave" name="clave" required placeholder="Ej: PM2025-09" />
+        </div>
+
+        <div class="form-group">
+          <label>Nombre del transporte:</label>
+          <input [(ngModel)]="newTransporte.nombre" name="nombre" required />
+        </div>
+
+        <div class="form-group">
+          <label>Número de asientos:</label>
+          <input type="number" [(ngModel)]="newTransporte.asientos" name="asientos" required min="1" />
+        </div>
+
+        <div class="form-group">
+          <label>Nombre del chofer:</label>
+          <input [(ngModel)]="newTransporte.chofer" name="chofer" required />
+        </div>
+
+        <div class="form-group">
+          <label>¿Tiene baño?</label>
+          <select [(ngModel)]="newTransporte.bano" name="bano">
+            <option value="Sí">Sí</option>
+            <option value="No">No</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>¿Tiene aire acondicionado?</label>
+          <select [(ngModel)]="newTransporte.aire" name="aire">
+            <option value="Sí">Sí</option>
+            <option value="No">No</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>¿Está rentado?</label>
+          <select [(ngModel)]="newTransporte.rentado" name="rentado">
+            <option value="No">No</option>
+            <option value="Sí">Sí</option>
+          </select>
+        </div>
+
+        <div class="modal-actions">
+          <button type="button" class="cancel-btn" (click)="closeModal()">
+            Cancelar
+          </button>
+          <button type="submit" class="save-btn">Guardar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+  }
+</div>

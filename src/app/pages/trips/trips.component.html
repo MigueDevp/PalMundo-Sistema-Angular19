@@ -1,0 +1,111 @@
+<div class="clients-container">
+  <div class="header-section">
+    <h2>Registro Global de Viajes</h2>
+    <hr />
+    <button class="add-btn" (click)="openAddModal()">
+      <i class="fas fa-plus"></i> Añadir Viaje
+    </button>
+  </div>
+
+  <div class="table-container">
+    <table class="clients-table">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Clave</th>
+          <th>Nombre del Viaje</th>
+          <th>Fecha/Hora Partida</th>
+          <th>Fecha/Hora Regreso</th>
+          <th>Último día para pagar</th>
+          <th>Anticipo</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (viaje of viajes(); track viaje.id) {
+        <tr>
+          <td>{{ viaje.id }}</td>
+          <td>{{ viaje.clave }}</td>
+          <td>{{ viaje.nombre }}</td>
+          <td>{{ formatFechaHora(viaje.fechaPartida) }}</td>
+          <td>{{ formatFechaHora(viaje.fechaRegreso) }}</td>
+          <td>{{ formatFecha(viaje.ultimoDiaPago) }}</td>
+          <td>${{ viaje.anticipo | number }}</td>
+          <td class="actions">
+            <button class="edit-btn">Editar</button>
+            <button class="delete-btn">Eliminar</button>
+          </td>
+        </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+
+  @if (showModal) {
+  <div class="modal-overlay">
+    <div class="modal-content">
+      <h3>Agregar Nuevo Viaje</h3>
+      <form (submit)="addViaje()">
+        <div class="form-group">
+          <label>Clave del viaje:</label>
+          <input [(ngModel)]="newViaje.clave" name="clave" required placeholder="Ej: QRO-MAZATLAN-2025" />
+        </div>
+
+        <div class="form-group">
+          <label>Nombre del viaje:</label>
+          <input [(ngModel)]="newViaje.nombre" name="nombre" required />
+        </div>
+
+        <div class="form-group">
+          <label>Fecha y hora de partida:</label>
+          <input
+            type="datetime-local"
+            [(ngModel)]="newViaje.fechaPartida"
+            name="fechaPartida"
+            required
+          />
+        </div>
+
+        <div class="form-group">
+          <label>Fecha y hora de regreso:</label>
+          <input
+            type="datetime-local"
+            [(ngModel)]="newViaje.fechaRegreso"
+            name="fechaRegreso"
+            required
+          />
+        </div>
+
+        <div class="form-group">
+          <label>Último día para pagar:</label>
+          <input
+            type="date"
+            [(ngModel)]="newViaje.ultimoDiaPago"
+            name="ultimoDiaPago"
+            required
+          />
+        </div>
+
+        <div class="form-group">
+          <label>Monto de anticipo ($):</label>
+          <input
+            type="number"
+            [(ngModel)]="newViaje.anticipo"
+            name="anticipo"
+            required
+            min="0"
+            step="100"
+          />
+        </div>
+
+        <div class="modal-actions">
+          <button type="button" class="cancel-btn" (click)="closeModal()">
+            Cancelar
+          </button>
+          <button type="submit" class="save-btn">Guardar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+  }
+</div>

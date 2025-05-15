@@ -1,0 +1,98 @@
+<div class="clients-container">
+  <div class="header-section">
+    <h2>Registro Global de Clientes</h2>
+    <hr />
+    <button class="add-btn" (click)="openAddModal()">
+      <i class="fas fa-plus"></i> Añadir Cliente
+    </button>
+  </div>
+
+  <div class="table-container">
+    <table class="clients-table">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Nombre</th>
+          <th>Edad</th>
+          <th>Dirección</th>
+          <th>Teléfono</th>
+          <th>Email</th>
+          <th>Sexo</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (client of clients(); track client.id) {
+        <tr>
+          <td>{{ client.id }}</td>
+          <td>{{ client.nombre }}</td>
+          <td>{{ client.edad }}</td>
+          <td>{{ client.direccion }}</td>
+          <td>{{ client.telefono }}</td>
+          <td>{{ client.email }}</td>
+          <td>{{ client.sexo }}</td>
+          <td class="actions">
+            <button class="edit-btn">Editar</button>
+            <button class="delete-btn">Eliminar</button>
+          </td>
+        </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+
+  @if (showModal) {
+  <div class="modal-overlay">
+    <div class="modal-content">
+      <h3>Agregar Nuevo Cliente</h3>
+      <form (submit)="addClient()">
+        <div class="form-group">
+          <label>Nombre completo:</label>
+          <input [(ngModel)]="newClient.nombre" name="nombre" required />
+        </div>
+
+        <div class="form-group">
+          <label>Fecha de nacimiento:</label>
+          <input
+            type="date"
+            [(ngModel)]="newClient.fechaNacimiento"
+            name="fechaNacimiento"
+            required
+          />
+        </div>
+
+        <div class="form-group">
+          <label>Dirección:</label>
+          <input [(ngModel)]="newClient.direccion" name="direccion" required />
+        </div>
+
+        <div class="form-group">
+          <label>Teléfono:</label>
+          <input [(ngModel)]="newClient.telefono" name="telefono" required />
+        </div>
+
+        <div class="form-group">
+          <label>Email:</label>
+          <input type="email" [(ngModel)]="newClient.email" name="email" />
+        </div>
+
+        <div class="form-group">
+          <label>Sexo:</label>
+          <select [(ngModel)]="newClient.sexo" name="sexo">
+            <option value="Masculino">Masculino</option>
+            <option value="Femenino">Femenino</option>
+            <option value="Otro">Otro</option>
+          </select>
+        </div>
+
+        <div class="modal-actions">
+          <button type="button" class="cancel-btn" (click)="closeModal()">
+            Cancelar
+          </button>
+          <button type="submit" class="save-btn">Guardar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+  }
+</div>
