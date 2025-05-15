@@ -81,10 +81,10 @@
     width: 100%;
     padding: 10px;
     background-color: transparent;
-    color: #ca160d;
-    border: 1px solid #ca160d;
+    color: #ffffff;
+    border: 1px solid #ffffff;
     border-radius: 5px;
-    font-size: 12px;
+    font-size: 14px;
     cursor: pointer;
     transition: all 0.3s;
     display: flex;
@@ -100,5 +100,9 @@
   
   .logout-btn i {
     font-size: 14px;
+  }
+
+  fa-icon {
+    margin-right: 10px;
   }
   

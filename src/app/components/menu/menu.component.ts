@@ -1,13 +1,29 @@
 import { Component } from '@angular/core';
-import { RouterLink, Router } from '@angular/router';
+import { RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { 
+  faHome, faUsers, faRoute, faListAlt, faCashRegister,
+  faBus, faBusAlt, faChartBar, faMoneyBillWave, faUserCog, faSignOutAlt 
+} from '@fortawesome/free-solid-svg-icons';
 
 @Component({
   selector: 'app-menu',
-  imports: [RouterLink, CommonModule],
+  standalone: true,
+  imports: [RouterLink, CommonModule, FontAwesomeModule],
   templateUrl: './menu.component.html',
-  styleUrl: './menu.component.css'
+  styleUrls: ['./menu.component.css']
 })
 export class MenuComponent {
-
+  faHome = faHome;
+  faUsers = faUsers;
+  faRoute = faRoute;
+  faListAlt = faListAlt;
+  faCashRegister = faCashRegister;
+  faBus = faBus;
+  faBusAlt = faBusAlt;
+  faChartBar = faChartBar;
+  faMoneyBillWave = faMoneyBillWave;
+  faUserCog = faUserCog;
+  faSignOutAlt = faSignOutAlt;
 }

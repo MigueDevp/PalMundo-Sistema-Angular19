@@ -1,68 +1,59 @@
 <nav class="sidebar">
   <div class="logo-container">
     <a routerLink="/home">
-      <img
-        class="company-logo"
-        src="icon-image-modified.png"
-        alt="PAL MUNDO LOGO"
-      />
+      <img class="company-logo" src="icon-image-modified.png" alt="PAL MUNDO LOGO">
     </a>
   </div>
-  <div class="menu-content">
-    <ul class="nav flex-column">
+  
+  <div class="menu-scroll">
+    <div class="menu-content">
+      <ul class="nav flex-column">
         <li class="nav-item">
-            <a class="nav-link" routerLink="/inicio"
-              ><i class="fas fa-bullhorn"></i> Inicio</a
-            >
-          </li>
-      <li class="nav-item">
-        <a class="nav-link" routerLink="/clients"
-          ><i class="fas fa-home"></i> Clientes</a
-        >
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" routerLink="/trips"
-          ><i class="fas fa-bullhorn"></i> Viajes</a
-        >
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" routerLink="/trip-catalog"
-          ><i class="fas fa-address-book"></i> Catalogo de Viajes</a
-        >
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" routerLink="/sales"
-          ><i class="fas fa-envelope"></i> Ventas</a
-        >
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" routerLink="/transport"
-          ><i class="fas fa-file-alt"></i> Transportes</a
-        >
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" routerLink="/reports"
-          ><i class="fas fa-calendar-alt"></i> Reportes</a
-        >
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" routerLink="/my-transport"
-          ><i class="fas fa-file-alt"></i> Mis Transportes</a
-        >
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" routerLink="/payments"
-          ><i class="fas fa-envelope"></i> Pagos</a
-        >
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" routerLink="/administration"
-          ><i class="fas fa-envelope"></i> Administración</a
-        >
-      </li>
-    </ul>
+          <a class="nav-link" routerLink="/inicio">
+ <fa-icon [icon]="faHome"></fa-icon> Inicio          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" routerLink="/clients">
+ <fa-icon [icon]="faUsers"></fa-icon> Clientes          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" routerLink="/trips">
+ <fa-icon [icon]="faRoute"></fa-icon> Viajes          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" routerLink="/trip-catalog">
+ <fa-icon [icon]="faListAlt"></fa-icon> Catálogo de Viajes          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" routerLink="/sales">
+ <fa-icon [icon]="faCashRegister"></fa-icon> Ventas          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" routerLink="/transport">
+ <fa-icon [icon]="faBus"></fa-icon> Transporte          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" routerLink="/reports">
+ <fa-icon [icon]="faChartBar"></fa-icon> Reportes          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" routerLink="/my-transport">
+ <fa-icon [icon]="faBusAlt"></fa-icon> Mi Transporte         
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" routerLink="/payments">
+             <fa-icon [icon]="faMoneyBillWave"></fa-icon> Pagos
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" routerLink="/administration">
+             <fa-icon [icon]="faUserCog"></fa-icon> Administración
+          </a>
+        </li>
+      </ul>
+    </div>
   </div>
-  <div class="spacer"></div> 
 
   <div class="logout-section">
     <button type="button" class="logout-btn">
