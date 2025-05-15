@@ -1,1 +1,120 @@
-<p>transport works!</p>
+<div class="clients-container">
+  <div class="header-section">
+    <h2>Transportes Asignados a Viajes</h2>
+    <hr />
+    <button class="add-btn" (click)="openAddModal()">
+      <fa-icon [icon]="faPlus"></fa-icon> Asignar Transporte
+    </button>
+  </div>
+
+  <div class="table-container">
+    <table class="clients-table">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Nombre del Viaje</th>
+          <th>Punto de Salida</th>
+          <th>Fecha Salida</th>
+          <th>Fecha Regreso</th>
+          <th>Transporte</th>
+          <th>Conductor</th>
+          <th>Hora Salida</th>
+          <th>Hora Regreso</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (tv of transportesViaje(); track tv.id) {
+        <tr>
+          <td>{{ tv.id }}</td>
+          <td>{{ tv.nombreViaje }}</td>
+          <td>{{ tv.puntoSalida }}</td>
+          <td>{{ tv.fechaSalida }}</td>
+          <td>{{ tv.fechaRegreso }}</td>
+          <td>{{ tv.transporteElegido }}</td>
+          <td>{{ tv.conductor }}</td>
+          <td>{{ tv.horaSalida }}</td>
+          <td>{{ tv.horaRegreso }}</td>
+          <td>
+            <button class="edit-btn">Editar</button>
+            <button class="delete-btn">Eliminar</button>
+          </td>
+        </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+
+  @if (showModal) {
+  <div class="modal-overlay">
+    <div class="modal-content">
+      <h3>Asignar Transporte a Viaje</h3>
+      <form (submit)="addTransporteViaje()">
+        <div class="form-group">
+          <label>Nombre del Viaje:</label>
+          <input [(ngModel)]="newTransporteViaje.nombreViaje" name="nombreViaje" required />
+        </div>
+
+        <div class="form-group">
+          <label>Punto de Salida:</label>
+          <select [(ngModel)]="newTransporteViaje.puntoSalida" name="puntoSalida" required>
+            <option value="">Seleccionar...</option>
+            @for (punto of puntosSalida; track punto) {
+              <option [value]="punto">{{ punto }}</option>
+            }
+          </select>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label>Fecha de Salida:</label>
+            <input type="date" [(ngModel)]="newTransporteViaje.fechaSalida" name="fechaSalida" required />
+          </div>
+          <div class="form-group">
+            <label>Hora de Salida:</label>
+            <input type="time" [(ngModel)]="newTransporteViaje.horaSalida" name="horaSalida" required />
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label>Fecha de Regreso:</label>
+            <input type="date" [(ngModel)]="newTransporteViaje.fechaRegreso" name="fechaRegreso" required />
+          </div>
+          <div class="form-group">
+            <label>Hora de Regreso:</label>
+            <input type="time" [(ngModel)]="newTransporteViaje.horaRegreso" name="horaRegreso" required />
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>Transporte:</label>
+          <select [(ngModel)]="newTransporteViaje.transporteElegido" name="transporteElegido" required>
+            <option value="">Seleccionar...</option>
+            @for (transporte of transportesDisponibles; track transporte) {
+              <option [value]="transporte">{{ transporte }}</option>
+            }
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>Conductor:</label>
+          <select [(ngModel)]="newTransporteViaje.conductor" name="conductor" required>
+            <option value="">Seleccionar...</option>
+            @for (conductor of conductoresDisponibles; track conductor) {
+              <option [value]="conductor">{{ conductor }}</option>
+            }
+          </select>
+        </div>
+
+        <div class="modal-actions">
+          <button type="button" class="cancel-btn" (click)="closeModal()">
+            Cancelar
+          </button>
+          <button type="submit" class="save-btn">Guardar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+  }
+</div>
