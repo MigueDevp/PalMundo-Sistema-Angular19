@@ -1,10 +1,11 @@
 import { Component, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { ButtonAddComponent } from '../../components/button-add/button-add.component';
 
 @Component({
   selector: 'app-my-transport',
-  imports: [FormsModule, CommonModule],
+  imports: [FormsModule, CommonModule, ButtonAddComponent],
   templateUrl: './my-transport.component.html',
   styleUrl: './my-transport.component.css'
 })

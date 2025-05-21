@@ -1,10 +1,11 @@
 import { Component, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { ButtonAddComponent } from '../../components/button-add/button-add.component';
 
 @Component({
   selector: 'app-trips',
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, ButtonAddComponent],
   templateUrl: './trips.component.html',
   styleUrl: './trips.component.css'
 })
