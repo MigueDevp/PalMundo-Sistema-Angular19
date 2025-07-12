@@ -16,6 +16,7 @@
           <th>Fecha/Hora Regreso</th>
           <th>Último día para pagar</th>
           <th>Anticipo</th>
+          <th>Precio Adulto</th>
           <th>Acciones</th>
         </tr>
       </thead>
@@ -29,7 +30,9 @@
           <td>{{ formatFechaHora(viaje.fechaRegreso) }}</td>
           <td>{{ formatFecha(viaje.ultimoDiaPago) }}</td>
           <td>${{ viaje.anticipo | number }}</td>
+          <td>${{ viaje.precioAdulto | number }}</td>
           <td class="actions">
+            <button class="view-btn" (click)="openDetailModal(viaje)">Ver</button>
             <button class="edit-btn">Editar</button>
             <button class="delete-btn">Eliminar</button>
           </td>
@@ -43,66 +46,285 @@
   <div class="modal-overlay">
     <div class="modal-content">
       <h3>Agregar Nuevo Viaje</h3>
+      <button class="close-modal-btn" (click)="closeModal()">×</button>
+
+      <!-- Pestañas -->
+      <div class="modal-tabs">
+        <button
+          [class.active]="activeTab === 'general'"
+          (click)="activeTab = 'general'"
+        >
+          General
+        </button>
+        <button
+          [class.active]="activeTab === 'precios'"
+          (click)="activeTab = 'precios'"
+        >
+          Precios
+        </button>
+        <button
+          [class.active]="activeTab === 'detalles'"
+          (click)="activeTab = 'detalles'"
+        >
+          Detalles
+        </button>
+      </div>
+
       <form (submit)="addViaje()">
-        <div class="form-group">
-          <label>Clave del viaje:</label>
-          <input [(ngModel)]="newViaje.clave" name="clave" required placeholder="Ej: QRO-MAZATLAN-2025" />
+        <!-- Pestaña General -->
+        <div *ngIf="activeTab === 'general'" class="tab-content">
+          <div class="form-group">
+            <label>Clave del viaje:</label>
+            <input
+              [(ngModel)]="newViaje.clave"
+              name="clave"
+              required
+              placeholder="Ej: QRO-MAZATLAN-2025"
+            />
+          </div>
+
+          <div class="form-group">
+            <label>Nombre del viaje:</label>
+            <input [(ngModel)]="newViaje.nombre" name="nombre" required />
+          </div>
+
+          <div class="form-group">
+            <label>Fecha y hora de partida:</label>
+            <input
+              type="datetime-local"
+              [(ngModel)]="newViaje.fechaPartida"
+              name="fechaPartida"
+              required
+            />
+          </div>
+
+          <div class="form-group">
+            <label>Fecha y hora de regreso:</label>
+            <input
+              type="datetime-local"
+              [(ngModel)]="newViaje.fechaRegreso"
+              name="fechaRegreso"
+              required
+            />
+          </div>
+
+          <div class="form-group">
+            <label>Último día para pagar:</label>
+            <input
+              type="date"
+              [(ngModel)]="newViaje.ultimoDiaPago"
+              name="ultimoDiaPago"
+              required
+            />
+          </div>
+
+          <div class="form-group">
+            <label>Monto de anticipo ($):</label>
+            <input
+              type="number"
+              [(ngModel)]="newViaje.anticipo"
+              name="anticipo"
+              required
+              min="0"
+              step="100"
+            />
+          </div>
         </div>
 
-        <div class="form-group">
-          <label>Nombre del viaje:</label>
-          <input [(ngModel)]="newViaje.nombre" name="nombre" required />
+        <!-- Pestaña Precios -->
+        <div *ngIf="activeTab === 'precios'" class="tab-content">
+          <div class="form-group">
+            <label>Precio adulto (13+ años):</label>
+            <input
+              type="number"
+              [(ngModel)]="newViaje.precioAdulto"
+              name="precioAdulto"
+              required
+              min="0"
+            />
+          </div>
+
+          <div class="form-group">
+            <label>Precio menor (6-12 años):</label>
+            <input
+              type="number"
+              [(ngModel)]="newViaje.precioMenor"
+              name="precioMenor"
+              required
+              min="0"
+            />
+          </div>
+
+          <div class="form-group">
+            <label>Precio infante (0-5 años):</label>
+            <input
+              type="number"
+              [(ngModel)]="newViaje.precioInfante"
+              name="precioInfante"
+              required
+              min="0"
+            />
+          </div>
         </div>
 
-        <div class="form-group">
-          <label>Fecha y hora de partida:</label>
-          <input
-            type="datetime-local"
-            [(ngModel)]="newViaje.fechaPartida"
-            name="fechaPartida"
-            required
-          />
-        </div>
+        <!-- Pestaña Detalles -->
+        <div *ngIf="activeTab === 'detalles'" class="tab-content">
+          <div class="form-group">
+            <label>Incluye (separar por comas):</label>
+            <textarea
+              [(ngModel)]="incluyeTemporal"
+              name="incluye"
+              placeholder="Autobús, Hospedaje, Seguro..."
+            ></textarea>
+          </div>
 
-        <div class="form-group">
-          <label>Fecha y hora de regreso:</label>
-          <input
-            type="datetime-local"
-            [(ngModel)]="newViaje.fechaRegreso"
-            name="fechaRegreso"
-            required
-          />
-        </div>
+          <div class="form-group">
+            <label>No incluye (separar por comas):</label>
+            <textarea
+              [(ngModel)]="noIncluyeTemporal"
+              name="noIncluye"
+              placeholder="Comidas, Propinas, Entradas..."
+            ></textarea>
+          </div>
 
-        <div class="form-group">
-          <label>Último día para pagar:</label>
-          <input
-            type="date"
-            [(ngModel)]="newViaje.ultimoDiaPago"
-            name="ultimoDiaPago"
-            required
-          />
-        </div>
-
-        <div class="form-group">
-          <label>Monto de anticipo ($):</label>
-          <input
-            type="number"
-            [(ngModel)]="newViaje.anticipo"
-            name="anticipo"
-            required
-            min="0"
-            step="100"
-          />
+          <div class="form-group">
+            <label>Puntos de salida (separar por saltos de línea):</label>
+            <textarea
+              [(ngModel)]="puntosSalidaTemporal"
+              name="puntosSalida"
+              rows="3"
+            ></textarea>
+          </div>
         </div>
 
         <div class="modal-actions">
           <button type="button" class="cancel-btn" (click)="closeModal()">
             Cancelar
           </button>
+          @if (activeTab !== 'detalles') {
+          <button type="button" class="next-btn" (click)="nextTab()">
+            Siguiente
+          </button>
+          } @if (activeTab === 'detalles') {
           <button type="submit" class="save-btn">Guardar</button>
+          }
         </div>
       </form>
+    </div>
+  </div>
+  }
+
+  @if (showDetailModal && selectedViaje) {
+  <div class="modal-overlay">
+    <div class="modal-content detail-modal">
+      <h3>Detalles completos del viaje: {{selectedViaje.nombre}}</h3>
+      <button class="close-modal-btn" (click)="closeDetailModal()">×</button>
+      
+      <div class="detail-section">
+        <h4>Información básica</h4>
+        <div class="detail-row">
+          <span class="detail-label">ID:</span>
+          <span>{{ selectedViaje.id }}</span>
+        </div>
+        <div class="detail-row">
+          <span class="detail-label">Clave:</span>
+          <span>{{ selectedViaje.clave }}</span>
+        </div>
+        <div class="detail-row">
+          <span class="detail-label">Nombre:</span>
+          <span>{{ selectedViaje.nombre }}</span>
+        </div>
+        <div class="detail-row">
+          <span class="detail-label">Fecha/Hora Partida:</span>
+          <span>{{ formatFechaHora(selectedViaje.fechaPartida) }}</span>
+        </div>
+        <div class="detail-row">
+          <span class="detail-label">Fecha/Hora Regreso:</span>
+          <span>{{ formatFechaHora(selectedViaje.fechaRegreso) }}</span>
+        </div>
+        <div class="detail-row">
+          <span class="detail-label">Último día para pagar:</span>
+          <span>{{ formatFecha(selectedViaje.ultimoDiaPago) }}</span>
+        </div>
+      </div>
+
+      <div class="detail-section">
+        <h4>Precios</h4>
+        <div class="detail-row">
+          <span class="detail-label">Anticipo:</span>
+          <span>${{ selectedViaje.anticipo | number }}</span>
+        </div>
+        <div class="detail-row">
+          <span class="detail-label">Precio Adulto:</span>
+          <span>${{ selectedViaje.precioAdulto | number }}</span>
+        </div>
+        <div class="detail-row">
+          <span class="detail-label">Precio Menor:</span>
+          <span>${{ selectedViaje.precioMenor | number }}</span>
+        </div>
+        <div class="detail-row">
+          <span class="detail-label">Precio Infante:</span>
+          <span>${{ selectedViaje.precioInfante | number }}</span>
+        </div>
+      </div>
+
+      <div class="detail-section">
+        <h4>Servicios incluidos</h4>
+        <ul>
+          @for (item of selectedViaje.incluye; track $index) {
+          <li>{{ item }}</li>
+          }
+        </ul>
+      </div>
+
+      <div class="detail-section">
+        <h4>Servicios no incluidos</h4>
+        <ul>
+          @for (item of selectedViaje.noIncluye; track $index) {
+          <li>{{ item }}</li>
+          }
+        </ul>
+      </div>
+
+      <div class="detail-section">
+        <h4>Itinerario</h4>
+        @for (dia of selectedViaje.itinerario; track dia.dia) {
+        <div class="itinerary-day">
+          <strong>Día {{ dia.dia }}: {{ dia.titulo }}</strong>
+          <p>{{ dia.descripcion }}</p>
+        </div>
+        }
+      </div>
+
+      <div class="detail-section">
+        <h4>Información adicional</h4>
+        <div class="detail-subsection">
+          <h5>Puntos de salida</h5>
+          <ul>
+            @for (punto of selectedViaje.informacionAdicional.puntosSalida; track $index) {
+            <li>{{ punto }}</li>
+            }
+          </ul>
+        </div>
+        
+        <div class="detail-subsection">
+          <h5>Formas de pago</h5>
+          <ul>
+            @for (forma of selectedViaje.informacionAdicional.formasPago; track $index) {
+            <li>{{ forma }}</li>
+            }
+          </ul>
+        </div>
+        
+        <div class="detail-subsection">
+          <h5>Políticas</h5>
+          <p>{{ selectedViaje.informacionAdicional.politicas }}</p>
+        </div>
+      </div>
+
+      <div class="modal-actions">
+        <button type="button" class="cancel-btn" (click)="closeDetailModal()">Cerrar</button>
+      </div>
     </div>
   </div>
   }
