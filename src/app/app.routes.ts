@@ -9,6 +9,7 @@ import { TransportComponent } from './pages/transport/transport.component';
 import { TripCatalogComponent } from './pages/trip-catalog/trip-catalog.component';
 import { TripsComponent } from './pages/trips/trips.component';
 import { HomeComponent } from './pages/home/home.component';
+import { ContractServiceComponent } from './pages/trip-catalog/contract-service/contract-service.component';
 
 export const routes: Routes = [
   {
@@ -51,6 +52,10 @@ export const routes: Routes = [
   {
     path: 'trips',
     component: TripsComponent,
+  },
+  {
+    path: 'contract-service',
+    component: ContractServiceComponent,
   },
   {
     path: '**',

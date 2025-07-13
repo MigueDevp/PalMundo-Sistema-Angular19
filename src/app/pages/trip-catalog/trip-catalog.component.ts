@@ -1,17 +1,18 @@
 import { Component } from '@angular/core';
-import { Router } from '@angular/router';
-import { NgModule } from '@angular/core';
+import { Router, ActivatedRoute } from '@angular/router';
 import { CommonModule } from '@angular/common';
+import { RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
+
 @Component({
   selector: 'app-trip-catalog',
-  imports: [CommonModule, FormsModule],
+  standalone: true,
+  imports: [CommonModule, FormsModule, RouterModule],
   templateUrl: './trip-catalog.component.html',
-  styleUrl: './trip-catalog.component.css'
+  styleUrls: ['./trip-catalog.component.css']
 })
-
 export class TripCatalogComponent {
- searchTerm: string = '';
+  searchTerm: string = '';
   priceFilter: string = '';
   
   // Usamos los mismos datos que en tu lista de viajes
@@ -127,18 +128,20 @@ export class TripCatalogComponent {
     anticipo: 5800
   }
 ];
+  
 
   filteredViajes = [...this.viajes];
 
-  constructor(private router: Router) {}
+  constructor(
+    private router: Router,
+    private route: ActivatedRoute
+  ) {}
 
   filterViajes() {
     this.filteredViajes = this.viajes.filter(viaje => {
-      // Filtro por búsqueda
       const matchesSearch = viaje.nombre.toLowerCase().includes(this.searchTerm.toLowerCase()) || 
                           viaje.clave.toLowerCase().includes(this.searchTerm.toLowerCase());
       
-      // Filtro por precio
       let matchesPrice = true;
       switch(this.priceFilter) {
         case 'low': matchesPrice = viaje.anticipo < 5000; break;
@@ -151,17 +154,15 @@ export class TripCatalogComponent {
   }
 
   formatFechaHora(fecha: string): string {
-    // Implementa tu formato de fecha existente
     return new Date(fecha).toLocaleString();
   }
 
   formatFecha(fecha: string): string {
-    // Implementa tu formato de fecha existente
     return new Date(fecha).toLocaleDateString();
   }
 
   selectViaje(viaje: any) {
-    // Navega a la página de reserva o detalles
-    this.router.navigate(['/reserva', viaje.id]);
-  }
+  // Navegación relativa al path actual (trip-catalog)
+  this.router.navigate(['contract', viaje.id], { relativeTo: this.route });
+}
 }

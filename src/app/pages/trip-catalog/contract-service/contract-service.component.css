@@ -1,0 +1,395 @@
+/* Contenedor principal */
+.contract-container {
+  padding: 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+  min-height: 100vh;
+}
+
+.contract-title {
+  text-align: center;
+  color: #2c3e50;
+  margin-bottom: 30px;
+  font-size: 1.8rem;
+}
+
+/* Contenedor del contenido (viaje + formulario) */
+.contract-content {
+  display: flex;
+  gap: 30px;
+  height: calc(100% - 100px);
+}
+
+/* Sección del viaje (izquierda) */
+.travel-section {
+  flex: 1;
+  min-width: 400px;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Card del viaje - versión extendida */
+.travel-card {
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  padding: 25px;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.card-header h3 {
+  margin: 0;
+  color: #2c3e50;
+  font-size: 1.4rem;
+}
+
+.travel-code {
+  background: #e74c3c;
+  color: white;
+  padding: 5px 10px;
+  border-radius: 4px;
+  font-size: 0.9rem;
+}
+
+.card-dates {
+  margin-bottom: 20px;
+}
+
+.date-group {
+  margin-bottom: 12px;
+}
+
+.date-label {
+  font-weight: bold;
+  color: #7f8c8d;
+  font-size: 0.95rem;
+}
+
+.date-value {
+  color: #2c3e50;
+  font-size: 1rem;
+}
+
+.card-payment {
+  margin: 20px 0;
+}
+
+.advance-payment, .payment-deadline {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+.amount {
+  font-weight: bold;
+  color: #27ae60;
+  font-size: 1.1rem;
+}
+
+/* Detalles completos del viaje */
+.full-details {
+  margin-top: 25px;
+  padding-top: 20px;
+  border-top: 1px solid #eee;
+  flex-grow: 1;
+  overflow-y: auto;
+}
+
+.full-details h4 {
+  color: #2c3e50;
+  margin-bottom: 15px;
+  font-size: 1.2rem;
+}
+
+.detail-item {
+  margin-bottom: 15px;
+  display: flex;
+}
+
+.detail-label {
+  font-weight: bold;
+  color: #7f8c8d;
+  width: 45%;
+  font-size: 0.95rem;
+}
+
+.detail-value {
+  width: 55%;
+  color: #2c3e50;
+  font-size: 0.95rem;
+}
+
+.details-btn {
+  width: 100%;
+  padding: 12px;
+  background: #3498db;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.3s;
+  margin-top: 20px;
+  font-size: 1rem;
+}
+
+.details-btn:hover {
+  background: #2980b9;
+}
+
+/* Sección del formulario (derecha) */
+.client-form-section {
+  flex: 1.5;
+  min-width: 500px;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.client-form-container {
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  padding: 25px;
+  height: 100%;
+  overflow-y: auto;
+}
+
+.form-title {
+  color: #2c3e50;
+  margin-top: 0;
+  padding-bottom: 15px;
+  border-bottom: 1px solid #ecf0f1;
+  font-size: 1.3rem;
+}
+
+.client-search {
+  margin-bottom: 20px;
+}
+
+.search-container {
+  display: flex;
+  margin-bottom: 10px;
+}
+
+.search-container input {
+  flex: 1;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 4px 0 0 4px;
+}
+
+.search-btn {
+  padding: 10px 15px;
+  background: #3498db;
+  color: white;
+  border: none;
+  border-radius: 0 4px 4px 0;
+  cursor: pointer;
+}
+
+.search-btn:hover {
+  background: #2980b9;
+}
+
+.search-results {
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  max-height: 200px;
+  overflow-y: auto;
+  margin-bottom: 10px;
+}
+
+.result-item {
+  padding: 10px;
+  cursor: pointer;
+  border-bottom: 1px solid #eee;
+}
+
+.result-item:hover {
+  background: #f5f5f5;
+}
+
+.new-client-toggle {
+  margin-bottom: 20px;
+}
+
+.new-client-toggle label {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+}
+
+.new-client-toggle input {
+  margin-right: 8px;
+}
+
+.client-form {
+  background: white;
+  padding: 20px;
+  border-radius: 8px;
+}
+
+.form-group {
+  margin-bottom: 15px;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 5px;
+  color: #7f8c8d;
+  font-size: 0.9rem;
+}
+
+.form-group input, 
+.form-group select {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.form-row {
+  display: flex;
+  gap: 15px;
+}
+
+.form-row .form-group {
+  flex: 1;
+}
+
+.age-display {
+  display: block;
+  font-size: 0.8rem;
+  color: #7f8c8d;
+  margin-top: 5px;
+}
+
+.companions-section {
+  margin-top: 30px;
+  background: white;
+  padding: 20px;
+  border-radius: 8px;
+}
+
+.companions-section h3 {
+  margin-top: 0;
+  color: #2c3e50;
+}
+
+.add-companion-btn {
+  background: #2ecc71;
+  color: white;
+  border: none;
+  padding: 8px 15px;
+  border-radius: 4px;
+  cursor: pointer;
+  margin-bottom: 15px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.add-companion-btn:hover {
+  background: #27ae60;
+}
+
+.companion-list {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.companion-item {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  padding: 15px;
+  background: #f9f9f9;
+  border-radius: 4px;
+}
+
+.companion-form {
+  flex: 1;
+  display: flex;
+  gap: 15px;
+}
+
+.companion-form .form-group {
+  margin-bottom: 0;
+}
+
+.remove-companion-btn {
+  background: #e74c3c;
+  color: white;
+  border: none;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.remove-companion-btn:hover {
+  background: #c0392b;
+}
+
+.generate-contract {
+  margin-top: 30px;
+  text-align: center;
+}
+
+.generate-btn {
+  background: #e67e22;
+  color: white;
+  border: none;
+  padding: 12px 25px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: background 0.3s;
+}
+
+.generate-btn:hover {
+  background: #d35400;
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+  .contract-content {
+    flex-direction: column;
+    height: auto;
+  }
+  
+  .travel-section, .client-form-section {
+    min-width: 100%;
+    height: auto;
+  }
+  
+  .travel-card, .client-form-container {
+    height: auto;
+  }
+}
+
+@media (max-width: 768px) {
+  .form-row {
+    flex-direction: column;
+    gap: 0;
+  }
+  
+  .companion-form {
+    flex-direction: column;
+    gap: 0;
+  }
+}
