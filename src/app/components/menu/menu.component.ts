@@ -4,7 +4,8 @@ import { CommonModule } from '@angular/common';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { 
   faHome, faUsers, faRoute, faListAlt, faCashRegister,
-  faBus, faBusAlt, faChartBar, faMoneyBillWave, faUserCog, faSignOutAlt 
+  faBus, faBusAlt, faChartBar, faMoneyBillWave, faUserCog, 
+  faSignOutAlt, faChevronDown, faChevronUp 
 } from '@fortawesome/free-solid-svg-icons';
 
 @Component({
@@ -15,6 +16,7 @@ import {
   styleUrls: ['./menu.component.css']
 })
 export class MenuComponent {
+  // Iconos
   faHome = faHome;
   faUsers = faUsers;
   faRoute = faRoute;
@@ -26,4 +28,18 @@ export class MenuComponent {
   faMoneyBillWave = faMoneyBillWave;
   faUserCog = faUserCog;
   faSignOutAlt = faSignOutAlt;
+  faChevronDown = faChevronDown;
+  faChevronUp = faChevronUp;
+
+  // Estados de los submenús
+  isSalesOpen = false;
+  isReportsOpen = false;
+
+  toggleSales() {
+    this.isSalesOpen = !this.isSalesOpen;
+  }
+
+  toggleReports() {
+    this.isReportsOpen = !this.isReportsOpen;
+  }
 }

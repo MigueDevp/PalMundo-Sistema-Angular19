@@ -32,21 +32,39 @@
             <fa-icon [icon]="faListAlt"></fa-icon> Catálogo de Viajes
           </a>
         </li>
+        
+        <!-- Menú desplegable de Ventas -->
         <li class="nav-item">
-          <a class="nav-link" routerLink="/sales">
+          <div class="nav-link menu-toggle" (click)="toggleSales()">
             <fa-icon [icon]="faCashRegister"></fa-icon> Ventas
-          </a>
+            <fa-icon [icon]="isSalesOpen ? faChevronUp : faChevronDown" class="ms-auto toggle-icon"></fa-icon>
+          </div>
+          <ul class="submenu" [class.show]="isSalesOpen">
+            <li><a class="nav-link submenu-item" routerLink="/sales/individual">Venta Individual</a></li>
+            <li><a class="nav-link submenu-item" routerLink="/sales/scheduled-trip">Viaje Programado</a></li>
+          </ul>
         </li>
+
         <li class="nav-item">
           <a class="nav-link" routerLink="/transport">
             <fa-icon [icon]="faBus"></fa-icon> Transporte
           </a>
         </li>
+        
+        <!-- Menú desplegable de Reportes -->
         <li class="nav-item">
-          <a class="nav-link" routerLink="/reports">
+          <div class="nav-link menu-toggle" (click)="toggleReports()">
             <fa-icon [icon]="faChartBar"></fa-icon> Reportes
-          </a>
+            <fa-icon [icon]="isReportsOpen ? faChevronUp : faChevronDown" class="ms-auto toggle-icon"></fa-icon>
+          </div>
+          <ul class="submenu" [class.show]="isReportsOpen">
+            <li><a class="nav-link submenu-item" routerLink="/reports/money">Reporte de Dinero</a></li>
+            <li><a class="nav-link submenu-item" routerLink="/reports/passengers-by-unit">Reporte de Pasajeros por Unidad</a></li>
+            <li><a class="nav-link submenu-item" routerLink="/reports/debtors">Reporte de Pasajeros Deudores</a></li>
+            <li><a class="nav-link submenu-item" routerLink="/reports/sales">Reporte de Ventas</a></li>
+          </ul>
         </li>
+
         <li class="nav-item">
           <a class="nav-link" routerLink="/my-transport">
             <fa-icon [icon]="faBusAlt"></fa-icon> Mi Transporte
@@ -68,7 +86,7 @@
 
   <div class="logout-section">
     <button type="button" class="logout-btn">
-      <i class="fas fa-sign-out-alt"></i> Cerrar Sesión
+      <fa-icon [icon]="faSignOutAlt"></fa-icon> Cerrar Sesión
     </button>
   </div>
 </nav>
