@@ -34,6 +34,7 @@ export class MenuComponent {
   // Estados de los submenús
   isSalesOpen = false;
   isReportsOpen = false;
+  isAdminOpen = false;
 
   toggleSales() {
     this.isSalesOpen = !this.isSalesOpen;
@@ -41,5 +42,9 @@ export class MenuComponent {
 
   toggleReports() {
     this.isReportsOpen = !this.isReportsOpen;
+  }
+
+  toggleAdmin(){
+    this.isAdminOpen = !this.isAdminOpen;
   }
 }

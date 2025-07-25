@@ -116,19 +116,17 @@
         </div>
         
         <!-- Formulario de cliente -->
-        <form class="client-form" *ngIf="isNewClient || (cliente.nombre && !searchingClient)">
+        <form class="client-form" *ngIf="isNewClient || cliente.nombre">
           <div class="form-group">
             <label>Nombre completo*</label>
             <input type="text" [(ngModel)]="cliente.nombre" name="nombre" required>
           </div>
-          
           <div class="form-row">
             <div class="form-group">
               <label>Fecha de nacimiento*</label>
               <input type="date" [(ngModel)]="cliente.fechaNacimiento" name="fechaNacimiento" required>
               <span class="age-display">Edad: {{ calcularEdad(cliente.fechaNacimiento) }} años</span>
             </div>
-            
             <div class="form-group">
               <label>Sexo*</label>
               <select [(ngModel)]="cliente.sexo" name="sexo" required>
@@ -138,18 +136,15 @@
               </select>
             </div>
           </div>
-          
           <div class="form-group">
             <label>Dirección*</label>
             <input type="text" [(ngModel)]="cliente.direccion" name="direccion" required>
           </div>
-          
           <div class="form-row">
             <div class="form-group">
               <label>Teléfono*</label>
               <input type="tel" [(ngModel)]="cliente.telefono" name="telefono" required>
             </div>
-            
             <div class="form-group">
               <label>Correo electrónico</label>
               <input type="email" [(ngModel)]="cliente.email" name="email">

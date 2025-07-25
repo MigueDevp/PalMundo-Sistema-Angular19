@@ -76,9 +76,15 @@
           </a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" routerLink="/administration">
+          <div class="nav-link menu-toggle" (click)="toggleAdmin()">
             <fa-icon [icon]="faUserCog"></fa-icon> Administración
-          </a>
+            <fa-icon [icon]="isAdminOpen ? faChevronUp : faChevronDown" class="ms-auto toggle-icon"></fa-icon>
+          </div>
+          <ul class="submenu" [class.show]="isAdminOpen">
+            <li><a class="nav-link submenu-item" routerLink="/contract-view">Contratos</a></li>
+            <li><a class="nav-link submenu-item" routerLink="/administration/accounting">Contabilidad</a></li>
+            <li><a class="nav-link submenu-item" routerLink="/administration/roomings-list">Roomings List</a></li>
+          </ul>
         </li>
       </ul>
     </div>

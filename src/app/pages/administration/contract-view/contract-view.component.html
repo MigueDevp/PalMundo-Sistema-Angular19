@@ -1,0 +1,63 @@
+<div class="contract-view-container">
+  <h2 class="title">Consulta de Contratos</h2>
+  <div class="search-section">
+    <div style="display: flex; gap: 8px; align-items: center;">
+      <input
+        type="text"
+        placeholder="Buscar por nombre del titular o folio de contrato"
+        [(ngModel)]="searchTerm"
+        (input)="buscarClientes()"
+        class="search-input"
+      />
+      <button class="search-btn" (click)="buscarClientes()" type="button">
+        <i class="fas fa-search"></i> Buscar
+      </button>
+    </div>
+  </div>
+
+  <div class="search-results" *ngIf="searchResults.length > 0">
+    <div class="result-item"
+         *ngFor="let result of searchResults"
+         (click)="seleccionarCliente(result)">
+      {{ result.titular }} - Folio: {{ result.folio }}
+    </div>
+  </div>
+
+  <div *ngIf="selectedClient" class="contracts-section">
+    <h3>Contratos a nombre de: {{ selectedClient.titular }}</h3>
+    <table class="contracts-table">
+      <thead>
+        <tr>
+          <th>Folio</th>
+          <th>Fecha</th>
+          <th>Servicio</th>
+          <th>Monto</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let contrato of selectedClient.contracts">
+          <td>{{ contrato.folio }}</td>
+          <td>{{ contrato.fecha }}</td>
+          <td>{{ contrato.servicio }}</td>
+          <td>{{ contrato.monto | currency:'MXN' }}</td>
+          <td>
+            <button class="view-btn" (click)="verContrato(contrato)">Ver</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div *ngIf="viewedContract" class="contract-detail-modal">
+    <div class="modal-content">
+      <h3>Detalle del Contrato</h3>
+      <p><strong>Folio:</strong> {{ viewedContract.folio }}</p>
+      <p><strong>Fecha:</strong> {{ viewedContract.fecha }}</p>
+      <p><strong>Servicio:</strong> {{ viewedContract.servicio }}</p>
+      <p><strong>Monto:</strong> {{ viewedContract.monto | currency:'MXN' }}</p>
+      <p><strong>Descripción:</strong> {{ viewedContract.descripcion }}</p>
+      <button class="close-btn" (click)="cerrarDetalleContrato()">Cerrar</button>
+    </div>
+  </div>
+</div>

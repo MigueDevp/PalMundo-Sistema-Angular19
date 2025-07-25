@@ -1,5 +1,4 @@
 import { Routes } from '@angular/router';
-import { AdministrationComponent } from './pages/administration/administration.component';
 import { ClientsComponent } from './pages/clients/clients.component';
 import { MyTransportComponent } from './pages/my-transport/my-transport.component';
 import { PaymentsComponent } from './pages/payments/payments.component';
@@ -9,6 +8,7 @@ import { TransportComponent } from './pages/transport/transport.component';
 import { TripCatalogComponent } from './pages/trip-catalog/trip-catalog.component';
 import { TripsComponent } from './pages/trips/trips.component';
 import { HomeComponent } from './pages/home/home.component';
+import { ContractViewComponent } from './pages/administration/contract-view/contract-view.component';
 import { ContractServiceComponent } from './pages/trip-catalog/contract-service/contract-service.component';
 
 export const routes: Routes = [
@@ -19,10 +19,6 @@ export const routes: Routes = [
   {
     path: 'clients',
     component: ClientsComponent,
-  },
-  {
-    path: 'administration',
-    component: AdministrationComponent,
   },
   {
     path: 'my-transport',
@@ -56,6 +52,10 @@ export const routes: Routes = [
   {
     path: 'contract-service',
     component: ContractServiceComponent,
+  },
+  {
+    path: 'contract-view',
+    component: ContractViewComponent,
   },
   {
     path: '**',
