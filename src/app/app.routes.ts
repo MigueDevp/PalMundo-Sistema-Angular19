@@ -2,12 +2,14 @@ import { Routes } from '@angular/router';
 import { ClientsComponent } from './pages/clients/clients.component';
 import { MyTransportComponent } from './pages/my-transport/my-transport.component';
 import { PaymentsComponent } from './pages/payments/payments.component';
-import { ReportsComponent } from './pages/reports/reports.component';
+import { PassengerReportComponent } from './pages/reports/passenger-report/passenger-report.component';
+import { DebtorPassengerComponent } from './pages/reports/debtor-passenger/debtor-passenger.component';
 import { SalesComponent } from './pages/sales/sales.component';
 import { TransportComponent } from './pages/transport/transport.component';
 import { TripCatalogComponent } from './pages/trip-catalog/trip-catalog.component';
 import { TripsComponent } from './pages/trips/trips.component';
 import { HomeComponent } from './pages/home/home.component';
+import { MoneyReportComponent } from './pages/reports/money-report/money-report.component';
 import { ContractViewComponent } from './pages/administration/contract-view/contract-view.component';
 import { ContractServiceComponent } from './pages/trip-catalog/contract-service/contract-service.component';
 
@@ -30,8 +32,16 @@ export const routes: Routes = [
     component: PaymentsComponent,
   },
   {
-    path: 'reports',
-    component: ReportsComponent,
+    path: 'passenger-report',
+    component: PassengerReportComponent,
+  },
+  {
+    path: 'debtor-passenger',
+    component: DebtorPassengerComponent,
+  },
+  {
+    path: 'money-report',
+    component: MoneyReportComponent,
   },
   {
     path: 'sales',

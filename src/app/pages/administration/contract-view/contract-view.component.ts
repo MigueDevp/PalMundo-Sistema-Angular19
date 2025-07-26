@@ -75,7 +75,7 @@ export class ContractViewComponent {
     this.searchResults = this.mockClients.filter(
       c =>
         c.titular.toLowerCase().includes(term) ||
-        c.folio.toLowerCase().includes(term)
+        c.folio.toLowerCase().includes(term) 
     );
     this.selectedClient = null;
   }

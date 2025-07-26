@@ -159,7 +159,7 @@ export class ContractServiceComponent {
   }
   
   agregarAcompanante(): void {
-    this.acompanantes.push({ nombre: '', edad: 0 });
+    this.acompanantes.push({ nombre: '', edad: 1 });
   }
   
   eliminarAcompanante(index: number): void {
