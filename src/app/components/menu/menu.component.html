@@ -40,8 +40,8 @@
             <fa-icon [icon]="isSalesOpen ? faChevronUp : faChevronDown" class="ms-auto toggle-icon"></fa-icon>
           </div>
           <ul class="submenu" [class.show]="isSalesOpen">
-            <li><a class="nav-link submenu-item" routerLink="/trips">Venta Individual</a></li>
-            <li><a class="nav-link submenu-item" routerLink="/trip-catalog">Viaje Programado</a></li>
+            <li><a class="nav-link submenu-item" routerLink="/trips"><span class="submenu-bullet">&#9679;</span> Venta Individual</a></li>
+            <li><a class="nav-link submenu-item" routerLink="/trip-catalog"><span class="submenu-bullet">&#9679;</span> Viaje Programado</a></li>
           </ul>
         </li>
 
@@ -58,10 +58,10 @@
             <fa-icon [icon]="isReportsOpen ? faChevronUp : faChevronDown" class="ms-auto toggle-icon"></fa-icon>
           </div>
           <ul class="submenu" [class.show]="isReportsOpen">
-            <li><a class="nav-link submenu-item" routerLink="/money-report">Reporte de Dinero</a></li>
-            <li><a class="nav-link submenu-item" routerLink="/passenger-report">Reporte de Pasajeros por Unidad</a></li>
-            <li><a class="nav-link submenu-item" routerLink="/debtor-passenger">Reporte de Pasajeros Deudores</a></li>
-            <li><a class="nav-link submenu-item" routerLink="/reports/sales">Reporte de Ventas</a></li>
+            <li><a class="nav-link submenu-item" routerLink="/money-report"><span class="submenu-bullet">&#9679;</span> Reporte de Dinero</a></li>
+            <li><a class="nav-link submenu-item" routerLink="/passenger-report"><span class="submenu-bullet">&#9679;</span> Reporte de Pasajeros por Unidad</a></li>
+            <li><a class="nav-link submenu-item" routerLink="/debtor-passenger"><span class="submenu-bullet">&#9679;</span> Reporte de Pasajeros Deudores</a></li>
+            <li><a class="nav-link submenu-item" routerLink="/reports/sales"><span class="submenu-bullet">&#9679;</span> Reporte de Ventas</a></li>
           </ul>
         </li>
 
@@ -81,9 +81,9 @@
             <fa-icon [icon]="isAdminOpen ? faChevronUp : faChevronDown" class="ms-auto toggle-icon"></fa-icon>
           </div>
           <ul class="submenu" [class.show]="isAdminOpen">
-            <li><a class="nav-link submenu-item" routerLink="/contract-view">Contratos</a></li>
-            <li><a class="nav-link submenu-item" routerLink="/administration/accounting">Contabilidad</a></li>
-            <li><a class="nav-link submenu-item" routerLink="/administration/roomings-list">Roomings List</a></li>
+            <li><a class="nav-link submenu-item" routerLink="/contract-view"><span class="submenu-bullet">&#9679;</span> Contratos</a></li>
+            <li><a class="nav-link submenu-item" routerLink="/administration/accounting"><span class="submenu-bullet">&#9679;</span> Contabilidad</a></li>
+            <li><a class="nav-link submenu-item" routerLink="/administration/roomings-list"><span class="submenu-bullet">&#9679;</span> Roomings List</a></li>
           </ul>
         </li>
       </ul>

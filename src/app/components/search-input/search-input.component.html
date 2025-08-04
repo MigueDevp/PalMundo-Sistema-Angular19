@@ -1,12 +1,9 @@
- <div class="search-section">
-    <div class="search-box">
-      <input
-        type="text"
-        placeholder=""
-        class="search-input"
-      />
-      <button class="search-btn" type="button">
-        <i class="fas fa-search"></i> Buscar
-      </button>
-    </div>
+<div class="search-section">
+  <div class="search-box">
+    <input type="text" [placeholder]="placeholder" class="search-input" />
+    <button class="search-btn" type="button">
+      Buscar
+      <fa-icon [icon]="faSearch"> </fa-icon>
+    </button>
   </div>
+</div>

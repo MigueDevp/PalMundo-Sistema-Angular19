@@ -31,3 +31,6 @@
   gap: 8px;
   align-items: center;
 }
+ fa-icon {
+    margin-left: 6px;
+ }
