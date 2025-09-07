@@ -2,16 +2,19 @@ import { Component, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { ButtonAddComponent } from '../../components/button-add/button-add.component';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import {faUser} from '@fortawesome/free-solid-svg-icons';
 
 @Component({
   selector: 'app-clients',
   standalone: true,
-  imports: [CommonModule, FormsModule, ButtonAddComponent],
+  imports: [CommonModule, FormsModule, ButtonAddComponent, FontAwesomeModule],
   templateUrl: './clients.component.html',
   styleUrls: ['./clients.component.css']
 })
 export class ClientsComponent {
   // Datos de ejemplo completos
+  faUser = faUser;
 clients = signal([
   { 
     id: 1, 

@@ -4,7 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { SearchInputComponent } from '../../../components/search-input/search-input.component';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
-import { faFileContract } from '@fortawesome/free-solid-svg-icons';
+import { faFileSignature } from '@fortawesome/free-solid-svg-icons';
 
 
 
@@ -184,5 +184,5 @@ export class ContractServiceComponent {
     alert('Contrato generado exitosamente (simulación)');
   }
 
-  faFileContract = faFileContract;
+  faFileSignature = faFileSignature;
 }
