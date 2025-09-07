@@ -6,7 +6,7 @@
 }
 
 .header-section fa-icon {
-  font-size: 1.5rem;
+  font-size: 1.7rem;
 }
 
 /* Botón añadir cliente */
@@ -27,9 +27,7 @@
 }
 
 /* Icono (si usas Font Awesome) */
-.fas {
-  font-size: 12px;
-}
+
 
 .clients-container {
   padding: 20px;

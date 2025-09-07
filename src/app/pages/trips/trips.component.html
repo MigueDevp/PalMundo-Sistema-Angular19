@@ -1,9 +1,25 @@
 <div class="clients-container">
   <div class="header-section">
-    <h2>Registro Global de Viajes</h2>
+    <h2>Registro Global de Viajes <fa-icon [icon]="faSuitcase"/></h2>
     <hr />
     <app-button-add (click)="openAddModal()">Añadir Viaje</app-button-add>
   </div>
+
+
+  <!-- Indicador de carga -->
+  @if (isLoading && viajes().length === 0) {
+  <div class="loading-indicator">
+    <p>Cargando viajes...</p>
+  </div>
+  }
+
+  <!-- Mensaje de error -->
+  @if (error()) {
+  <div class="error-message">
+    <p>⚠️ {{ error() }}</p>
+    <button (click)="loadTrips()">Reintentar</button>
+  </div>
+  }
 
   <div class="table-container">
     <table class="clients-table">

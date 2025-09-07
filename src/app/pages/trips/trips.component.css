@@ -2,6 +2,12 @@
   justify-content: space-between;
   align-items: center;
   margin-bottom: 10px;
+
+  
+}
+
+.header-section fa-icon {
+  font-size: 1.7rem;
 }
 
 /* Botón añadir cliente */
@@ -155,6 +161,126 @@
   border: none;
   border-radius: 4px;
   cursor: pointer;
+}
+
+/* Indicadores de carga y error */
+.loading-indicator {
+  text-align: center;
+  padding: 2rem;
+  color: #666;
+}
+
+.error-message {
+  background: #fee;
+  border: 1px solid #fcc;
+  border-radius: 8px;
+  padding: 1rem;
+  margin: 1rem 0;
+  color: #c33;
+  text-align: center;
+}
+
+.error-message button {
+  background: #c33;
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  margin-top: 0.5rem;
+  cursor: pointer;
+}
+
+.error-message button:hover {
+  background: #a22;
+}
+
+/* Estado de carga en la tabla */
+.table-container.loading {
+  opacity: 0.7;
+  pointer-events: none;
+}
+
+/* Sin datos */
+.no-data {
+  text-align: center;
+  padding: 2rem;
+  color: #666;
+  font-style: italic;
+}
+
+/* Badges de estado */
+.status-badge {
+  padding: 0.25rem 0.75rem;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.status-badge.activo {
+  background: #d4edda;
+  color: #155724;
+}
+
+.status-badge.completado {
+  background: #d1ecf1;
+  color: #0c5460;
+}
+
+.status-badge.cancelado {
+  background: #f8d7da;
+  color: #721c24;
+}
+
+/* Clave del viaje */
+.trip-key {
+  font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+  background: #f8f9fa;
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+  border: 1px solid #e9ecef;
+  font-size: 0.875rem;
+}
+
+/* Botones deshabilitados */
+button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* Mejoras visuales para la tabla */
+.clients-table td {
+  vertical-align: middle;
+}
+
+.actions {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.view-btn, .edit-btn, .delete-btn {
+  padding: 0.25rem 0.5rem;
+  font-size: 0.75rem;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.view-btn {
+  background: #17a2b8;
+  color: white;
+}
+
+.edit-btn {
+  background: #ffc107;
+  color: #212529;
+}
+
+.delete-btn {
+  background: #dc3545;
+  color: white;
 }
 .btn-add-client {
   
