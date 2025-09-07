@@ -18,6 +18,7 @@ interface ClientResult {
 
 @Component({
   selector: 'app-contract-view',
+  standalone: true,
   imports: [CommonModule, FormsModule],
   templateUrl: './contract-view.component.html',
   styleUrls: ['./contract-view.component.css']

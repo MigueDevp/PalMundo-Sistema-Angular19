@@ -3,11 +3,15 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { faPlane
+} from '@fortawesome/free-solid-svg-icons';
+import { faPlane as faPlaneSolid } from '@fortawesome/free-solid-svg-icons';
 
 @Component({
   selector: 'app-trip-catalog',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterModule],
+  imports: [CommonModule, FormsModule, RouterModule, FontAwesomeModule],
   templateUrl: './trip-catalog.component.html',
   styleUrls: ['./trip-catalog.component.css']
 })
@@ -165,4 +169,7 @@ export class TripCatalogComponent {
   // Navegación relativa al path actual (trip-catalog)
   this.router.navigate(['contract', viaje.id], { relativeTo: this.route });
 }
+
+  faPlane = faPlane;
+
 }

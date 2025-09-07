@@ -1,99 +1,94 @@
 /* Contenedor principal */
 .contract-container {
-  padding: 20px;
   max-width: 1200px;
-  margin: 0 auto;
-  min-height: 100vh;
+  margin: 2rem auto;
+  padding: 0 20px;
 }
 
 .contract-title {
   text-align: center;
   color: #2c3e50;
-  margin-bottom: 30px;
-  font-size: 1.8rem;
+  margin-bottom: 2rem;
+  font-size: 2.2rem;
+  font-weight: 600;
 }
 
 /* Contenedor del contenido (viaje + formulario) */
 .contract-content {
-  display: flex;
-  gap: 30px;
-  height: calc(100% - 100px);
+  display: grid;
+  grid-template-columns: 1fr 1.2fr;
+  gap: 2rem;
 }
 
 /* Sección del viaje (izquierda) */
 .travel-section {
-  flex: 1;
-  min-width: 400px;
-  height: 100%;
-  display: flex;
-  flex-direction: column;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  padding: 1.5rem;
 }
 
 /* Card del viaje - versión extendida */
 .travel-card {
-  background: white;
-  border-radius: 8px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  padding: 25px;
-  height: 100%;
-  display: flex;
-  flex-direction: column;
+  padding: 1.5rem;
 }
 
 .card-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 20px;
+  border-bottom: 2px solid #f0f2f5;
+  padding-bottom: 1rem;
+  margin-bottom: 1rem;
 }
 
 .card-header h3 {
+  color: #1a73e8;
   margin: 0;
-  color: #2c3e50;
-  font-size: 1.4rem;
+  font-size: 1.5rem;
 }
 
 .travel-code {
-  background: #e74c3c;
-  color: white;
-  padding: 5px 10px;
+  display: inline-block;
+  background: #e8f0fe;
+  color: #1967d2;
+  padding: 0.3rem 0.8rem;
   border-radius: 4px;
   font-size: 0.9rem;
+  margin-top: 0.5rem;
 }
 
-.card-dates {
-  margin-bottom: 20px;
+.card-dates, .card-payment {
+  background: #f8f9fa;
+  padding: 1rem;
+  border-radius: 8px;
+  margin: 1rem 0;
 }
 
 .date-group {
-  margin-bottom: 12px;
-}
-
-.date-label {
-  font-weight: bold;
-  color: #7f8c8d;
-  font-size: 0.95rem;
-}
-
-.date-value {
-  color: #2c3e50;
-  font-size: 1rem;
-}
-
-.card-payment {
-  margin: 20px 0;
-}
-
-.advance-payment, .payment-deadline {
   display: flex;
   justify-content: space-between;
-  margin-bottom: 10px;
+  margin: 0.5rem 0;
+}
+
+.advance-payment{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.payment-deadline{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+}
+.date-label {
+  color: #5f6368;
+  font-weight: 500;
 }
 
 .amount {
-  font-weight: bold;
-  color: #27ae60;
-  font-size: 1.1rem;
+  color: #1a73e8;
+  font-weight: 600;
+  font-size: 1.2rem;
 }
 
 /* Detalles completos del viaje */
@@ -103,17 +98,23 @@
   border-top: 1px solid #eee;
   flex-grow: 1;
   overflow-y: auto;
+  justify-content: space-between;
 }
 
 .full-details h4 {
   color: #2c3e50;
   margin-bottom: 15px;
   font-size: 1.2rem;
+  margin-top: 20px;
+  margin-bottom: 30px;
+  
 }
 
 .detail-item {
   margin-bottom: 15px;
   display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
 .detail-label {
@@ -126,7 +127,10 @@
 .detail-value {
   width: 55%;
   color: #2c3e50;
-  font-size: 0.95rem;
+  font-size: 0.90rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
 .details-btn {
@@ -146,13 +150,15 @@
   background: #2980b9;
 }
 
+.contract-title fa-icon {
+  font-size: 1.7rem;
+}
 /* Sección del formulario (derecha) */
 .client-form-section {
-  flex: 1.5;
-  min-width: 500px;
-  height: 100%;
-  display: flex;
-  flex-direction: column;
+  background: #fff;
+  border-radius: 12px;
+  padding: 2rem;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
 .client-form-container {
@@ -166,57 +172,61 @@
 
 .form-title {
   color: #2c3e50;
-  margin-top: 0;
-  padding-bottom: 15px;
-  border-bottom: 1px solid #ecf0f1;
-  font-size: 1.3rem;
+  margin-bottom: 1.5rem;
+  font-size: 1.8rem;
 }
 
+/* Búsqueda de cliente */
 .client-search {
   margin-bottom: 20px;
 }
 
 .search-container {
   display: flex;
-  margin-bottom: 10px;
+  gap: 1rem;
+  margin-bottom: 1rem;
 }
 
 .search-container input {
   flex: 1;
-  padding: 10px;
-  border: 1px solid #ddd;
-  border-radius: 4px 0 0 4px;
+  padding: 0.8rem;
+  border: 2px solid #e0e0e0;
+  border-radius: 6px;
+  font-size: 1rem;
 }
 
 .search-btn {
-  padding: 10px 15px;
-  background: #3498db;
+  background: #1a73e8;
   color: white;
   border: none;
-  border-radius: 0 4px 4px 0;
+  border-radius: 6px;
+  padding: 0 1.5rem;
   cursor: pointer;
+  transition: background 0.3s;
 }
 
 .search-btn:hover {
-  background: #2980b9;
+  background: #1557b0;
 }
 
+/* Resultados de búsqueda */
 .search-results {
-  border: 1px solid #ddd;
-  border-radius: 4px;
+  background: white;
+  border: 1px solid #e0e0e0;
+  border-radius: 6px;
   max-height: 200px;
   overflow-y: auto;
-  margin-bottom: 10px;
+  margin-top: 0.5rem;
 }
 
 .result-item {
-  padding: 10px;
+  padding: 0.8rem 1rem;
   cursor: pointer;
-  border-bottom: 1px solid #eee;
+  transition: background 0.2s;
 }
 
 .result-item:hover {
-  background: #f5f5f5;
+  background: #f0f7ff;
 }
 
 .new-client-toggle {
@@ -240,45 +250,36 @@
 }
 
 .form-group {
-  margin-bottom: 15px;
+  margin-bottom: 1.2rem;
 }
 
 .form-group label {
   display: block;
-  margin-bottom: 5px;
-  color: #7f8c8d;
-  font-size: 0.9rem;
+  margin-bottom: 0.5rem;
+  color: #5f6368;
+  font-weight: 500;
 }
 
-.form-group input, 
+.form-group input,
 .form-group select {
   width: 100%;
-  padding: 10px;
-  border: 1px solid #ddd;
-  border-radius: 4px;
+  padding: 0.8rem;
+  border: 2px solid #e0e0e0;
+  border-radius: 6px;
+  font-size: 1rem;
 }
 
 .form-row {
-  display: flex;
-  gap: 15px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
 }
 
-.form-row .form-group {
-  flex: 1;
-}
-
-.age-display {
-  display: block;
-  font-size: 0.8rem;
-  color: #7f8c8d;
-  margin-top: 5px;
-}
-
+/* Sección de acompañantes */
 .companions-section {
-  margin-top: 30px;
-  background: white;
-  padding: 20px;
-  border-radius: 8px;
+  margin-top: 2rem;
+  padding-top: 1.5rem;
+  border-top: 2px solid #f0f2f5;
 }
 
 .companions-section h3 {
@@ -287,20 +288,18 @@
 }
 
 .add-companion-btn {
-  background: #2ecc71;
+  background: #34a853;
   color: white;
   border: none;
-  padding: 8px 15px;
-  border-radius: 4px;
+  border-radius: 6px;
+  padding: 0.8rem 1.5rem;
   cursor: pointer;
-  margin-bottom: 15px;
-  display: flex;
-  align-items: center;
-  gap: 5px;
+  margin-bottom: 1rem;
+  transition: background 0.3s;
 }
 
 .add-companion-btn:hover {
-  background: #27ae60;
+  background: #2d8544;
 }
 
 .companion-list {
@@ -310,86 +309,58 @@
 }
 
 .companion-item {
+  background: #f8f9fa;
+  border-radius: 8px;
+  padding: 1rem;
+  margin-bottom: 1rem;
   display: flex;
-  gap: 10px;
-  align-items: center;
-  padding: 15px;
-  background: #f9f9f9;
-  border-radius: 4px;
+  gap: 1rem;
 }
 
 .companion-form {
   flex: 1;
-  display: flex;
-  gap: 15px;
-}
-
-.companion-form .form-group {
-  margin-bottom: 0;
 }
 
 .remove-companion-btn {
-  background: #e74c3c;
+  background: #dc3545;
   color: white;
   border: none;
-  width: 30px;
-  height: 30px;
-  border-radius: 50%;
+  border-radius: 6px;
+  width: 36px;
+  height: 36px;
   cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  transition: background 0.3s;
 }
 
 .remove-companion-btn:hover {
-  background: #c0392b;
+  background: #bb2d3b;
 }
 
+/* Botón generar contrato */
 .generate-contract {
-  margin-top: 30px;
+  margin-top: 2rem;
   text-align: center;
 }
 
 .generate-btn {
-  background: #e67e22;
+  background: #1a73e8;
   color: white;
   border: none;
-  padding: 12px 25px;
-  border-radius: 4px;
+  border-radius: 6px;
+  padding: 1rem 2rem;
+  font-size: 1.1rem;
+  font-weight: 500;
   cursor: pointer;
-  font-size: 1rem;
   transition: background 0.3s;
 }
 
 .generate-btn:hover {
-  background: #d35400;
+  background: #1557b0;
 }
 
 /* Responsive */
-@media (max-width: 1024px) {
+@media (max-width: 968px) {
   .contract-content {
-    flex-direction: column;
-    height: auto;
-  }
-  
-  .travel-section, .client-form-section {
-    min-width: 100%;
-    height: auto;
-  }
-  
-  .travel-card, .client-form-container {
-    height: auto;
-  }
-}
-
-@media (max-width: 768px) {
-  .form-row {
-    flex-direction: column;
-    gap: 0;
-  }
-  
-  .companion-form {
-    flex-direction: column;
-    gap: 0;
+    grid-template-columns: 1fr;
   }
 }

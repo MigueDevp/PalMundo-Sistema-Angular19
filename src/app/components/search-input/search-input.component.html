@@ -1,7 +1,14 @@
 <div class="search-section">
   <div class="search-box">
-    <input type="text" [placeholder]="placeholder" class="search-input" />
-    <button class="search-btn" type="button">
+    <input
+      type="text"
+      [placeholder]="placeholder"
+      [ngModel]="value"
+      (ngModelChange)="valueChange.emit($event)"
+      (input)="onInput($event)"
+      class="search-input"
+    />
+    <button class="search-btn"  type="button" (click)="onButtonClick()">
       Buscar
       <fa-icon [icon]="faSearch"> </fa-icon>
     </button>

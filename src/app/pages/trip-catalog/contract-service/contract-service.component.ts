@@ -2,6 +2,10 @@ import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
+import { SearchInputComponent } from '../../../components/search-input/search-input.component';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { faFileContract } from '@fortawesome/free-solid-svg-icons';
+
 
 
 interface Viaje {
@@ -36,7 +40,7 @@ interface Acompanante {
 @Component({
   selector: 'app-contract-service',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterModule],
+  imports: [CommonModule, FormsModule, RouterModule, SearchInputComponent, FontAwesomeModule],
   templateUrl: './contract-service.component.html',
   styleUrls: ['./contract-service.component.css']
 })
@@ -179,4 +183,6 @@ export class ContractServiceComponent {
     });
     alert('Contrato generado exitosamente (simulación)');
   }
+
+  faFileContract = faFileContract;
 }

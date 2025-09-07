@@ -1,6 +1,8 @@
 <div class="catalog-container">
+  
   <div class="header-section">
-    <h2>Catálogo de Viajes Disponibles</h2>
+    <h2>Catálogo de Viajes Disponibles <fa-icon [icon]="faPlane"/></h2> 
+    
     <div class="filter-section">
       <div class="search-container">
         <input type="text" placeholder="Buscar viaje..." [(ngModel)]="searchTerm" (input)="filterViajes()">

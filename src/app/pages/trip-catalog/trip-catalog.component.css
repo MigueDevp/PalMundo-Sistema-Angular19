@@ -12,9 +12,11 @@
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: space-between;
   gap: 1.5rem;
   margin-bottom: 2rem;
   width: 100%;
+  margin-top: 30px;
 
   h2 {
     color: #2c3e50;
@@ -22,6 +24,11 @@
     margin: 0;
     text-align: center;
   }
+}
+
+.catalog-container  {
+display: flexbox;
+
 }
 
 .filter-section {
@@ -133,6 +140,13 @@
   }
 }
 
+/* Añadir estilo específico para el icono si es necesario */
+.catalog-container fa-icon {
+  font-size: 1.5rem;
+  color: #2c3e50;
+  cursor: pointer;
+}
+
 .select-btn {
   margin-top: auto;
   background-color: #2ecc71;
@@ -165,3 +179,4 @@
     grid-template-columns: 1fr;
   }
 }
+
