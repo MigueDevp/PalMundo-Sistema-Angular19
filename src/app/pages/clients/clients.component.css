@@ -5,6 +5,10 @@
   margin-bottom: 10px;
 }
 
+.header-section fa-icon {
+  font-size: 1.5rem;
+}
+
 /* Botón añadir cliente */
 .add-btn {
   background-color: #4CAF50;

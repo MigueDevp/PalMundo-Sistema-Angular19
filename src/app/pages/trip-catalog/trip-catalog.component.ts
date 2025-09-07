@@ -6,7 +6,6 @@ import { FormsModule } from '@angular/forms';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { faPlane
 } from '@fortawesome/free-solid-svg-icons';
-import { faPlane as faPlaneSolid } from '@fortawesome/free-solid-svg-icons';
 
 @Component({
   selector: 'app-trip-catalog',
