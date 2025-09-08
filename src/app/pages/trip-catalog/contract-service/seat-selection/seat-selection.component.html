@@ -1,0 +1,249 @@
+<div class="seat-selection-container">
+  <!-- Header -->
+  <div class="header-section">
+    <h1>
+      <fa-icon [icon]="faBus"></fa-icon>
+      Selección de Asientos y Puntos de Abordaje
+    </h1>
+    <p class="trip-info">{{ contractData.viaje.nombre }} - {{ contractData.viaje.clave }}</p>
+    
+    <!-- Progress indicator -->
+    <div class="progress-indicator">
+      <div class="step" [class.active]="currentPhase() === 'seats'" [class.completed]="currentPhase() === 'boarding'">
+        <div class="step-number">1</div>
+        <div class="step-label">Selección de Asientos</div>
+      </div>
+      <div class="step-connector" [class.completed]="currentPhase() === 'boarding'"></div>
+      <div class="step" [class.active]="currentPhase() === 'boarding'">
+        <div class="step-number">2</div>
+        <div class="step-label">Puntos de Abordaje</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Error message -->
+  @if (error()) {
+    <div class="error-message">
+      <fa-icon [icon]="faTimesCircle"></fa-icon>
+      {{ error() }}
+      <button (click)="error.set(null)" class="close-error">×</button>
+    </div>
+  }
+
+  <!-- PHASE 1: SEAT SELECTION -->
+  @if (currentPhase() === 'seats') {
+    <div class="seats-phase">
+      <div class="main-content">
+        <!-- Left side: Bus layout -->
+        <div class="bus-section">
+          <div class="bus-header">
+            <h3><fa-icon [icon]="faBus"></fa-icon> Distribución del Autobús</h3>
+            <div class="legend">
+              <div class="legend-item">
+                <div class="seat-sample available"></div>
+                <span>Disponible</span>
+              </div>
+              <div class="legend-item">
+                <div class="seat-sample occupied"></div>
+                <span>Ocupado</span>
+              </div>
+              <div class="legend-item">
+                <div class="seat-sample selected"></div>
+                <span>Seleccionado</span>
+              </div>
+            </div>
+          </div>
+          
+          <div class="bus-layout">
+            <div class="bus-front">FRENTE</div>
+            
+            <div class="seats-grid">
+              @for (row of getSeatRows(); track $index) {
+                <div class="seat-row">
+                  <!-- Left side seats -->
+                  <div class="seat-pair">
+                    <div 
+                      class="{{ getSeatClass(row[0]) }}" 
+                      (click)="selectSeat(row[0].numero)"
+                    >
+                      {{ row[0].numero }}
+                    </div>
+                    <div 
+                      class="{{ getSeatClass(row[1]) }}" 
+                      (click)="selectSeat(row[1].numero)"
+                    >
+                      {{ row[1].numero }}
+                    </div>
+                  </div>
+                  
+                  <!-- Aisle -->
+                  <div class="aisle"></div>
+                  
+                  <!-- Right side seats -->
+                  <div class="seat-pair">
+                    <div 
+                      class="{{ getSeatClass(row[2]) }}" 
+                      (click)="selectSeat(row[2].numero)"
+                    >
+                      {{ row[2].numero }}
+                    </div>
+                    <div 
+                      class="{{ getSeatClass(row[3]) }}" 
+                      (click)="selectSeat(row[3].numero)"
+                    >
+                      {{ row[3].numero }}
+                    </div>
+                  </div>
+                </div>
+              }
+            </div>
+          </div>
+        </div>
+
+        <!-- Right side: Passenger management -->
+        <div class="passengers-section">
+          <div class="passenger-selection">
+            <h3><fa-icon [icon]="faUser"></fa-icon> Pasajeros</h3>
+            
+            <!-- Currently selected passenger -->
+            @if (selectedPassenger()) {
+              <div class="current-passenger">
+                <h4>Asignando asiento a:</h4>
+                <div class="passenger-card active">
+                  <fa-icon [icon]="faUser"></fa-icon>
+                  <div class="passenger-info">
+                    <span class="name">{{ selectedPassenger()!.nombre }}</span>
+                    <span class="details">{{ selectedPassenger()!.edad }} años - {{ selectedPassenger()!.tipo }}</span>
+                  </div>
+                </div>
+              </div>
+            }
+
+            <!-- Passengers without seats -->
+            @if (getPassengersWithoutSeats().length > 0) {
+              <div class="pending-passengers">
+                <h4>Pendientes de asiento ({{ getPassengersWithoutSeats().length }}):</h4>
+                @for (passenger of getPassengersWithoutSeats(); track passenger.id) {
+                  <div 
+                    class="passenger-card clickable" 
+                    [class.active]="selectedPassenger()?.id === passenger.id"
+                    (click)="selectPassenger(passenger)"
+                  >
+                    <fa-icon [icon]="faUser"></fa-icon>
+                    <div class="passenger-info">
+                      <span class="name">{{ passenger.nombre }}</span>
+                      <span class="details">{{ passenger.edad }} años - {{ passenger.tipo }}</span>
+                    </div>
+                  </div>
+                }
+              </div>
+            }
+
+            <!-- Passengers with seats assigned -->
+            @if (getPassengersWithSeats().length > 0) {
+              <div class="assigned-passengers">
+                <h4>Con asiento asignado ({{ getPassengersWithSeats().length }}):</h4>
+                @for (passenger of getPassengersWithSeats(); track passenger.id) {
+                  <div class="passenger-card assigned">
+                    <fa-icon [icon]="faCheckCircle"></fa-icon>
+                    <div class="passenger-info">
+                      <span class="name">{{ passenger.nombre }}</span>
+                      <span class="details">Asiento {{ passenger.asientoAsignado }} - {{ passenger.edad }} años</span>
+                    </div>
+                  </div>
+                }
+              </div>
+            }
+          </div>
+
+          <!-- Continue button -->
+          @if (canProceedToBoarding()) {
+            <div class="continue-section">
+              <button class="continue-btn" (click)="proceedToBoarding()">
+                <fa-icon [icon]="faMapMarkerAlt"></fa-icon>
+                Continuar a Puntos de Abordaje
+              </button>
+            </div>
+          }
+        </div>
+      </div>
+    </div>
+  }
+
+  <!-- PHASE 2: BOARDING POINTS -->
+  @if (currentPhase() === 'boarding') {
+    <div class="boarding-phase">
+      <div class="boarding-header">
+        <button class="back-btn" (click)="backToSeats()">
+          ← Volver a Asientos
+        </button>
+        <h3><fa-icon [icon]="faMapMarkerAlt"></fa-icon> Asignación de Puntos de Abordaje</h3>
+      </div>
+
+      <div class="boarding-content">
+        <div class="instructions">
+          <p>Selecciona el punto de abordaje para cada pasajero. Los puntos están ordenados por horario de salida.</p>
+        </div>
+
+        <div class="passenger-boarding-list">
+          @for (passenger of passengers(); track passenger.id) {
+            <div class="passenger-boarding-card">
+              <div class="passenger-header">
+                <div class="passenger-basic-info">
+                  <fa-icon [icon]="faUser"></fa-icon>
+                  <div>
+                    <h4>{{ passenger.nombre }}</h4>
+                    <p>Asiento {{ passenger.asientoAsignado }} - {{ passenger.edad }} años</p>
+                  </div>
+                </div>
+              </div>
+
+              <div class="boarding-selection">
+                <label>Punto de abordaje:</label>
+                <select 
+                  [value]="boardingAssignments().get(passenger.id) || ''"
+                  (change)="updateBoardingPoint(passenger.id, $event)"
+                  class="boarding-select"
+                >
+                  <option value="">Seleccionar punto de abordaje...</option>
+                  @for (punto of contractData.viaje.puntosAbordaje; track punto) {
+                    <option [value]="punto">{{ punto }}</option>
+                  }
+                </select>
+              </div>
+            </div>
+          }
+        </div>
+
+        <!-- Generate contract button -->
+        <div class="generate-contract-section">
+          @if (canGenerateContract()) {
+            <div class="contract-summary">
+              <h4>✅ Todo listo para generar el contrato</h4>
+              <p>Todos los pasajeros tienen asientos y puntos de abordaje asignados.</p>
+            </div>
+            
+            <button 
+              class="generate-contract-btn" 
+              (click)="generateContract()"
+              [disabled]="isLoading"
+            >
+              @if (isLoading) {
+                <span class="loading-spinner"></span>
+                Generando Contrato...
+              } @else {
+                <fa-icon [icon]="faCheckCircle"></fa-icon>
+                Generar Contrato Final
+              }
+            </button>
+          } @else {
+            <div class="incomplete-warning">
+              <fa-icon [icon]="faTimesCircle"></fa-icon>
+              <p>Completa todos los puntos de abordaje para continuar.</p>
+            </div>
+          }
+        </div>
+      </div>
+    </div>
+  }
+</div>

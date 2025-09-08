@@ -12,6 +12,7 @@ import { HomeComponent } from './pages/home/home.component';
 import { MoneyReportComponent } from './pages/reports/money-report/money-report.component';
 import { ContractViewComponent } from './pages/administration/contract-view/contract-view.component';
 import { ContractServiceComponent } from './pages/trip-catalog/contract-service/contract-service.component';
+import { SeatSelectionComponent } from './pages/trip-catalog/contract-service/seat-selection/seat-selection.component';
 
 export const routes: Routes = [
   {
@@ -67,6 +68,11 @@ export const routes: Routes = [
     path: 'contract-view',
     component: ContractViewComponent,
   },
+  {
+    path: 'seat-selection',
+    component: SeatSelectionComponent,
+  },
+
   {
     path: '**',
     redirectTo: '',

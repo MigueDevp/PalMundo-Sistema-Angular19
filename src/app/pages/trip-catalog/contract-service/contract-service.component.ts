@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { RouterModule } from '@angular/router';
+import { RouterModule, Router } from '@angular/router';
 import { SearchInputComponent } from '../../../components/search-input/search-input.component';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { faFileSignature } from '@fortawesome/free-solid-svg-icons';
@@ -47,6 +47,7 @@ interface Acompanante {
   styleUrls: ['./contract-service.component.css']
 })
 export class ContractServiceComponent {
+  constructor(private router: Router) {}
 
   faXmark = faXmark;
   // Datos del viaje seleccionado (simulados)
@@ -186,6 +187,10 @@ export class ContractServiceComponent {
       acompanantes: this.acompanantes
     });
     alert('Contrato generado exitosamente (simulación)');
+  }
+
+  continuarASeleccionAsientos(): void {
+    this.router.navigate(['/seat-selection']);
   }
 
   faFileSignature = faFileSignature;
