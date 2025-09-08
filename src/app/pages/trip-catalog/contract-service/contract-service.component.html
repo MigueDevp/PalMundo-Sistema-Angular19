@@ -193,9 +193,7 @@
         <div class="companions-section" *ngIf="cliente.nombre">
           <h3>Acompañantes</h3>
 
-          <button class="add-companion-btn" (click)="agregarAcompanante()">
-            + Agregar acompañante
-          </button>
+          <app-button-add (click)="agregarAcompanante()" class="btn-add">Agregar</app-button-add>
 
           <div class="companion-list">
             <div
@@ -226,7 +224,7 @@
                 class="remove-companion-btn"
                 (click)="eliminarAcompanante(i)"
               >
-                <i class="fas fa-times"></i>
+                <fa-icon [icon]="faXmark"></fa-icon>
               </button>
             </div>
           </div>
@@ -235,7 +233,7 @@
         <!-- Botón para generar contrato -->
         <div class="generate-contract" *ngIf="cliente.nombre">
           <button class="generate-btn" (click)="generarContrato()">
-            Generar Contrato de Servicio
+            Continuar
           </button>
         </div>
       </div>

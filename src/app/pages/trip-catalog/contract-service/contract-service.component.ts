@@ -5,6 +5,8 @@ import { RouterModule } from '@angular/router';
 import { SearchInputComponent } from '../../../components/search-input/search-input.component';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { faFileSignature } from '@fortawesome/free-solid-svg-icons';
+import { ButtonAddComponent } from '../../../components/button-add/button-add.component';
+import { faXmark } from '@fortawesome/free-solid-svg-icons';
 
 
 
@@ -40,11 +42,13 @@ interface Acompanante {
 @Component({
   selector: 'app-contract-service',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterModule, SearchInputComponent, FontAwesomeModule],
+  imports: [CommonModule, FormsModule, RouterModule, SearchInputComponent, FontAwesomeModule, ButtonAddComponent],
   templateUrl: './contract-service.component.html',
   styleUrls: ['./contract-service.component.css']
 })
 export class ContractServiceComponent {
+
+  faXmark = faXmark;
   // Datos del viaje seleccionado (simulados)
   viajeSeleccionado: Viaje = {
     id: 1,
