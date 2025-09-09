@@ -1,693 +1,87 @@
-/* Container principal */
-.seat-selection-container {
-  max-width: 1400px;
-  margin: 0 auto;
-  padding: 2rem;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  background: linear-gradient(135deg, #cedfff 0%, #87d5ff 100%);
-  min-height: 100vh;
-}
-
-/* Header */
-.header-section {
-  text-align: center;
-  margin-bottom: 2rem;
-  background: white;
-  padding: 2rem;
-  border-radius: 16px;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-}
-
-.header-section h1 {
-  color: #2c3e50;
-  font-size: 2.5rem;
-  margin-bottom: 0.5rem;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 1rem;
-}
-
-.trip-info {
-  color: #7f8c8d;
-  font-size: 1.2rem;
-  margin-bottom: 2rem;
-}
-
-/* Progress indicator */
-.progress-indicator {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 2rem;
-  margin-top: 2rem;
-}
-
-.step {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 0.5rem;
-  opacity: 0.5;
-  transition: all 0.3s ease;
-}
-
-.step.active, .step.completed {
-  opacity: 1;
-}
-
-.step-number {
-  width: 50px;
-  height: 50px;
-  border-radius: 50%;
-  background: #ecf0f1;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-weight: bold;
-  font-size: 1.2rem;
-  color: #7f8c8d;
-  transition: all 0.3s ease;
-}
-
-.step.active .step-number {
-  background: #3498db;
-  color: white;
-}
-
-.step.completed .step-number {
-  background: #27ae60;
-  color: white;
-}
-
-.step-label {
-  font-weight: 500;
-  color: #2c3e50;
-}
-
-.step-connector {
-  height: 3px;
-  width: 100px;
-  background: #ecf0f1;
-  transition: all 0.3s ease;
-}
-
-.step-connector.completed {
-  background: #27ae60;
-}
-
-/* Error message */
-.error-message {
-  background: #e74c3c;
-  color: white;
-  padding: 1rem 1.5rem;
-  border-radius: 8px;
-  margin-bottom: 1rem;
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  position: relative;
-}
-
-.close-error {
-  position: absolute;
-  right: 1rem;
-  background: none;
-  border: none;
-  color: white;
-  font-size: 1.5rem;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.5rem;
-  box-shadow: 0 4px 12px rgba(39, 174, 96, 0.2);
-}
-
-.continue-btn:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 20px rgba(39, 174, 96, 0.3);
-}
-
-/* PHASE 2: BOARDING POINTS */
-.boarding-phase {
-  background: white;
-  border-radius: 16px;
-  padding: 2rem;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-}
-
-.boarding-header {
-  display: flex;
-  align-items: center;
-  gap: 2rem;
-  margin-bottom: 2rem;
-  padding-bottom: 1rem;
-  border-bottom: 2px solid #ecf0f1;
-}
-
-.back-btn {
-  background: #95a5a6;
-  color: white;
-  border: none;
-  border-radius: 8px;
-  padding: 0.75rem 1.5rem;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  font-weight: 500;
-}
-
-.back-btn:hover {
-  background: #7f8c8d;
-  transform: translateX(-2px);
-}
-
-.boarding-header h3 {
-  color: #2c3e50;
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  margin: 0;
-  font-size: 1.5rem;
-}
-
-.boarding-content {
-  max-width: 800px;
-  margin: 0 auto;
-}
-
-.instructions {
-  background: #e8f4fd;
-  border-left: 4px solid #3498db;
-  padding: 1rem 1.5rem;
-  margin-bottom: 2rem;
-  border-radius: 0 8px 8px 0;
-}
-
-.instructions p {
-  margin: 0;
-  color: #2c3e50;
-}
-
-.passenger-boarding-list {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-direction: column;
-  gap: 1.5rem;
-  margin-bottom: 3rem;
- height: 90%;
-}
-
-.passenger-boarding-card {
-  background: white;
-  border: 2px solid #e9ecef;
-  border-radius: 12px;
-  padding: 1.5rem;
-  transition: all 0.3s ease;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-}
-
-.passenger-boarding-card:hover {
-  border-color: #3498db;
-  box-shadow: 0 4px 16px rgba(52, 152, 219, 0.1);
-}
-
-.passenger-header {
-  margin-bottom: 1rem;
-}
-
-.passenger-basic-info {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-}
-
-.passenger-basic-info fa-icon {
-  font-size: 1.5rem;
-  color: #3498db;
-}
-
-.passenger-basic-info h4 {
-  margin: 0;
-  color: #2c3e50;
-  font-size: 1.2rem;
-}
-
-.passenger-basic-info p {
-  margin: 0.25rem 0 0 0;
-  color: #7f8c8d;
-  font-size: 0.9rem;
-}
-
-.boarding-selection {
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-}
-
-.boarding-selection label {
-  font-weight: 600;
-  color: #2c3e50;
-  font-size: 0.95rem;
-}
-
-.boarding-select {
-  padding: 0.75rem 1rem;
-  border: 2px solid #e9ecef;
-  border-radius: 8px;
-  font-size: 1rem;
-  background: white;
-  cursor: pointer;
-  transition: all 0.3s ease;
-}
-
-.boarding-select:focus {
-  outline: none;
-  border-color: #3498db;
-  box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
-}
-
-.boarding-select:hover {
-  border-color: #3498db;
-}
-
-/* Generate contract section */
-.generate-contract-section {
-  background: linear-gradient(135deg, #f8f9fa, #e9ecef);
-  border-radius: 16px;
-  padding: 2rem;
-  text-align: center;
-  border: 2px solid #e9ecef;
-}
-
-.contract-summary {
-  margin-bottom: 2rem;
-}
-
-.contract-summary h4 {
-  color: #27ae60;
-  font-size: 1.3rem;
-  margin-bottom: 0.5rem;
-}
-
-.contract-summary p {
-  color: #2c3e50;
-  font-size: 1rem;
-  margin: 0;
-}
-
-.generate-contract-btn {
-  background: linear-gradient(135deg, #e74c3c, #c0392b);
-  color: white;
-  border: none;
-  border-radius: 12px;
-  padding: 1.25rem 3rem;
-  font-size: 1.2rem;
-  font-weight: bold;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  display: inline-flex;
-  align-items: center;
-  gap: 0.75rem;
-  box-shadow: 0 4px 16px rgba(231, 76, 60, 0.3);
-}
-
-.generate-contract-btn:hover:not(:disabled) {
-  transform: translateY(-3px);
-  box-shadow: 0 8px 25px rgba(231, 76, 60, 0.4);
-}
-
-.generate-contract-btn:disabled {
-  opacity: 0.7;
-  cursor: not-allowed;
-  transform: none;
-}
-
-.loading-spinner {
-  width: 20px;
-  height: 20px;
-  border: 2px solid transparent;
-  border-top: 2px solid currentColor;
-  border-radius: 50%;
-  animation: spin 1s linear infinite;
-}
-
-@keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
-}
-
-.incomplete-warning {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 1rem;
-  color: #e74c3c;
-}
-
-.incomplete-warning fa-icon {
-  font-size: 1.5rem;
-}
-
-.incomplete-warning p {
-  margin: 0;
-  font-weight: 500;
-}
-
-/* Responsive design */
-@media (max-width: 1200px) {
-  .main-content {
-    grid-template-columns: 1fr;
-    gap: 2rem;
-  }
-  
-  .seat-selection-container {
-    padding: 1rem;
-  }
-}
-
-@media (max-width: 768px) {
-  .header-section h1 {
-    font-size: 1.8rem;
-    flex-direction: column;
-    gap: 0.5rem;
-  }
-  
-  .progress-indicator {
-    flex-direction: column;
-    gap: 1rem;
-  }
-  
-  .step-connector {
-    width: 3px;
-    height: 50px;
-  }
-  
-  .bus-layout {
-    padding: 1rem;
-  }
-  
-  .seat {
-    width: 35px;
-    height: 35px;
-    font-size: 0.8rem;
-  }
-  
-  .aisle {
-    width: 40px;
-  }
-  
-  .boarding-header {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 1rem;
-  }
-  
-  .boarding-content {
-    padding: 0;
-  }
-}
-
-@media (max-width: 480px) {
-  .seat-pair {
-    gap: 0.25rem;
-  }
-  
-  .seat {
-    width: 30px;
-    height: 30px;
-    font-size: 0.7rem;
-  }
-  
-  .aisle {
-    width: 30px;
-  }
-  
-  .passenger-basic-info {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 0.5rem;
-  }
-}
-  
-
-/* PHASE 1: SEAT SELECTION */
-.seats-phase {
-  background: white;
-  border-radius: 16px;
-  padding: 2rem;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-}
-
-.main-content {
-  display: grid;
-  grid-template-columns: 2fr 1fr;
-  gap: 3rem;
-}
-
-/* Bus section */
-.bus-section {
-  background: #f8f9fa;
-  border-radius: 12px;
-  padding: 2rem;
-  border: 2px solid #e9ecef;
-}
-
-.bus-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 2rem;
-}
-
-.bus-header h3 {
-  color: #2c3e50;
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  margin: 0;
-}
-
-.legend {
-  display: flex;
-  gap: 1rem;
-}
-
-.legend-item {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  font-size: 0.9rem;
-}
-
-.seat-sample {
-  width: 20px;
-  height: 20px;
-  border-radius: 4px;
-  border: 1px solid #ddd;
-}
-
-/* Bus layout */
-.bus-layout {
-  background: #ffffff;
-  border-radius: 12px;
-  padding: 2rem;
-  border: 3px solid #34495e;
-  position: relative;
-}
-
-.bus-front {
-  text-align: center;
-  background: #34495e;
-  color: white;
-  padding: 0.5rem;
-  border-radius: 8px 8px 0 0;
-  margin: -2rem -2rem 1rem -2rem;
-  font-weight: bold;
-}
-
-.seats-grid {
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-}
-
-.seat-row {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-
-.seat-pair {
-  display: flex;
-  gap: 0.5rem;
-}
-
-.aisle {
-  width: 60px;
-  height: 2px;
-  background: repeating-linear-gradient(
-    90deg,
-    #bdc3c7,
-    #bdc3c7 10px,
-    transparent 10px,
-    transparent 20px
-  );
-}
-
-/* Seat styles */
-.seat {
-  width: 45px;
-  height: 45px;
-  border-radius: 8px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-weight: bold;
-  font-size: 0.9rem;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  border: 2px solid;
-  position: relative;
-}
-
-.seat.available {
-  background: #ecf0f1;
-  border-color: #bdc3c7;
-  color: #2c3e50;
-}
-
-.seat.available:hover {
-  background: #d5dbdb;
-  transform: scale(1.1);
-  box-shadow: 0 4px 12px rgba(52, 152, 219, 0.3);
-}
-
-.seat.occupied {
-  background: #e74c3c;
-  border-color: #c0392b;
-  color: white;
-  cursor: not-allowed;
-}
-
-.seat.selected {
-  background: #27ae60;
-  border-color: #229954;
-  color: white;
-  transform: scale(1.1);
-  box-shadow: 0 4px 12px rgba(39, 174, 96, 0.4);
-}
-
-.seat.ventana::after {
-  content: '';
-  position: absolute;
-  top: -3px;
-  right: -3px;
-  width: 8px;
-  height: 8px;
-  background: #3498db;
-  border-radius: 50%;
-}
-
-/* Passengers section */
-.passengers-section {
-  display: flex;
-  flex-direction: column;
-  gap: 2rem;
-}
-
-.passenger-selection {
-  background: white;
-  border-radius: 12px;
-  padding: 1.5rem;
-  border: 1px solid #e9ecef;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-}
-
-.passenger-selection h3 {
-  color: #2c3e50;
-  margin-bottom: 1.5rem;
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-}
-
-.current-passenger h4 {
-  color: #3498db;
-  margin-bottom: 1rem;
-  font-size: 1rem;
-}
-
-.passenger-card {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-  padding: 1rem;
-  border-radius: 8px;
-  border: 2px solid #e9ecef;
-  margin-bottom: 0.5rem;
-  transition: all 0.3s ease;
-}
-
-.passenger-card.clickable {
-  cursor: pointer;
-}
-
-.passenger-card.clickable:hover {
-  border-color: #3498db;
-  background: #f8f9ff;
-}
-
-.passenger-card.active {
-  border-color: #3498db;
-  background: linear-gradient(135deg, #3498db, #2980b9);
-  color: white;
-}
-
-.passenger-card.assigned {
-  border-color: #27ae60;
-  background: #d5f4e6;
-  color: #27ae60;
-}
-
-.passenger-info {
-  flex: 1;
-}
-
-.passenger-info .name {
-  display: block;
-  font-weight: bold;
-  font-size: 1rem;
-}
-
-.passenger-info .details {
-  display: block;
-  font-size: 0.85rem;
-  opacity: 0.8;
-  margin-top: 0.25rem;
-}
-
-.pending-passengers h4,
-.assigned-passengers h4 {
-  color: #2c3e50;
-  font-size: 1rem;
-  margin-bottom: 1rem;
-}
-
-.continue-section {
-  margin-top: auto;
-}
-
-.continue-btn {
-  width: 100%;
-  background: linear-gradient(135deg, #27ae60, #229954);
-  color: white;
-  border: none;
-  border-radius: 12px;
-  padding: 1rem 2rem;
-  font-size: 1.1rem;
-  font-weight: bold;
-  cursor: pointer;
-}
+/* Minimal CSS for seat selection component */
+.seat-selection-container { max-width: 1400px; margin: 0 auto; padding: 2rem; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); min-height: 100vh; }
+.header-section { text-align: center; margin-bottom: 2rem; background: white; padding: 2rem; border-radius: 16px; box-shadow: 0 8px 32px rgba(0,0,0,0.1); }
+.header-section h1 { color: #2c3e50; font-size: 2.5rem; margin-bottom: 0.5rem; display: flex; align-items: center; justify-content: center; gap: 1rem; }
+.trip-info { color: #7f8c8d; font-size: 1.2rem; margin-bottom: 2rem; }
+
+.progress-indicator { display: flex; align-items: center; justify-content: center; gap: 2rem; margin-top: 2rem; }
+.step { display: flex; flex-direction: column; align-items: center; gap: 0.5rem; opacity: 0.5; transition: all 0.3s; }
+.step.active, .step.completed { opacity: 1; }
+.step-number { width: 50px; height: 50px; border-radius: 50%; background: #ecf0f1; display: flex; align-items: center; justify-content: center; font-weight: bold; color: #7f8c8d; transition: all 0.3s; }
+.step.active .step-number { background: #3498db; color: white; }
+.step.completed .step-number { background: #27ae60; color: white; }
+.step-connector { height: 3px; width: 100px; background: #ecf0f1; transition: all 0.3s; }
+.step-connector.completed { background: #27ae60; }
+
+.error-message { background: #e74c3c; color: white; padding: 1rem; border-radius: 8px; margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem; position: relative; }
+.close-error { position: absolute; right: 1rem; background: none; border: none; color: white; font-size: 1.5rem; cursor: pointer; }
+
+.seats-phase, .boarding-phase { background: white; border-radius: 16px; padding: 2rem; box-shadow: 0 8px 32px rgba(0,0,0,0.1); }
+.main-content { display: grid; grid-template-columns: 2fr 1fr; gap: 3rem; }
+
+.bus-section { background: #f8f9fa; border-radius: 12px; padding: 2rem; border: 2px solid #e9ecef; }
+.bus-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; }
+.bus-header h3 { color: #2c3e50; display: flex; align-items: center; gap: 0.5rem; margin: 0; }
+.legend { display: flex; gap: 1rem; }
+.legend-item { display: flex; align-items: center; gap: 0.5rem; font-size: 0.9rem; }
+.seat-sample { width: 20px; height: 20px; border-radius: 4px; border: 1px solid #ddd; }
+
+.bus-layout { background: white; border-radius: 12px; padding: 2rem; border: 3px solid #34495e; }
+.bus-front { text-align: center; background: #34495e; color: white; padding: 0.5rem; margin: -2rem -2rem 1rem; font-weight: bold; border-radius: 8px 8px 0 0; }
+.seats-grid { display: flex; flex-direction: column; gap: 0.5rem; }
+.seat-row { display: flex; align-items: center; justify-content: space-between; }
+.seat-pair { display: flex; gap: 0.5rem; }
+.aisle { width: 60px; height: 2px; background: repeating-linear-gradient(90deg, #bdc3c7, #bdc3c7 10px, transparent 10px, transparent 20px); }
+
+.seat { width: 45px; height: 45px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 0.9rem; cursor: pointer; transition: all 0.3s; border: 2px solid; }
+.seat.available { background: #ecf0f1; border-color: #bdc3c7; color: #2c3e50; }
+.seat.available:hover { background: #d5dbdb; transform: scale(1.1); }
+.seat.occupied { background: #e74c3c; border-color: #c0392b; color: white; cursor: not-allowed; }
+.seat.selected { background: #27ae60; border-color: #229954; color: white; transform: scale(1.1); }
+
+.passengers-section { display: flex; flex-direction: column; gap: 2rem; }
+.passenger-selection { background: white; border-radius: 12px; padding: 1.5rem; border: 1px solid #e9ecef; }
+.passenger-card { display: flex; align-items: center; gap: 1rem; padding: 1rem; border-radius: 8px; border: 2px solid #e9ecef; margin-bottom: 0.5rem; transition: all 0.3s; }
+.passenger-card.clickable { cursor: pointer; }
+.passenger-card.clickable:hover { border-color: #3498db; background: #f8f9ff; }
+.passenger-card.active { border-color: #3498db; background: linear-gradient(135deg, #3498db, #2980b9); color: white; }
+.passenger-card.assigned { border-color: #27ae60; background: #d5f4e6; color: #27ae60; }
+
+.passenger-info { flex: 1; }
+.passenger-info .name { display: block; font-weight: bold; }
+.passenger-info .details { display: block; font-size: 0.85rem; opacity: 0.8; margin-top: 0.25rem; }
+
+.continue-btn { width: 100%; background: linear-gradient(135deg, #27ae60, #229954); color: white; border: none; border-radius: 12px; padding: 1rem 2rem; font-size: 1.1rem; font-weight: bold; cursor: pointer; transition: all 0.3s; display: flex; align-items: center; justify-content: center; gap: 0.5rem; }
+.continue-btn:hover { transform: translateY(-2px); }
+
+.boarding-header { display: flex; align-items: center; gap: 2rem; margin-bottom: 2rem; padding-bottom: 1rem; border-bottom: 2px solid #ecf0f1; }
+.back-btn { background: #95a5a6; color: white; border: none; border-radius: 8px; padding: 0.75rem 1.5rem; cursor: pointer; transition: all 0.3s; }
+.back-btn:hover { background: #7f8c8d; }
+
+.boarding-content { max-width: 800px; margin: 0 auto; }
+.instructions { background: #e8f4fd; border-left: 4px solid #3498db; padding: 1rem 1.5rem; margin-bottom: 2rem; border-radius: 0 8px 8px 0; }
+.passenger-boarding-list { display: flex; flex-direction: column; gap: 1.5rem; margin-bottom: 3rem; }
+.passenger-boarding-card { background: white; border: 2px solid #e9ecef; border-radius: 12px; padding: 1.5rem; transition: all 0.3s; }
+.passenger-boarding-card:hover { border-color: #3498db; }
+
+.passenger-basic-info { display: flex; align-items: center; gap: 1rem; }
+.passenger-basic-info h4 { margin: 0; color: #2c3e50; }
+.passenger-basic-info p { margin: 0.25rem 0 0 0; color: #7f8c8d; font-size: 0.9rem; }
+
+.boarding-selection { display: flex; flex-direction: column; gap: 0.5rem; }
+.boarding-select { padding: 0.75rem 1rem; border: 2px solid #e9ecef; border-radius: 8px; background: white; cursor: pointer; transition: all 0.3s; }
+.boarding-select:focus { outline: none; border-color: #3498db; }
+
+.generate-contract-section { background: linear-gradient(135deg, #f8f9fa, #e9ecef); border-radius: 16px; padding: 2rem; text-align: center; border: 2px solid #e9ecef; }
+.generate-contract-btn { background: linear-gradient(135deg, #e74c3c, #c0392b); color: white; border: none; border-radius: 12px; padding: 1.25rem 3rem; font-size: 1.2rem; font-weight: bold; cursor: pointer; transition: all 0.3s; display: inline-flex; align-items: center; gap: 0.75rem; }
+.generate-contract-btn:hover:not(:disabled) { transform: translateY(-3px); }
+.generate-contract-btn:disabled { opacity: 0.7; cursor: not-allowed; }
+
+.loading-spinner { width: 20px; height: 20px; border: 2px solid transparent; border-top: 2px solid currentColor; border-radius: 50%; animation: spin 1s linear infinite; }
+@keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+
+.incomplete-warning { display: flex; align-items: center; justify-content: center; gap: 1rem; color: #e74c3c; }
+
+@media (max-width: 1200px) { .main-content { grid-template-columns: 1fr; gap: 2rem; } .seat-selection-container { padding: 1rem; } }
+@media (max-width: 768px) { .header-section h1 { font-size: 1.8rem; flex-direction: column; } .progress-indicator { flex-direction: column; gap: 1rem; } .step-connector { width: 3px; height: 50px; } .seat { width: 35px; height: 35px; font-size: 0.8rem; } .boarding-header { flex-direction: column; align-items: flex-start; gap: 1rem; } }
+@media (max-width: 480px) { .seat { width: 30px; height: 30px; font-size: 0.7rem; } .passenger-basic-info { flex-direction: column; align-items: flex-start; gap: 0.5rem; } }
