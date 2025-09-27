@@ -1,0 +1,15 @@
+<button
+  class="action-btn"
+  [ngClass]="type"
+  [disabled]="disabled"
+  (click)="actionClick.emit()"
+  matRipple
+>
+  <fa-icon 
+    [icon]="
+      type === 'view' ? faEye :
+      type === 'edit' ? faEdit :
+      faTrash
+    "
+  ></fa-icon>
+</button>

@@ -5,6 +5,7 @@ import { ButtonAddComponent } from '../../components/button-add/button-add.compo
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { faUser } from '@fortawesome/free-solid-svg-icons';
 import { Subscription } from 'rxjs';
+import { ActionsbuttonsComponent } from '../../components/actionsbuttons/actionsbuttons.component';
 
 // Import our service and the interfaces we need
 import { ClientService, Client, ClientResponse } from '../../services/client/client.service';
@@ -12,7 +13,7 @@ import { ClientService, Client, ClientResponse } from '../../services/client/cli
 @Component({
   selector: 'app-clients',
   standalone: true,
-  imports: [CommonModule, FormsModule, ButtonAddComponent, FontAwesomeModule],
+  imports: [CommonModule, FormsModule, ButtonAddComponent, FontAwesomeModule, ActionsbuttonsComponent],
   templateUrl: './clients.component.html',
   styleUrls: ['./clients.component.css']
 })
@@ -27,15 +28,34 @@ export class ClientsComponent implements OnInit, OnDestroy {
   showModal = false;
   isLoading = false; // To show loading indicators
   error = signal<string | null>(null); // To show errors to users
+
+
 // Y en tu componente:
-newClient: Omit<Client, 'id' | 'edad'> = {
+newClient: Omit<Client, 'id'> = {
   nombre: '',
-  fechaNacimiento: '',
+  fecha_nacimiento: '',
   direccion: '',
-  telefono: '',
-  email: '',
-  sexo: 'Masculino', // Ya no necesita type assertion
+  numero_telefono: '',
+  correo: '',
+  sexo: 'F', // Ya no necesita type assertion
+  activo: true, // Nuevo campo con valor por defecto
 };
+
+
+calculateAge(fechaNacimiento: string): number {
+  if (!fechaNacimiento) return 0;
+  const birth = new Date(fechaNacimiento);
+  const today = new Date();
+  let age = today.getFullYear() - birth.getFullYear();
+  const monthDiff = today.getMonth() - birth.getMonth();
+  if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birth.getDate())) {
+    age--;
+  }
+  return age;
+}
+
+
+
 
   // To manage subscriptions and prevent memory leaks
   private subscriptions = new Subscription();
@@ -175,9 +195,9 @@ newClient: Omit<Client, 'id' | 'edad'> = {
   private validateForm(): boolean {
     return !!(
       this.newClient.nombre?.trim() &&
-      this.newClient.fechaNacimiento &&
+      this.newClient.fecha_nacimiento &&
       this.newClient.direccion?.trim() &&
-      this.newClient.telefono?.trim() &&
+      this.newClient.numero_telefono?.trim() &&
       this.newClient.sexo
     );
   }
@@ -189,11 +209,11 @@ newClient: Omit<Client, 'id' | 'edad'> = {
   private resetForm(): void {
     this.newClient = {
       nombre: '',
-      fechaNacimiento: '',
+      fecha_nacimiento: '',
       direccion: '',
-      telefono: '',
-      email: '',
-      sexo: 'Masculino' as 'Masculino' // Ensure type compatibility
+      numero_telefono: '',
+      correo: '',
+      sexo: 'M' // Ensure type compatibility
     };
     this.error.set(null);
   }
@@ -260,47 +280,7 @@ newClient: Omit<Client, 'id' | 'edad'> = {
     this.subscriptions.add(subscription);
   }
 
-  /**
-   * Edits an existing client
-   */
-  updateClient(client: Client): void {
-    this.isLoading = true;
-    this.error.set(null);
-
-    // Ensure client.id is defined before calling updateClient
-    if (typeof client.id !== 'number') {
-      this.error.set('Invalid client ID');
-      this.isLoading = false;
-      return;
-    }
-
-    const subscription = this.clientService.updateClient(client.id, client).subscribe({
-      next: (response) => {
-        if (response.success) {
-          console.log('Client updated successfully');
-          this.loadClients(); // Reload list to show changes
-          this.closeModal(); // Close edit modal if you're using one
-        } else {
-          this.error.set(response.message || 'Error updating client');
-        }
-        this.isLoading = false;
-      },
-      error: (error) => {
-        console.error('Edit error:', error);
-        this.error.set('Error updating client');
-        this.isLoading = false;
-      }
-    });
-
-    this.subscriptions.add(subscription);
+  
   }
 
-  // Add this method to your ClientsComponent class
-getTodayDateString(): string {
-  const today = new Date();
-  const year = today.getFullYear();
-  const month = (today.getMonth() + 1).toString().padStart(2, '0');
-  const day = today.getDate().toString().padStart(2, '0');
-  return `${year}-${month}-${day}`;
-}
-}
+ 

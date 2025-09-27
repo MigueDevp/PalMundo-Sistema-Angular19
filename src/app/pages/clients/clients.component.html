@@ -1,31 +1,63 @@
 <div class="clients-container">
   <div class="header-section">
-    <h2>Registro Global de Clientes <fa-icon [icon]="faUser"/></h2>
+    <h2>Registro Global de Clientes <fa-icon [icon]="faUser" /></h2>
     <hr />
-    
+
     <!-- Error message display - shows when something goes wrong -->
     @if (error()) {
-      <div class="error-message" style="background: #ffebee; color: #c62828; padding: 10px; border-radius: 4px; margin-bottom: 15px; position: relative;">
-        {{ error() }}
-        <button 
-          style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); background: none; border: none; cursor: pointer; color: #c62828; font-size: 16px;"
-          (click)="error.set(null)"
-        >
-          ×
-        </button>
-      </div>
+    <div
+      class="error-message"
+      style="
+        background: #ffebee;
+        color: #c62828;
+        padding: 10px;
+        border-radius: 4px;
+        margin-bottom: 15px;
+        position: relative;
+      "
+    >
+      {{ error() }}
+      <button
+        style="
+          position: absolute;
+          right: 10px;
+          top: 50%;
+          transform: translateY(-50%);
+          background: none;
+          border: none;
+          cursor: pointer;
+          color: #c62828;
+          font-size: 16px;
+        "
+        (click)="error.set(null)"
+      >
+        ×
+      </button>
+    </div>
     }
-    
+
     <!-- Loading indicator - shows when data is being processed -->
     @if (isLoading) {
-      <div class="loading-indicator" style="text-align: center; color: #666; margin-bottom: 15px; padding: 10px;">
-        <span style="display: inline-block; margin-right: 8px;">⏳</span>
-        Procesando...
-      </div>
+    <div
+      class="loading-indicator"
+      style="
+        text-align: center;
+        color: #666;
+        margin-bottom: 15px;
+        padding: 10px;
+      "
+    >
+      <span style="display: inline-block; margin-right: 8px">⏳</span>
+      Procesando...
+    </div>
     }
-    
+
     <!-- Add client button - disabled during loading to prevent multiple submissions -->
-    <app-button-add (click)="openAddModal()" [style.opacity]="isLoading ? '0.6' : '1'" [style.pointer-events]="isLoading ? 'none' : 'auto'">
+    <app-button-add
+      (click)="openAddModal()"
+      [style.opacity]="isLoading ? '0.6' : '1'"
+      [style.pointer-events]="isLoading ? 'none' : 'auto'"
+    >
       Añadir Cliente
     </app-button-add>
   </div>
@@ -34,66 +66,106 @@
     <table class="clients-table">
       <thead>
         <tr>
-          <th>ID</th>
           <th>Nombre</th>
-          <th>Edad</th>
           <th>Dirección</th>
+          <th>Fecha de Nacimiento</th>
           <th>Teléfono</th>
           <th>Email</th>
           <th>Sexo</th>
+          <th>Estado</th>
           <th>Acciones</th>
         </tr>
       </thead>
       <tbody>
         <!-- Show message when no clients exist and we're not loading -->
         @if (clients().length === 0 && !isLoading) {
-          <tr>
-            <td colspan="8" style="text-align: center; color: #666; padding: 40px; font-style: italic;">
-              No hay clientes registrados. ¡Agrega el primero haciendo clic en "Añadir Cliente"!
-            </td>
-          </tr>
+        <tr>
+          <td
+            colspan="8"
+            style="
+              text-align: center;
+              color: #666;
+              padding: 40px;
+              font-style: italic;
+            "
+          >
+            No hay clientes registrados. ¡Agrega el primero haciendo clic en
+            "Añadir Cliente"!
+          </td>
+        </tr>
         }
-        
+
         <!-- Show loading row when data is being fetched -->
         @if (isLoading && clients().length === 0) {
-          <tr>
-            <td colspan="8" style="text-align: center; color: #666; padding: 40px;">
-              <span style="display: inline-block; margin-right: 8px;">🔄</span>
-              Cargando clientes...
-            </td>
-          </tr>
+        <tr>
+          <td
+            colspan="8"
+            style="text-align: center; color: #666; padding: 40px"
+          >
+            <span style="display: inline-block; margin-right: 8px">🔄</span>
+            Cargando clientes...
+          </td>
+        </tr>
         }
-        
+
         <!-- Display actual client data -->
-        @for (client of clients(); track client.id) {
-          <tr [style.opacity]="isLoading ? '0.7' : '1'">
-            <td>{{ client.id }}</td>
-            <td>{{ client.nombre }}</td>
-            <td>{{ client.edad }}</td> <!-- Age now comes calculated from the service -->
-            <td>{{ client.direccion }}</td>
-            <td>{{ client.telefono }}</td>
-            <td>{{ client.email || 'N/A' }}</td> <!-- Show N/A if email is empty -->
-            <td>{{ client.sexo }}</td>
-            <td class="actions">
-              <!-- Buttons are disabled during loading operations -->
-              <button 
-                class="edit-btn" 
-                [style.opacity]="isLoading ? '0.6' : '1'"
-                [style.pointer-events]="isLoading ? 'none' : 'auto'"
-                (abort)="updateClient(client)"
-              >
-                Editar
-              </button>
-              <button 
-                class="delete-btn" 
-                [style.opacity]="isLoading ? '0.6' : '1'"
-                [style.pointer-events]="isLoading ? 'none' : 'auto'"
-                (click)="deleteClient(client.id!)"
-              >
-                Eliminar
-              </button>
-            </td>
-          </tr>
+        @for (client of clients(); track client.id_cliente) {
+        <tr [style.opacity]="isLoading ? '0.7' : '1'">
+          <td>
+  <div class="name-container">
+    <div class="client-name">{{ client.nombre }}</div>
+    <div class="client-age">
+      Edad: {{ calculateAge(client.fecha_nacimiento) }}
+    </div>
+  </div>
+</td>
+          <td>{{ client.direccion }}</td>
+          <td>{{ client.fecha_nacimiento | date: 'yyyy-MM-dd' }}</td>
+          <td>{{ client.numero_telefono }}</td>
+          <td>{{ client.correo || "N/A" }}</td>
+          <!-- Show N/A if email is empty -->
+          <td>{{ client.sexo }}</td>
+          <td>
+  <span 
+    class="status-badge" 
+    [ngClass]="client.activo ? 'active' : 'inactive'"
+  >
+    <span class="status-dot"></span>
+    {{ client.activo ? 'Activo' : 'Inactivo' }}
+  </span>
+</td>
+
+          <td class="actions">
+  <app-actionsbuttons
+    type="view" 
+    [disabled]="isLoading" 
+  
+  ></app-actionsbuttons>
+
+
+
+<!-- 
+      Mensaje de error - se muestra cuando algo sale mal 
+      Se puede ocultar haciendo clic en la X
+    -->
+
+
+
+
+  <app-actionsbuttons
+    type="edit" 
+    [disabled]="isLoading" 
+   
+  ></app-actionsbuttons>
+
+  <app-actionsbuttons 
+    type="delete" 
+    [disabled]="isLoading" 
+    (actionClick)="deleteClient(client.id_cliente!)"
+  ></app-actionsbuttons>
+</td>
+
+        </tr>
         }
       </tbody>
     </table>
@@ -101,140 +173,152 @@
 
   <!-- Modal for adding new clients -->
   @if (showModal) {
-    <div class="modal-overlay">
-      <div class="modal-content">
-        <h3>Agregar Nuevo Cliente</h3>
-        
-        <!-- Show specific form errors -->
-        @if (error()) {
-          <div class="error-message" style="background: #ffebee; color: #c62828; padding: 10px; border-radius: 4px; margin-bottom: 15px;">
-            {{ error() }}
-          </div>
-        }
-        
-        <form (submit)="addClient()" #clientForm="ngForm">
-          <div class="form-group">
-            <label>Nombre completo: <span style="color: red;">*</span></label>
-            <input 
-              [(ngModel)]="newClient.nombre" 
-              name="nombre" 
-              required 
-              [disabled]="isLoading"
-              placeholder="Ejemplo: Juan Pérez García"
-              #nombreField="ngModel"
-            />
-            <!-- Field-specific validation message -->
-            @if (nombreField.invalid && nombreField.touched) {
-              <small style="color: #c62828; font-size: 12px;">El nombre es obligatorio</small>
-            }
-          </div>
+  <div class="modal-overlay">
+    <div class="modal-content">
+      <h3>Agregar Nuevo Cliente</h3>
 
-          <div class="form-group">
-            <label>Fecha de nacimiento: <span style="color: red;">*</span></label>
-            <input
-              type="date"
-              [(ngModel)]="newClient.fechaNacimiento"
-              name="fechaNacimiento"
-              required
-              [disabled]="isLoading"
-              [max]="getTodayDateString()"
-              #fechaField="ngModel"
-            />
-            @if (fechaField.invalid && fechaField.touched) {
-              <small style="color: #c62828; font-size: 12px;">La fecha de nacimiento es obligatoria</small>
-            }
-          </div>
-
-          <div class="form-group">
-            <label>Dirección: <span style="color: red;">*</span></label>
-            <input 
-              [(ngModel)]="newClient.direccion" 
-              name="direccion" 
-              required 
-              [disabled]="isLoading"
-              placeholder="Calle, número, colonia, ciudad"
-              #direccionField="ngModel"
-            />
-            @if (direccionField.invalid && direccionField.touched) {
-              <small style="color: #c62828; font-size: 12px;">La dirección es obligatoria</small>
-            }
-          </div>
-
-          <div class="form-group">
-            <label>Teléfono: <span style="color: red;">*</span></label>
-            <input 
-              [(ngModel)]="newClient.telefono" 
-              name="telefono" 
-              required 
-              [disabled]="isLoading"
-              placeholder="10 dígitos: 4421234567"
-              pattern="[0-9]{10}"
-              #telefonoField="ngModel"
-            />
-            @if (telefonoField.invalid && telefonoField.touched) {
-              <small style="color: #c62828; font-size: 12px;">
-                @if (telefonoField.errors?.['required']) {
-                  El teléfono es obligatorio
-                } @else if (telefonoField.errors?.['pattern']) {
-                  El teléfono debe tener exactamente 10 dígitos
-                }
-              </small>
-            }
-          </div>
-
-          <div class="form-group">
-            <label>Email:</label>
-            <input 
-              type="email" 
-              [(ngModel)]="newClient.email" 
-              name="email" 
-              [disabled]="isLoading"
-              placeholder="ejemplo@correo.com (opcional)"
-              #emailField="ngModel"
-            />
-            @if (emailField.invalid && emailField.touched && newClient.email.trim()) {
-              <small style="color: #c62828; font-size: 12px;">Ingresa un email válido</small>
-            }
-          </div>
-
-          <div class="form-group">
-            <label>Sexo: <span style="color: red;">*</span></label>
-            <select 
-              [(ngModel)]="newClient.sexo" 
-              name="sexo"
-              [disabled]="isLoading"
-              required
-            >
-              <option value="Masculino">Masculino</option>
-              <option value="Femenino">Femenino</option>
-              <option value="Otro">Otro</option>
-            </select>
-          </div>
-
-          <div class="modal-actions">
-            <button 
-              type="button" 
-              class="cancel-btn" 
-              (click)="closeModal()"
-              [disabled]="isLoading"
-            >
-              Cancelar
-            </button>
-            <button 
-              type="submit" 
-              class="save-btn"
-              [disabled]="isLoading || clientForm.invalid"
-            >
-              @if (isLoading) {
-                <span style="display: inline-block; margin-right: 8px;">⏳</span>
-                Guardando...
-              } @else {
-                Guardar
-              }
-            </button>
-          </div>
-        </form>
+      <!-- Show specific form errors -->
+      @if (error()) {
+      <div
+        class="error-message"
+        style="
+          background: #ffebee;
+          color: #c62828;
+          padding: 10px;
+          border-radius: 4px;
+          margin-bottom: 15px;
+        "
+      >
+        {{ error() }}
       </div>
+      }
+
+      <form (submit)="addClient()" #clientForm="ngForm">
+        <div class="form-group">
+          <label>Nombre completo: <span style="color: red">*</span></label>
+          <input
+            [(ngModel)]="newClient.nombre"
+            name="nombre"
+            required
+            [disabled]="isLoading"
+            placeholder="Ejemplo: Juan Pérez García"
+            #nombreField="ngModel"
+          />
+          <!-- Field-specific validation message -->
+          @if (nombreField.invalid && nombreField.touched) {
+          <small style="color: #c62828; font-size: 12px"
+            >El nombre es obligatorio</small
+          >
+          }
+        </div>
+
+        <div class="form-group">
+          <label>Fecha de nacimiento: <span style="color: red">*</span></label>
+          <input
+            type="date"
+            [(ngModel)]="newClient.fecha_nacimiento"
+            name="fechaNacimiento"
+            required
+            [disabled]="isLoading"
+            #fechaField="ngModel"
+          />
+          @if (fechaField.invalid && fechaField.touched) {
+          <small style="color: #c62828; font-size: 12px"
+            >La fecha de nacimiento es obligatoria</small
+          >
+          }
+        </div>
+
+        <div class="form-group">
+          <label>Dirección: <span style="color: red">*</span></label>
+          <input
+            [(ngModel)]="newClient.direccion"
+            name="direccion"
+            required
+            [disabled]="isLoading"
+            placeholder="Calle, número, colonia, ciudad"
+            #direccionField="ngModel"
+          />
+          @if (direccionField.invalid && direccionField.touched) {
+          <small style="color: #c62828; font-size: 12px"
+            >La dirección es obligatoria</small
+          >
+          }
+        </div>
+
+        <div class="form-group">
+          <label>Teléfono: <span style="color: red">*</span></label>
+          <input
+            [(ngModel)]="newClient.numero_telefono"
+            name="telefono"
+            required
+            [disabled]="isLoading"
+            placeholder="10 dígitos: 4421234567"
+            pattern="[0-9]{10}"
+            #telefonoField="ngModel"
+          />
+          @if (telefonoField.invalid && telefonoField.touched) {
+          <small style="color: #c62828; font-size: 12px">
+            @if (telefonoField.errors?.['required']) { El teléfono es
+            obligatorio } @else if (telefonoField.errors?.['pattern']) { El
+            teléfono debe tener exactamente 10 dígitos }
+          </small>
+          }
+        </div>
+
+        <div class="form-group">
+          <label>Email:</label>
+          <input
+            type="email"
+            [(ngModel)]="newClient.correo"
+            name="email"
+            [disabled]="isLoading"
+            placeholder="ejemplo@correo.com (opcional)"
+            #emailField="ngModel"
+          />
+          @if (emailField.invalid && emailField.touched &&
+          newClient.correo.trim()) {
+          <small style="color: #c62828; font-size: 12px"
+            >Ingresa un email válido</small
+          >
+          }
+        </div>
+
+        <div class="form-group">
+          <label>Sexo: <span style="color: red">*</span></label>
+          <select
+            [(ngModel)]="newClient.sexo"
+            name="sexo"
+            [disabled]="isLoading"
+            required
+          >
+            <option value="Masculino">Masculino</option>
+            <option value="Femenino">Femenino</option>
+            <option value="Otro">Otro</option>
+          </select>
+        </div>
+
+        <div class="modal-actions">
+          <button
+            type="button"
+            class="cancel-btn"
+            (click)="closeModal()"
+            [disabled]="isLoading"
+          >
+            Cancelar
+          </button>
+          <button
+            type="submit"
+            class="save-btn"
+            [disabled]="isLoading || clientForm.invalid"
+          >
+            @if (isLoading) {
+            <span style="display: inline-block; margin-right: 8px">⏳</span>
+            Guardando... } @else { Guardar }
+          </button>
+        </div>
+      </form>
     </div>
+  </div>
   }
 </div>

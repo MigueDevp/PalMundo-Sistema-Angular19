@@ -1,0 +1,51 @@
+.action-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 6px 12px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 11px;
+  font-weight: 500;
+  margin-right: 5px;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.08);
+}
+
+.action-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* View - azul pastel */
+.action-btn.view {
+  background-color: #a5d8ff; /* azul pastel */
+  color: #1e40af; /* azul oscuro */
+}
+.action-btn.view:hover {
+  background-color: #74c0fc;
+}
+
+/* Edit - amarillo pastel */
+.action-btn.edit {
+  background-color: #fff3bf; /* amarillo pastel */
+  color: #78350f; /* marrón oscuro / contraste */
+}
+.action-btn.edit:hover {
+  background-color: #ffe066;
+}
+
+/* Delete - rojo pastel */
+.action-btn.delete {
+  background-color: #ffc9c9; /* rojo pastel */
+  color: #b91c1c; /* rojo oscuro */
+}
+.action-btn.delete:hover {
+  background-color: #ffa8a8;
+}
+
+/* Ajuste de iconos para contraste */
+.action-btn fa-icon {
+  margin-right: 4px;
+}
