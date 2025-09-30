@@ -210,37 +210,68 @@
 
 /* Badges de estado */
 .status-badge {
-  padding: 0.25rem 0.75rem;
-  border-radius: 20px;
+  display: inline-flex;
+  align-items: center;
+  padding: 6px 12px;
+  border-radius: 16px;
   font-size: 0.75rem;
-  font-weight: 500;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
+  font-weight: 600;
+  text-transform: capitalize;
+  letter-spacing: 0.3px;
+  min-width: 90px;
+  justify-content: center;
+}
+
+.status-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  margin-right: 6px;
 }
 
 .status-badge.activo {
-  background: #d4edda;
-  color: #155724;
+  background-color: #b8f1c7;
+}
+
+.status-badge.activo .status-dot {
+  background-color: #2e7d32;
 }
 
 .status-badge.completado {
-  background: #d1ecf1;
-  color: #0c5460;
+  background-color: #d4edda;
+  color: #155724;
+}
+
+.status-badge.completado .status-dot {
+  background-color: #155724;
 }
 
 .status-badge.cancelado {
-  background: #f8d7da;
+  background-color: #f8d7da;
   color: #721c24;
 }
 
-/* Clave del viaje */
-.trip-key {
-  font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
-  background: #f8f9fa;
-  padding: 0.25rem 0.5rem;
-  border-radius: 4px;
-  border: 1px solid #e9ecef;
-  font-size: 0.875rem;
+.status-badge.cancelado .status-dot {
+  background-color: #721c24;
+}
+
+/* Estados de viaje actualizados */
+.status-badge.programado {
+  background-color: #fff3cd;
+  color: #856404;
+}
+
+.status-badge.programado .status-dot {
+  background-color: #856404;
+}
+
+.status-badge.en-curso {
+  background-color: #cce5ff;
+  color: #004085;
+}
+
+.status-badge.en-curso .status-dot {
+  background-color: #004085;
 }
 
 /* Botones deshabilitados */
@@ -249,16 +280,7 @@ button:disabled {
   cursor: not-allowed;
 }
 
-/* Mejoras visuales para la tabla */
-.clients-table td {
-  vertical-align: middle;
-}
 
-.actions {
-  display: flex;
-  gap: 0.5rem;
-  flex-wrap: wrap;
-}
 
 .view-btn, .edit-btn, .delete-btn {
   padding: 0.25rem 0.5rem;
@@ -435,4 +457,24 @@ li {
 
 .close-modal-btn:active {
   background-color: #c33d38;
+}
+
+
+/* Nombre normal */
+.trip-name {
+  font-weight: bold;
+}
+
+/* Edad en gris, más pequeña */
+.trip-key {
+  font-size: 12px;
+  color: gray;
+  margin-top: 2px; /* pequeño espacio debajo del nombre */
+}
+
+.incluye-item {
+  width: 200px; /* Ajusta este valor según sea necesario */
+}
+.incluye-item-p {
+  width: 180px; /* Ajusta este valor según sea necesario */
 }

@@ -15,6 +15,7 @@ import {
   templateUrl: './menu.component.html',
   styleUrls: ['./menu.component.css']
 })
+
 export class MenuComponent {
   // Iconos
   faHome = faHome;

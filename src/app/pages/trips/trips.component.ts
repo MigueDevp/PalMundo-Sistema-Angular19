@@ -5,81 +5,76 @@ import { ButtonAddComponent } from '../../components/button-add/button-add.compo
 import { Subscription } from 'rxjs';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { faSuitcase } from '@fortawesome/free-solid-svg-icons';
-
-// Import our service and interfaces
-import { TripService, Trip, TripResponse, Itinerario, InformacionAdicional } from '../../services/trip/trip.service';
+import { TripService, Trip } from '../../services/trip/trip.service';
+import { ActionsbuttonsComponent } from '../../components/actionsbuttons/actionsbuttons.component';
 
 @Component({
   selector: 'app-trips',
-  imports: [CommonModule, FormsModule, ButtonAddComponent, FontAwesomeModule],
+  standalone: true,
+  imports: [CommonModule, FormsModule, ButtonAddComponent, FontAwesomeModule, ActionsbuttonsComponent],
   templateUrl: './trips.component.html',
-  styleUrl: './trips.component.css',
+  styleUrl: './trips.component.css'
 })
 export class TripsComponent implements OnInit, OnDestroy {
+  // Tabs y estados
   activeTab: 'general' | 'precios' | 'detalles' = 'general';
-  incluyeTemporal: string = '';
-  noIncluyeTemporal: string = '';
-  puntosSalidaTemporal: string = '';
-
-  selectedViaje: Trip | null = null;
+  showModal = false;
   showDetailModal = false;
-
-  // Instead of signal with fixed data, use the service
-  viajes = signal<Trip[]>([]);
   isLoading = false;
+  
+  // Signals y datos
+  viajes = signal<Trip[]>([]);
   error = signal<string | null>(null);
-
+  selectedViaje: Trip | null = null;
+  
+  // Variables temporales para el formulario
+  incluyeTemporal = '';
+  noIncluyeTemporal = '';
+  
+  // Icono
   faSuitcase = faSuitcase;
   
-  private subscriptions = new Subscription();
-
-  // Variables for the new trip form
-  showModal = false;
-  newViaje: Omit<Trip, 'id' | 'estado' | 'asientosDisponibles'> = {
+  // Nuevo viaje (actualizado según la base de datos)
+  newViaje: Omit<Trip, 'id_viaje'> = {
     clave: '',
-    nombre: '',
-    fechaPartida: '',
-    fechaRegreso: '',
-    ultimoDiaPago: '',
-    anticipo: 0,
-    precioAdulto: 0,
-    precioInfante: 0,
-    precioMenor: 0,
-    incluye: [''],
-    noIncluye: [''],
-    itinerario: [{ dia: 1, titulo: '', descripcion: '' }],
-    informacionAdicional: {
-      puntosSalida: [''],
-      formasPago: [''],
-      politicas: '',
-    }
+    nombre_viaje: '',
+    fecha_partida: '',
+    fecha_regreso: '',
+    ultimo_dia_pagar: '',
+    cantidad_anticipo: 0,
+    precio_adulto: 0,
+    precio_menor: 0,
+    precio_infante: 0,
+    servicios_incluidos: [],
+    servicios_no_incluidos: [],
+    itinerario: '',
+    estado_viaje: 'programado',
+    activo: true
   };
+
+  private subscriptions = new Subscription();
 
   constructor(private tripService: TripService) {}
 
   ngOnInit(): void {
     this.loadTrips();
-    this.subscribeToChanges();
   }
 
   ngOnDestroy(): void {
     this.subscriptions.unsubscribe();
   }
 
-  public loadTrips(): void {
-    console.log('Loading trips from service...');
+  loadTrips(): void {
     this.isLoading = true;
     this.error.set(null);
 
     const subscription = this.tripService.getTrips().subscribe({
       next: (trips) => {
-        console.log('Trips loaded successfully:', trips.length);
         this.viajes.set(trips);
         this.isLoading = false;
       },
-      error: (error) => {
-        console.error('Error loading trips:', error);
-        this.error.set('Error loading trip list. Please try again.');
+      error: (err) => {
+        this.error.set(err.message);
         this.isLoading = false;
       }
     });
@@ -87,163 +82,102 @@ export class TripsComponent implements OnInit, OnDestroy {
     this.subscriptions.add(subscription);
   }
 
-  private subscribeToChanges(): void {
-    const subscription = this.tripService.trips$.subscribe({
-      next: (trips) => {
-        if (JSON.stringify(this.viajes()) !== JSON.stringify(trips)) {
-          console.log('Changes detected in trip list');
-          this.viajes.set(trips.map(trip => this.tripService['enrichTripData'](trip)));
-        }
-      }
-    });
-
-    this.subscriptions.add(subscription);
-  }
-
-  openDetailModal(viaje: Trip) {
-    this.selectedViaje = viaje;
-    this.showDetailModal = true;
-  }
-
-  closeDetailModal() {
-    this.showDetailModal = false;
-    this.selectedViaje = null;
-  }
-
-  openAddModal() {
-    this.showModal = true;
-    this.activeTab = 'general';
-    this.incluyeTemporal = '';
-    this.noIncluyeTemporal = '';
-    this.puntosSalidaTemporal = '';
-    this.error.set(null);
-  }
-
-  closeModal() {
-    this.showModal = false;
-    this.resetForm();
-  }
-
-  nextTab() {
-    if (this.activeTab === 'general') {
-      this.activeTab = 'precios';
-    } else if (this.activeTab === 'precios') {
-      this.activeTab = 'detalles';
-    }
-  }
-
-  addViaje() {
+  addViaje(): void {
     if (!this.validateForm()) {
-      this.error.set('Please complete all required fields');
+      this.error.set('Por favor complete todos los campos requeridos');
       return;
     }
 
-    console.log('Sending new trip to service:', this.newViaje);
+    const processedViaje = {
+      ...this.newViaje,
+      servicios_incluidos: this.incluyeTemporal.split(',').map(item => item.trim()).filter(Boolean),
+      servicios_no_incluidos: this.noIncluyeTemporal.split(',').map(item => item.trim()).filter(Boolean)
+    };
+
     this.isLoading = true;
     this.error.set(null);
 
-    // Process text fields to arrays
-    const processedViaje = {
-      ...this.newViaje,
-      incluye: this.incluyeTemporal
-        .split(',')
-        .map(item => item.trim())
-        .filter(item => item),
-      noIncluye: this.noIncluyeTemporal
-        .split(',')
-        .map(item => item.trim())
-        .filter(item => item),
-      informacionAdicional: {
-        ...this.newViaje.informacionAdicional,
-        puntosSalida: this.puntosSalidaTemporal
-          .split('\n')
-          .map(item => item.trim())
-          .filter(item => item),
-        formasPago: this.newViaje.informacionAdicional.formasPago.filter(item => item),
-        politicas: this.newViaje.informacionAdicional.politicas || 'Políticas básicas del viaje',
-      },
-      itinerario: this.newViaje.itinerario.filter(item => item.titulo || item.descripcion)
-    };
-
-    const subscription = this.tripService.createTrip(processedViaje).subscribe({
-      next: (response: TripResponse) => {
+    this.tripService.createTrip(processedViaje).subscribe({
+      next: (response) => {
         if (response.success) {
-          console.log('Trip created successfully:', response.data);
           this.closeModal();
-          console.log('✅ Trip added successfully');
+          this.loadTrips();
         } else {
-          console.error('Service error:', response.message);
-          this.error.set(response.message || 'Error creating trip');
+          this.error.set(response.message || 'Error al crear el viaje');
         }
         this.isLoading = false;
       },
-      error: (error) => {
-        console.error('Unexpected error creating trip:', error);
-        this.error.set('Unexpected error. Please try again.');
+      error: (err) => {
+        this.error.set(err.message);
         this.isLoading = false;
       }
     });
-
-    this.subscriptions.add(subscription);
   }
 
+  // Métodos auxiliares
   private validateForm(): boolean {
     return !!(
       this.newViaje.clave?.trim() &&
-      this.newViaje.nombre?.trim() &&
-      this.newViaje.fechaPartida &&
-      this.newViaje.fechaRegreso &&
-      this.newViaje.ultimoDiaPago &&
-      this.newViaje.anticipo >= 0 &&
-      this.newViaje.precioAdulto >= 0
+      this.newViaje.nombre_viaje?.trim() &&
+      this.newViaje.fecha_partida &&
+      this.newViaje.fecha_regreso &&
+      this.newViaje.ultimo_dia_pagar &&
+      this.newViaje.cantidad_anticipo >= 0 &&
+      this.newViaje.precio_adulto >= 0
     );
+  }
+
+  // Métodos de UI
+  openModal(): void {
+    this.showModal = true;
+    this.resetForm();
+  }
+
+  closeModal(): void {
+    this.showModal = false;
+    this.resetForm();
   }
 
   private resetForm(): void {
     this.newViaje = {
       clave: '',
-      nombre: '',
-      fechaPartida: '',
-      fechaRegreso: '',
-      ultimoDiaPago: '',
-      anticipo: 0,
-      precioAdulto: 0,
-      precioInfante: 0,
-      precioMenor: 0,
-      incluye: [''],
-      noIncluye: [''],
-      itinerario: [{ dia: 1, titulo: '', descripcion: '' }],
-      informacionAdicional: {
-        puntosSalida: [''],
-        formasPago: [''],
-        politicas: '',
-      }
+      nombre_viaje: '',
+      fecha_partida: '',
+      fecha_regreso: '',
+      ultimo_dia_pagar: '',
+      cantidad_anticipo: 0,
+      precio_adulto: 0,
+      precio_menor: 0,
+      precio_infante: 0,
+      servicios_incluidos: [],
+      servicios_no_incluidos: [],
+      itinerario: '',
+      estado_viaje: 'programado',
+      activo: true
     };
+    this.incluyeTemporal = '';
+    this.noIncluyeTemporal = '';
     this.error.set(null);
   }
 
+  // Métodos de formato
   formatFecha(fecha: string): string {
     if (!fecha) return '';
-    const date = new Date(fecha);
-    return date.toLocaleDateString('es-MX');
+    return new Date(fecha).toLocaleDateString('es-MX');
   }
 
-  formatFechaHora(fechaHora: string): string {
-    if (!fechaHora) return '';
-    const date = new Date(fechaHora);
-    return date.toLocaleString('es-MX');
+  getEstadoClass(estado: string): string {
+  switch (estado?.toLowerCase()) {
+    case 'programado':
+      return 'programado';
+    case 'en_curso':
+      return 'en-curso';
+    case 'completado':
+      return 'completado';
+    case 'cancelado':
+      return 'cancelado';
+    default:
+      return 'programado';
   }
-
-  // Future methods to implement:
-  updateTrip(trip: Trip): void {
-    // Similar to addViaje but using tripService.updateTrip()
-  }
-
-  deleteTrip(id: number): void {
-    // Similar to addViaje but using tripService.deleteTrip()
-  }
-
-  searchTrips(term: string): void {
-    // Use tripService.searchTrips()
-  }
+}
 }
