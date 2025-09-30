@@ -19,6 +19,7 @@
 
 .name {
   font-weight: bold;
+  font-size: 13px;
 }
 
 .dropdown {
@@ -47,6 +48,7 @@
 .user-details {
   display: flex;
   flex-direction: column;
+  color: black;
 }
 
 .full-name {
@@ -60,7 +62,7 @@
 
 .dropdown-divider {
   height: 1px;
-  background-color: #eee;
+  background-color: #262424;
 }
 
 .dropdown-options {
@@ -70,8 +72,9 @@
 .option {
   padding: 10px 15px;
   cursor: pointer;
+  color: black;
 }
 
 .option:hover {
-  background-color: #f5f5f5;
+  background-color: #ebdfdf;
 }

@@ -4,16 +4,18 @@
   margin-right: 8px;
   vertical-align: middle;
 }
+
 .sidebar {
-  height: 100vh;
-  width: 200px;
+  width: 220px; /* Cambiado de 200px a 220px para coincidir */
+  height: calc(100vh - 70px);
   background-color: #03083e;
   color: white;
   display: flex;
   flex-direction: column;
   transition: all 0.4s;
-  position: fixed;
-  z-index: 1000;
+    
+    top: 70px;
+    left: 0;
 }
 
 .logo-container {
@@ -89,7 +91,7 @@
 }
 
 .submenu.show {
-  max-height: 400px; /* Ajusta según la cantidad de elementos */
+  max-height: 400px;
 }
 
 .submenu-item {
@@ -118,5 +120,5 @@
 }
 
 .menu-scroll::-webkit-scrollbar-thumb:hover {
-  background:  rgba(255, 255, 255, 0.2);
+  background: rgba(255, 255, 255, 0.2);
 }

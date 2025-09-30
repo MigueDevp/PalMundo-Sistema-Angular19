@@ -1,18 +1,20 @@
 .header {
   position: fixed;
   top: 0;
-  left: 0;
-  width: 100%;
-  height: 70px;
-  background: linear-gradient(135deg, #a8e6cf 0%, #dcedc1 100%);
+  left: 220px; /* Comienza donde termina el sidebar */
+  right: 0; /* Se extiende hasta el borde derecho */
+  height: 55px;
+  background:#03083e;
   backdrop-filter: blur(10px);
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding: 0 2rem;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 20px rgba(170, 167, 167, 0.1);
   z-index: 1000;
-  border-bottom: 2px solid #ffd3b6;
+  border-bottom: 2px solid #1e1e1e;
+  transition: left 0.3s ease-in-out; /* Quitamos width de la transición */
+  color: white;
 }
 
 .header-left {
@@ -23,19 +25,19 @@
 .company-brand {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 10px;
 }
 
-.brand-icon {
+/* .brand-icon {
   font-size: 2rem;
   animation: bounce 2s infinite;
-}
+} */
 
 .brand-name {
-  font-size: 1.8rem;
+  font-size: 0.7rem;
   font-weight: 700;
-  color: #ff8b94;
-  text-shadow: 2px 2px 4px rgba(255, 139, 148, 0.2);
+  color: #ffffff;
+  text-shadow: 2px 2px 4px rgba(238, 224, 225, 0.2);
   letter-spacing: 1px;
 }
 
@@ -64,7 +66,7 @@
   }
   
   .brand-name {
-    font-size: 1.4rem;
+    font-size: 1.2rem;
   }
   
   .header-right {
