@@ -1,0 +1,22 @@
+<div class="user-menu" (click)="toggleDropdown()">
+  <div class="user-info">
+    <span class="avatar">{{ user.avatar }}</span>
+    <span class="name">{{ user.fullName }}</span>
+    <span class="dropdown-arrow">▼</span>
+  </div>
+  <div class="dropdown" [class.show]="isDropdownOpen">
+    <div class="dropdown-header">
+      <span class="avatar-large">{{ user.avatar }}</span>
+      <div class="user-details">
+        <span class="full-name">{{ user.fullName }}</span>
+        <span class="email">{{ user.email }}</span>
+        <span class="role">{{ user.role }}</span>
+      </div>
+    </div>
+    <div class="dropdown-divider"></div>
+    <div class="dropdown-options">
+      <div class="option">Mi Perfil</div>
+      <div class="option" (click)="logout()">Cerrar Sesión</div>
+    </div>
+  </div>
+</div>

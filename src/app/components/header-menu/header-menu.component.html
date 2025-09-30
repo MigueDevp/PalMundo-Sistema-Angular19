@@ -1,0 +1,14 @@
+<header class="header">
+  <div class="header-left">
+    <div class="company-brand">
+      <span class="brand-icon">🚌</span>
+      <span class="brand-name">Pal Mundo</span>
+    </div>
+  </div>
+  
+  <div class="header-right">
+    <app-notifications [count]="notificationCount"></app-notifications>
+    <app-kpi-badge [amount]="dailySales"></app-kpi-badge>
+    <app-user-profile [user]="currentUser"></app-user-profile>
+  </div>
+</header>
