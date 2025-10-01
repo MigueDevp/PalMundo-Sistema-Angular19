@@ -6,20 +6,34 @@
 .user-info {
   display: flex;
   align-items: center;
-  gap: 5px;
+  gap: 8px;
+  padding: 5px 10px;
+  border-radius: 5px;
+  transition: background-color 0.3s;
 }
 
-.avatar, .avatar-large {
-  font-size: 1.5rem;
+.user-info:hover {
+  background-color: #03083e;
+  color: white;
 }
 
-.avatar-large {
-  font-size: 2rem;
+.user-info fa-icon {
+  font-size: 1.2rem;
 }
 
 .name {
   font-weight: bold;
-  font-size: 13px;
+  font-size: 14px;
+}
+
+.dropdown-arrow {
+  font-size: 11px;
+  color: #ffffff;
+  transition: transform 0.3s;
+}
+
+.user-menu:hover .dropdown-arrow {
+  transform: rotate(180deg);
 }
 
 .dropdown {
@@ -27,11 +41,13 @@
   top: 100%;
   right: 0;
   background-color: white;
-  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-  border-radius: 5px;
-  width: 250px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  border-radius: 8px;
+  width: 280px;
   display: none;
   z-index: 1001;
+  margin-top: 5px;
+  border: 1px solid #e0e0e0;
 }
 
 .dropdown.show {
@@ -41,8 +57,14 @@
 .dropdown-header {
   display: flex;
   align-items: center;
-  gap: 10px;
-  padding: 15px;
+  gap: 12px;
+  padding: 20px;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.dropdown-header fa-icon {
+  font-size: 2.5rem;
+  color: #666;
 }
 
 .user-details {
@@ -53,6 +75,8 @@
 
 .full-name {
   font-weight: bold;
+  font-size: 16px;
+  margin-bottom: 2px;
 }
 
 .email, .role {
@@ -60,21 +84,44 @@
   color: #666;
 }
 
+.email {
+  margin-bottom: 2px;
+}
+
+.role {
+  font-weight: 500;
+  color: #888;
+}
+
 .dropdown-divider {
   height: 1px;
-  background-color: #262424;
+  background-color: #e0e0e0;
+  margin: 0;
 }
 
 .dropdown-options {
-  padding: 10px 0;
+  padding: 8px 0;
 }
 
 .option {
-  padding: 10px 15px;
+  padding: 12px 20px;
   cursor: pointer;
-  color: black;
+  color: #333;
+  font-size: 14px;
+  transition: background-color 0.2s;
+  display: flex;
+  align-items: center;
 }
 
 .option:hover {
-  background-color: #ebdfdf;
+  background-color: #f8f9fa;
+}
+
+.option:last-child {
+  color: #d32f2f;
+  font-weight: 500;
+}
+
+.option:last-child:hover {
+  background-color: #ffebee;
 }

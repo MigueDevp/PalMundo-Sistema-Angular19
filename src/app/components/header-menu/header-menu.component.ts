@@ -10,13 +10,15 @@ import { UserProfileComponent } from './user-profile/user-profile.component';
   styleUrl: './header-menu.component.css'
 })
 export class HeaderMenuComponent {
-notificationCount = 2;
-  dailySales = 15234.50;
+notificationCount = 4;
+  dailySales = 3800;
   
   currentUser = {
     avatar: '👤',
-    fullName: 'Ana García',
-    email: 'ana.garcia@palmunido.com',
+    fullName: 'Mariana Rangel ',
+    email: 'ceomariana@palmundo.com',
     role: 'Admin'
   };
+
+  
 }

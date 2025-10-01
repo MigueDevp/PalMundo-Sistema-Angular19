@@ -2,12 +2,9 @@
   position: relative;
 }
 
-.notification-button {
-  background: none;
-  border: none;
+.notifications fa-icon{
   font-size: 1.5rem;
   cursor: pointer;
-  position: relative;
 }
 
 .badge {

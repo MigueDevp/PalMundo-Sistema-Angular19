@@ -8,5 +8,6 @@ import { Component, Input } from '@angular/core';
 })
 export class KpiBadgeComponent {
     @Input() amount = 0;
+    @Input() variant: 'primary' | 'success' | 'warning' | 'danger' = 'primary';
 
 }

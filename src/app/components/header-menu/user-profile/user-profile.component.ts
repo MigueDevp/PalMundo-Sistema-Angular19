@@ -1,12 +1,15 @@
 import { Component, Input, HostListener } from '@angular/core';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { faUser } from '@fortawesome/free-regular-svg-icons';
 
 @Component({
   selector: 'app-user-profile',
-  imports: [],
+  imports: [FontAwesomeModule],
   templateUrl: './user-profile.component.html',
   styleUrl: './user-profile.component.css'
 })
 export class UserProfileComponent {
+  faUser = faUser;
  @Input() user: any;
   isDropdownOpen = false;
 

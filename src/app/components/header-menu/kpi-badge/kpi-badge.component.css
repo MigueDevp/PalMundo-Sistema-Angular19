@@ -4,5 +4,13 @@
   border-radius: 20px;
   font-weight: bold;
   font-size: 13px;
-  color: #00796b;
+  color: #645e5e;
+}
+.label {
+  margin-left: 20px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  color: #ffffff;
 }
