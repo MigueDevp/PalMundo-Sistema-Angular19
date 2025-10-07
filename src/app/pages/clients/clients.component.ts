@@ -8,54 +8,69 @@ import { Subscription } from 'rxjs';
 import { ActionsbuttonsComponent } from '../../components/actionsbuttons/actionsbuttons.component';
 
 // Import our service and the interfaces we need
-import { ClientService, Client, ClientResponse } from '../../services/client/client.service';
+import {
+  ClientService,
+  Client,
+  ClientResponse,
+} from '../../services/client/client.service';
 
 @Component({
   selector: 'app-clients',
   standalone: true,
-  imports: [CommonModule, FormsModule, ButtonAddComponent, FontAwesomeModule, ActionsbuttonsComponent],
+  imports: [
+    CommonModule,
+    FormsModule,
+    ButtonAddComponent,
+    FontAwesomeModule,
+    ActionsbuttonsComponent,
+  ],
   templateUrl: './clients.component.html',
-  styleUrls: ['./clients.component.css']
+  styleUrls: ['./clients.component.css'],
 })
 export class ClientsComponent implements OnInit, OnDestroy {
   faUser = faUser;
+  // Variables para edición
+  editingClient: Client | null = null;
+  isEditMode = false;
+
+  viewingClient: Client | null = null;
+isViewMode = false;
 
   // Instead of a signal with fixed data, now we have a signal that updates dynamically
   // This starts empty and gets populated by the service
   clients = signal<Client[]>([]);
-  
+
   // Variables for managing UI state
   showModal = false;
   isLoading = false; // To show loading indicators
   error = signal<string | null>(null); // To show errors to users
 
+  // CORREGIR en clients.component.ts
+  newClient: Omit<Client, 'id_cliente'> & { usuario_creacion: string } = {
+    nombre: '',
+    fecha_nacimiento: '',
+    direccion: '',
+    numero_telefono: '',
+    correo: '',
+    sexo: '',
+    activo: true,
+    usuario_creacion: 'admin', // O el usuario actual del sistema
+  };
 
-// Y en tu componente:
-newClient: Omit<Client, 'id'> = {
-  nombre: '',
-  fecha_nacimiento: '',
-  direccion: '',
-  numero_telefono: '',
-  correo: '',
-  sexo: 'F', // Ya no necesita type assertion
-  activo: true, // Nuevo campo con valor por defecto
-};
-
-
-calculateAge(fechaNacimiento: string): number {
-  if (!fechaNacimiento) return 0;
-  const birth = new Date(fechaNacimiento);
-  const today = new Date();
-  let age = today.getFullYear() - birth.getFullYear();
-  const monthDiff = today.getMonth() - birth.getMonth();
-  if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birth.getDate())) {
-    age--;
+  calculateAge(fechaNacimiento: string): number {
+    if (!fechaNacimiento) return 0;
+    const birth = new Date(fechaNacimiento);
+    const today = new Date();
+    let age = today.getFullYear() - birth.getFullYear();
+    const monthDiff = today.getMonth() - birth.getMonth();
+    if (
+      monthDiff < 0 ||
+      (monthDiff === 0 && today.getDate() < birth.getDate())
+    ) {
+      age--;
+    }
+    return age;
   }
-  return age;
-}
-
-
-
 
   // To manage subscriptions and prevent memory leaks
   private subscriptions = new Subscription();
@@ -98,7 +113,7 @@ calculateAge(fechaNacimiento: string): number {
         console.error('Error loading clients:', error);
         this.error.set('Error loading client list. Please try again.');
         this.isLoading = false;
-      }
+      },
     });
 
     this.subscriptions.add(subscription);
@@ -116,74 +131,90 @@ calculateAge(fechaNacimiento: string): number {
           console.log('Changes detected in client list');
           this.clients.set(clients);
         }
-      }
+      },
     });
 
     this.subscriptions.add(subscription);
   }
 
-  /**
-   * Opens the modal to add a client
-   * This function stays practically the same
-   */
-  openAddModal(): void {
-    this.showModal = true;
-    this.error.set(null); // Clear previous errors
-  }
+openEditModal(client: Client): void {
+  console.log('✏️ Opening edit modal for client:', client);
+  
+  // Crear una copia profunda del cliente para editar
+  this.editingClient = { ...client };
+  this.isEditMode = true;
+  this.showModal = true;
+  this.error.set(null);
+}
+
+
+
+openViewModal(client: Client): void {
+  console.log('👁️ Opening view modal for client:', client);
+  
+  this.viewingClient = { ...client };
+  this.isViewMode = true;
+  this.showModal = true;
+  this.error.set(null);
+}
+
+
+closeModal(): void {
+  this.showModal = false;
+  this.isEditMode = false;
+  this.isViewMode = false;
+  this.editingClient = null;
+  this.viewingClient = null;
+  this.resetForm();
+}
+
 
   /**
    * Closes the modal and resets the form
    * This function stays the same
    */
-  closeModal(): void {
-    this.showModal = false;
-    this.resetForm();
-  }
+  
 
-  /**
-   * Adds a new client - HERE'S WHERE WE SEE THE BIGGEST CHANGE
-   * Instead of manipulating the signal directly, we ask the service to do the work
-   */
   addClient(): void {
-    // Basic frontend validation (the service will have its own validations)
+    // Validación frontend
     if (!this.validateForm()) {
-      this.error.set('Please complete all required fields');
+      this.error.set('Por favor completa todos los campos obligatorios');
       return;
     }
 
-    console.log('Sending new client to service:', this.newClient);
+    console.log('Enviando nuevo cliente al servicio:', this.newClient);
     this.isLoading = true;
     this.error.set(null);
 
-    // Instead of manipulating the array directly, we use the service
-    const subscription = this.clientService.createClient(this.newClient).subscribe({
-      next: (response: ClientResponse) => {
-        if (response.success) {
-          console.log('Client created successfully:', response.data);
-          
-          // The service already updated its internal state, but we can force a reload
-          // to be sure (in a real app, this wouldn't be necessary)
-          this.loadClients();
-          
-          // Close modal and show success message
-          this.closeModal();
-          // Here you could add a success notification
-          console.log('✅ Client added successfully');
-          
-        } else {
-          // The service tells us something went wrong
-          console.error('Service error:', response.message);
-          this.error.set(response.message || 'Error creating client');
-        }
-        
-        this.isLoading = false;
-      },
-      error: (error) => {
-        console.error('Unexpected error creating client:', error);
-        this.error.set('Unexpected error. Please try again.');
-        this.isLoading = false;
-      }
-    });
+    // Asegurar que activo tenga valor por defecto
+    const clientToSend = {
+      ...this.newClient,
+      activo: this.newClient.activo !== false,
+    };
+
+    const subscription = this.clientService
+      .createClient(clientToSend)
+      .subscribe({
+        next: (response: ClientResponse) => {
+          if (response.success) {
+            console.log('Cliente creado exitosamente:', response.data);
+            this.closeModal();
+            // Opcional: mostrar mensaje de éxito
+            console.log('✅ Cliente agregado exitosamente');
+          } else {
+            console.error('Error del servicio:', response.message);
+            this.error.set(response.message || 'Error creando cliente');
+          }
+          this.isLoading = false;
+        },
+        error: (error) => {
+          console.error('Error inesperado creando cliente:', error);
+          this.error.set(
+            'Error de conexión. Verifica que el backend esté ejecutándose.'
+          );
+          this.isLoading = false;
+        },
+      });
 
     this.subscriptions.add(subscription);
   }
@@ -202,10 +233,6 @@ calculateAge(fechaNacimiento: string): number {
     );
   }
 
-  /**
-   * Resets the form to its initial state
-   * Now properly typed to match the Client interface
-   */
   private resetForm(): void {
     this.newClient = {
       nombre: '',
@@ -213,19 +240,21 @@ calculateAge(fechaNacimiento: string): number {
       direccion: '',
       numero_telefono: '',
       correo: '',
-      sexo: 'M' // Ensure type compatibility
+      sexo: '', // Ensure type compatibility
+      activo: true,
+      usuario_creacion: 'admin', // Or the current user of the system
     };
     this.error.set(null);
   }
 
   /**
    * WE REMOVE the calcularEdad function from here because now the service handles that
-   * This is an important improvement: business logic (calculating ages) 
+   * This is an important improvement: business logic (calculating ages)
    * now lives in the service, not in the UI component
    */
 
   // Future functions you could add using the service:
-  
+
   /**
    * Searches clients by name (to implement in the future)
    */
@@ -245,7 +274,7 @@ calculateAge(fechaNacimiento: string): number {
         console.error('Search error:', error);
         this.error.set('Search error');
         this.isLoading = false;
-      }
+      },
     });
 
     this.subscriptions.add(subscription);
@@ -274,13 +303,179 @@ calculateAge(fechaNacimiento: string): number {
         console.error('Delete error:', error);
         this.error.set('Error deleting client');
         this.isLoading = false;
-      }
+      },
     });
 
     this.subscriptions.add(subscription);
   }
 
-  
+  //----------------------------------EDITAR UN USUARIO-------------------------------------------------------------------------
+
+
+/**
+ * Actualiza un cliente existente
+ */
+updateClient(): void {
+  if (!this.editingClient || !this.editingClient.id_cliente) {
+    this.error.set('Cliente no válido para editar');
+    return;
   }
 
- 
+  // Validación
+  if (!this.validateEditForm()) {
+    this.error.set('Por favor completa todos los campos obligatorios');
+    return;
+  }
+
+  console.log('🔄 Actualizando cliente:', this.editingClient);
+  this.isLoading = true;
+  this.error.set(null);
+
+  // Preparar datos para enviar (sin campos de sistema)
+  const clientToUpdate = {
+    nombre: this.editingClient.nombre,
+    fecha_nacimiento: this.editingClient.fecha_nacimiento,
+    direccion: this.editingClient.direccion,
+    numero_telefono: this.editingClient.numero_telefono,
+    correo: this.editingClient.correo,
+    sexo: this.editingClient.sexo,
+    activo: this.editingClient.activo
+  };
+
+  const subscription = this.clientService
+    .updateClient(this.editingClient.id_cliente, clientToUpdate)
+    .subscribe({
+      next: (response: ClientResponse) => {
+        if (response.success) {
+          console.log('✅ Cliente actualizado exitosamente:', response.data);
+          this.closeModal();
+          this.loadClients(); // Recargar lista para asegurar consistencia
+        } else {
+          this.error.set(response.message || 'Error actualizando cliente');
+        }
+        this.isLoading = false;
+      },
+      error: (error) => {
+        console.error('Error actualizando cliente:', error);
+        this.error.set('Error: ' + error.message);
+        this.isLoading = false;
+      }
+    });
+
+  this.subscriptions.add(subscription);
+}
+
+/**
+ * Valida el formulario de edición
+ */
+private validateEditForm(): boolean {
+  if (!this.editingClient) return false;
+  
+  return !!(
+    this.editingClient.nombre?.trim() &&
+    this.editingClient.fecha_nacimiento &&
+    this.editingClient.direccion?.trim() &&
+    this.editingClient.numero_telefono?.trim() &&
+    this.editingClient.sexo
+  );
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// En clients.component.ts - agregar getters para el formulario
+
+get currentFormData() {
+  return this.isEditMode ? this.editingClient! : this.newClient;
+}
+
+// O individualmente:
+get currentNombre(): string {
+  return this.isEditMode ? this.editingClient?.nombre || '' : this.newClient.nombre;
+}
+
+set currentNombre(value: string) {
+  if (this.isEditMode && this.editingClient) {
+    this.editingClient.nombre = value;
+  } else {
+    this.newClient.nombre = value;
+  }
+}
+
+get currentFechaNacimiento(): string {
+  return this.isEditMode ? this.editingClient?.fecha_nacimiento || '' : this.newClient.fecha_nacimiento;
+}
+
+set currentFechaNacimiento(value: string) {
+  if (this.isEditMode && this.editingClient) {
+    this.editingClient.fecha_nacimiento = value;
+  } else {
+    this.newClient.fecha_nacimiento = value;
+  }
+}
+
+get currentDireccion(): string {
+  return this.isEditMode ? this.editingClient?.direccion || '' : this.newClient.direccion;
+}
+
+set currentDireccion(value: string) {
+  if (this.isEditMode && this.editingClient) {
+    this.editingClient.direccion = value;
+  } else {
+    this.newClient.direccion = value;
+  }
+}
+
+get currentTelefono(): string {
+  return this.isEditMode ? this.editingClient?.numero_telefono || '' : this.newClient.numero_telefono;
+}
+
+set currentTelefono(value: string) {
+  if (this.isEditMode && this.editingClient) {
+    this.editingClient.numero_telefono = value;
+  } else {
+    this.newClient.numero_telefono = value;
+  }
+}
+
+get currentCorreo(): string {
+  return this.isEditMode ? this.editingClient?.correo || '' : this.newClient.correo;
+}
+
+set currentCorreo(value: string) {
+  if (this.isEditMode && this.editingClient) {
+    this.editingClient.correo = value;
+  } else {
+    this.newClient.correo = value;
+  }
+}
+
+get currentSexo(): string {
+  return this.isEditMode ? this.editingClient?.sexo || 'Masculino' : this.newClient.sexo;
+}
+
+set currentSexo(value: string) {
+  if (this.isEditMode && this.editingClient) {
+    this.editingClient.sexo = value;
+  } else {
+    this.newClient.sexo = value;
+  }
+}
+
+openAddModal(): void {
+  this.showModal = true;
+  this.isEditMode = false;
+  this.error.set(null);
+  this.resetForm();
+}
+}

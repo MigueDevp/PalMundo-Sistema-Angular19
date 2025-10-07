@@ -11,7 +11,7 @@ export interface Client {
   direccion: string;
   numero_telefono: string;
   correo: string;
-  sexo: 'M' | 'F' | 'O';
+  sexo: string;
   fecha_creacion?: string;
   usuario_creacion?: string;
   fecha_modificacion?: string;
@@ -81,25 +81,22 @@ export class ClientService {
     );
   }
 
-  /**
-   * Creates a new client in the backend
-   */
-  createClient(client: Omit<Client, 'id' | 'edad'>): Observable<ClientResponse> {
-    console.log('➕ Creating new client in backend:', client);
-    
-    return this.http.post<ClientResponse>(`${this.apiUrl}`, client).pipe(
-      tap(response => {
-        if (response.success) {
-          // Actualizar la lista local agregando el nuevo cliente
-          const currentClients = this.clientsSubject.value;
-          const newClient = response.data as Client;
-          this.clientsSubject.next([...currentClients, newClient]);
-          console.log('✅ Client created successfully');
-        }
-      }),
-      catchError(this.handleError)
-    );
-  }
+  // En client.service.ts - modificar createClient
+createClient(client: Omit<Client, 'id_cliente'> & { usuario_creacion: string }): Observable<ClientResponse> {
+  console.log('➕ Creating new client in backend:', client);
+  
+  return this.http.post<ClientResponse>(`${this.apiUrl}`, client).pipe(
+    tap(response => {
+      if (response.success) {
+        const currentClients = this.clientsSubject.value;
+        const newClient = response.data as Client;
+        this.clientsSubject.next([...currentClients, newClient]);
+        console.log('✅ Client created successfully');
+      }
+    }),
+    catchError(this.handleError)
+  );
+}
 
   /**
    * Updates an existing client in the backend

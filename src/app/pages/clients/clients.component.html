@@ -112,88 +112,71 @@
         @for (client of clients(); track client.id_cliente) {
         <tr [style.opacity]="isLoading ? '0.7' : '1'">
           <td>
-  <div class="name-container">
-    <div class="client-name">{{ client.nombre }}</div>
-    <div class="client-age">
-      Edad: {{ calculateAge(client.fecha_nacimiento) }}
-    </div>
-  </div>
-</td>
+            <div class="name-container">
+              <div class="client-name">{{ client.nombre }}</div>
+              <div class="client-age">
+                Edad: {{ calculateAge(client.fecha_nacimiento) }}
+              </div>
+            </div>
+          </td>
           <td>{{ client.direccion }}</td>
-          <td>{{ client.fecha_nacimiento | date: 'yyyy-MM-dd' }}</td>
+          <td>{{ client.fecha_nacimiento | date : "yyyy-MM-dd" }}</td>
           <td>{{ client.numero_telefono }}</td>
           <td>{{ client.correo || "N/A" }}</td>
           <!-- Show N/A if email is empty -->
           <td>{{ client.sexo }}</td>
           <td>
-  <span 
-    class="status-badge" 
-    [ngClass]="client.activo ? 'active' : 'inactive'"
-  >
-    <span class="status-dot"></span>
-    {{ client.activo ? 'Activo' : 'Inactivo' }}
-  </span>
-</td>
+            <span
+              class="status-badge"
+              [ngClass]="client.activo ? 'active' : 'inactive'"
+            >
+              <span class="status-dot"></span>
+              {{ client.activo ? "Activo" : "Inactivo" }}
+            </span>
+          </td>
 
           <td class="actions">
-  <app-actionsbuttons
-    type="view" 
-    [disabled]="isLoading" 
-  
-  ></app-actionsbuttons>
+            <app-actionsbuttons
+              type="view"
+              [disabled]="isLoading"
+              (actionClick)="openViewModal(client)"
+            ></app-actionsbuttons>
 
-
-
-<!-- 
+            <!-- 
       Mensaje de error - se muestra cuando algo sale mal 
       Se puede ocultar haciendo clic en la X
     -->
 
+            <app-actionsbuttons
+              type="edit"
+              [disabled]="isLoading"
+              (actionClick)="openEditModal(client)"
+            ></app-actionsbuttons>
 
-
-
-  <app-actionsbuttons
-    type="edit" 
-    [disabled]="isLoading" 
-   
-  ></app-actionsbuttons>
-
-  <app-actionsbuttons 
-    type="delete" 
-    [disabled]="isLoading" 
-    (actionClick)="deleteClient(client.id_cliente!)"
-  ></app-actionsbuttons>
-</td>
-
+            <app-actionsbuttons
+              type="delete"
+              [disabled]="isLoading"
+              (actionClick)="deleteClient(client.id_cliente!)"
+            ></app-actionsbuttons>
+          </td>
         </tr>
         }
       </tbody>
     </table>
   </div>
-
-  <!-- Modal for adding new clients -->
-  @if (showModal) {
+  <!-- Modal para AGREGAR cliente -->
+  @if (showModal && !isEditMode) {
   <div class="modal-overlay">
     <div class="modal-content">
       <h3>Agregar Nuevo Cliente</h3>
 
-      <!-- Show specific form errors -->
       @if (error()) {
-      <div
-        class="error-message"
-        style="
-          background: #ffebee;
-          color: #c62828;
-          padding: 10px;
-          border-radius: 4px;
-          margin-bottom: 15px;
-        "
-      >
+      <div class="error-message">
         {{ error() }}
       </div>
       }
 
-      <form (submit)="addClient()" #clientForm="ngForm">
+      <form (ngSubmit)="addClient()" #addForm="ngForm">
         <div class="form-group">
           <label>Nombre completo: <span style="color: red">*</span></label>
           <input
@@ -204,7 +187,6 @@
             placeholder="Ejemplo: Juan Pérez García"
             #nombreField="ngModel"
           />
-          <!-- Field-specific validation message -->
           @if (nombreField.invalid && nombreField.touched) {
           <small style="color: #c62828; font-size: 12px"
             >El nombre es obligatorio</small
@@ -298,6 +280,12 @@
           </select>
         </div>
 
+        <input
+          type="hidden"
+          [(ngModel)]="newClient.usuario_creacion"
+          name="usuario_creacion"
+        />
+
         <div class="modal-actions">
           <button
             type="button"
@@ -310,11 +298,283 @@
           <button
             type="submit"
             class="save-btn"
-            [disabled]="isLoading || clientForm.invalid"
+            [disabled]="isLoading || addForm.invalid"
           >
             @if (isLoading) {
             <span style="display: inline-block; margin-right: 8px">⏳</span>
             Guardando... } @else { Guardar }
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+  }
+
+  <!-- Modal para VER cliente (Solo lectura) -->
+  @if (showModal && isViewMode && viewingClient) {
+  <div class="modal-overlay">
+    <div class="modal-content view-mode">
+      <h3>Visualizar Cliente</h3>
+
+      <div class="client-details">
+        <!-- Información Personal -->
+        <div class="detail-section">
+          <h4>Información Personal</h4>
+          <div class="detail-grid">
+            <div class="detail-item">
+              <label>Nombre completo:</label>
+              <span class="detail-value">{{ viewingClient.nombre }}</span>
+            </div>
+            <div class="detail-item">
+              <label>Fecha de nacimiento:</label>
+              <span class="detail-value">{{
+                viewingClient.fecha_nacimiento | date : "dd/MM/yyyy"
+              }}</span>
+            </div>
+            <div class="detail-item">
+              <label>Edad:</label>
+              <span class="detail-value"
+                >{{ calculateAge(viewingClient.fecha_nacimiento) }} años</span
+              >
+            </div>
+            <div class="detail-item">
+              <label>Sexo:</label>
+              <span class="detail-value">{{ viewingClient.sexo }}</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Información de Contacto -->
+        <div class="detail-section">
+          <h4>Información de Contacto</h4>
+          <div class="detail-grid">
+            <div class="detail-item">
+              <label>Dirección:</label>
+              <span class="detail-value">{{ viewingClient.direccion }}</span>
+            </div>
+            <div class="detail-item">
+              <label>Teléfono:</label>
+              <span class="detail-value">{{
+                viewingClient.numero_telefono
+              }}</span>
+            </div>
+            <div class="detail-item">
+              <label>Email:</label>
+              <span class="detail-value">{{
+                viewingClient.correo || "No especificado"
+              }}</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Información del Sistema -->
+        <div class="detail-section">
+          <h4>Información del Sistema</h4>
+          <div class="detail-grid">
+            <div class="detail-item">
+              <label>ID Cliente:</label>
+              <span class="detail-value">{{ viewingClient.id_cliente }}</span>
+            </div>
+            <div class="detail-item">
+              <label>Estado:</label>
+              <span class="detail-value">
+                <span
+                  class="status-badge"
+                  [ngClass]="viewingClient.activo ? 'active' : 'inactive'"
+                >
+                  <span class="status-dot"></span>
+                  {{ viewingClient.activo ? "Activo" : "Inactivo" }}
+                </span>
+              </span>
+            </div>
+            <div class="detail-item">
+              <label>Fecha de creación:</label>
+              <span class="detail-value">{{
+                viewingClient.fecha_creacion | date : "dd/MM/yyyy HH:mm"
+              }}</span>
+            </div>
+            @if (viewingClient.fecha_modificacion) {
+            <div class="detail-item">
+              <label>Última modificación:</label>
+              <span class="detail-value">{{
+                viewingClient.fecha_modificacion | date : "dd/MM/yyyy HH:mm"
+              }}</span>
+            </div>
+            }
+            <div class="detail-item">
+              <label>Creado por:</label>
+              <span class="detail-value">{{
+                viewingClient.usuario_creacion || "Sistema"
+              }}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="modal-actions">
+        <button type="button" class="cancel-btn" (click)="closeModal()">
+          Cerrar
+        </button>
+        <button
+          type="button"
+          class="edit-btn"
+          (click)="openEditModal(viewingClient!)"
+        >
+          ✏️ Editar Cliente
+        </button>
+      </div>
+    </div>
+  </div>
+  }
+
+  <!-- Modal para EDITAR cliente -->
+  @if (showModal && isEditMode && editingClient) {
+  <div class="modal-overlay">
+    <div class="modal-content">
+      <h3>Editar Cliente</h3>
+
+      @if (error()) {
+      <div class="error-message">
+        {{ error() }}
+      </div>
+      }
+
+      <form (ngSubmit)="updateClient()" #editForm="ngForm">
+        <div class="form-group">
+          <label>Nombre completo: <span style="color: red">*</span></label>
+          <input
+            [(ngModel)]="editingClient.nombre"
+            name="nombre"
+            required
+            [disabled]="isLoading"
+            placeholder="Ejemplo: Juan Pérez García"
+            #nombreField="ngModel"
+          />
+          @if (nombreField.invalid && nombreField.touched) {
+          <small style="color: #c62828; font-size: 12px"
+            >El nombre es obligatorio</small
+          >
+          }
+        </div>
+
+        <div class="form-group">
+          <label>Fecha de nacimiento: <span style="color: red">*</span></label>
+          <input
+            type="date"
+            [(ngModel)]="editingClient.fecha_nacimiento"
+            name="fechaNacimiento"
+            required
+            [disabled]="isLoading"
+            #fechaField="ngModel"
+          />
+          @if (fechaField.invalid && fechaField.touched) {
+          <small style="color: #c62828; font-size: 12px"
+            >La fecha de nacimiento es obligatoria</small
+          >
+          }
+        </div>
+
+        <div class="form-group">
+          <label>Dirección: <span style="color: red">*</span></label>
+          <input
+            [(ngModel)]="editingClient.direccion"
+            name="direccion"
+            required
+            [disabled]="isLoading"
+            placeholder="Calle, número, colonia, ciudad"
+            #direccionField="ngModel"
+          />
+          @if (direccionField.invalid && direccionField.touched) {
+          <small style="color: #c62828; font-size: 12px"
+            >La dirección es obligatoria</small
+          >
+          }
+        </div>
+
+        <div class="form-group">
+          <label>Teléfono: <span style="color: red">*</span></label>
+          <input
+            [(ngModel)]="editingClient.numero_telefono"
+            name="telefono"
+            required
+            [disabled]="isLoading"
+            placeholder="10 dígitos: 4421234567"
+            pattern="[0-9]{10}"
+            #telefonoField="ngModel"
+          />
+          @if (telefonoField.invalid && telefonoField.touched) {
+          <small style="color: #c62828; font-size: 12px">
+            @if (telefonoField.errors?.['required']) { El teléfono es
+            obligatorio } @else if (telefonoField.errors?.['pattern']) { El
+            teléfono debe tener exactamente 10 dígitos }
+          </small>
+          }
+        </div>
+
+        <div class="form-group">
+          <label>Email:</label>
+          <input
+            type="email"
+            [(ngModel)]="editingClient.correo"
+            name="email"
+            [disabled]="isLoading"
+            placeholder="ejemplo@correo.com (opcional)"
+            #emailField="ngModel"
+          />
+          @if (emailField.invalid && emailField.touched &&
+          editingClient.correo.trim()) {
+          <small style="color: #c62828; font-size: 12px"
+            >Ingresa un email válido</small
+          >
+          }
+        </div>
+
+        <div class="form-group">
+          <label>Sexo: <span style="color: red">*</span></label>
+          <select
+            [(ngModel)]="editingClient.sexo"
+            name="sexo"
+            [disabled]="isLoading"
+            required
+          >
+            <option value="Masculino">Masculino</option>
+            <option value="Femenino">Femenino</option>
+            <option value="Otro">Otro</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>Estado:</label>
+          <div class="checkbox-group">
+            <label>
+              <input
+                type="checkbox"
+                [(ngModel)]="editingClient.activo"
+                name="activo"
+                [disabled]="isLoading"
+              />
+              Cliente activo
+            </label>
+          </div>
+        </div>
+
+        <div class="modal-actions">
+          <button
+            type="button"
+            class="cancel-btn"
+            (click)="closeModal()"
+            [disabled]="isLoading"
+          >
+            Cancelar
+          </button>
+          <button
+            type="submit"
+            class="save-btn"
+            [disabled]="isLoading || editForm.invalid"
+          >
+            @if (isLoading) {
+            <span style="display: inline-block; margin-right: 8px">⏳</span>
+            Actualizando... } @else { Actualizar }
           </button>
         </div>
       </form>

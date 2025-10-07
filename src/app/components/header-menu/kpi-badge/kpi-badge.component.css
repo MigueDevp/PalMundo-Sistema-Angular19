@@ -4,7 +4,7 @@
   border-radius: 20px;
   font-weight: bold;
   font-size: 13px;
-  color: #645e5e;
+  color: #000000;
 }
 .label {
   margin-left: 20px;
@@ -13,4 +13,8 @@
   gap: 8px;
   font-size: 14px;
   color: #ffffff;
+}
+
+.label span {
+  font-weight: bold;
 }
