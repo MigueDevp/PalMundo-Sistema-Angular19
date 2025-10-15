@@ -18,7 +18,7 @@ export interface Trip {
   servicios_incluidos: string[];
   servicios_no_incluidos: string[];
   itinerario: string;
-  estado_viaje?: 'programado' | 'completado' | 'cancelado' ;
+  estado_viaje?: 'PROGRAMADO' | 'CANCELADO' | 'COMPLETADO';
   fecha_creacion?: string;
   fecha_modificacion?: string;
   usuario_creacion?: string;

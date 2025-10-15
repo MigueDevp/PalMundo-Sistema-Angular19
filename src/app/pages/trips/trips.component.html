@@ -2,21 +2,24 @@
   <div class="header-section">
     <h2>Registro Global de Viajes <fa-icon [icon]="faSuitcase" /></h2>
     <hr />
-    <app-button-add (click)="openModal()"> Añadir Viaje </app-button-add>
-  </div>
 
-  <!-- Error message display -->
-  @if (error()) {
-  <div class="error-message">
-    {{ error() }}
-    <button (click)="error.set(null)">×</button>
-  </div>
-  }
+    @if (error()) {
+    <div class="error-message">
+      {{ error() }}
+      <button (click)="error.set(null)">×</button>
+    </div>
+    } @if (isLoading) {
+    <div class="loading-indicator"><span>⏳</span> Procesando...</div>
+    }
 
-  <!-- Loading indicator -->
-  @if (isLoading && viajes().length === 0) {
-  <div class="loading-indicator"><span>⏳</span> Cargando viajes...</div>
-  }
+    <app-button-add
+      (click)="openAddModal()"
+      [style.opacity]="isLoading ? '0.6' : '1'"
+      [style.pointer-events]="isLoading ? 'none' : 'auto'"
+    >
+      Añadir Viaje
+    </app-button-add>
+  </div>
 
   <div class="table-container">
     <table class="clients-table">
@@ -25,7 +28,7 @@
           <th>Detalles</th>
           <th>Fechas</th>
           <th>Adelanto</th>
-          <th class="incluye-item-p">Ultimo dia para pagar</th>
+          <th class="incluye-item-p">Último día para pagar</th>
           <th class="incluye-item">Incluye</th>
           <th>Estado</th>
           <th>Acciones</th>
@@ -34,25 +37,38 @@
       <tbody>
         @if (viajes().length === 0 && !isLoading) {
         <tr>
-          <td colspan="5" class="no-data">
+          <td colspan="7" class="no-data">
             No hay viajes registrados. ¡Agrega el primero haciendo clic en
             "Añadir Viaje"!
           </td>
         </tr>
-        } @for (viaje of viajes(); track viaje.id_viaje) {
+        } @if (isLoading && viajes().length === 0) {
         <tr>
+          <td colspan="7" class="no-data">
+            <span>🔄</span> Cargando viajes...
+          </td>
+        </tr>
+        } @for (viaje of viajes(); track viaje.id_viaje) {
+        <tr [style.opacity]="isLoading ? '0.7' : '1'">
           <td>
             <div class="name-container">
               <div class="trip-name">{{ viaje.nombre_viaje }}</div>
-              <div class="trip-key">
-                {{ viaje.clave }}
-              </div>
+              <div class="trip-key">{{ viaje.clave }}</div>
             </div>
           </td>
           <td>
             <div class="name-container">
               <div>Salida: {{ formatFecha(viaje.fecha_partida) }}</div>
               <div>Regreso: {{ formatFecha(viaje.fecha_regreso) }}</div>
+              <div class="trip-duration">
+                <span
+                  >Duración:
+                  {{
+                    calcularDuracion(viaje.fecha_partida, viaje.fecha_regreso)
+                  }}
+                  días
+                </span>
+              </div>
             </div>
           </td>
           <td>
@@ -67,7 +83,7 @@
           </td>
           <td>
             <div class="name-container">
-              <div>{{ viaje.servicios_incluidos }} servicios incluidos</div>
+              <div>{{ formatServiciosPreview(viaje.servicios_incluidos) }}</div>
             </div>
           </td>
           <td>
@@ -83,14 +99,19 @@
             <app-actionsbuttons
               type="view"
               [disabled]="isLoading"
+              (actionClick)="openViewModal(viaje)"
             ></app-actionsbuttons>
+
             <app-actionsbuttons
               type="edit"
               [disabled]="isLoading"
+              (actionClick)="openEditModal(viaje)"
             ></app-actionsbuttons>
+
             <app-actionsbuttons
               type="delete"
               [disabled]="isLoading"
+              (actionClick)="deleteViaje(viaje.id_viaje!)"
             ></app-actionsbuttons>
           </td>
         </tr>
@@ -98,4 +119,714 @@
       </tbody>
     </table>
   </div>
+
+  <!-- Modal add :v -->
+  @if (showModal && !isEditMode && !isViewMode) {
+  <div class="modal-overlay">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3>Agregar Nuevo Viaje</h3>
+        <button class="close-modal-btn" (click)="closeModal()">×</button>
+      </div>
+
+      @if (error()) {
+      <div class="error-message">{{ error() }}</div>
+      }
+
+      <form (ngSubmit)="addViaje()" #addForm="ngForm">
+        <div class="form-section">
+          <h4>Información General</h4>
+          <div class="form-row">
+            <div class="form-group">
+              <label>Clave: <span style="color: red">*</span></label>
+              <input
+                [(ngModel)]="newViaje.clave"
+                name="clave"
+                required
+                [disabled]="isLoading"
+                placeholder="Ej: VJ-2024-001"
+                #claveField="ngModel"
+              />
+              @if (claveField.invalid && claveField.touched) {
+              <small style="color: #c62828; font-size: 12px"
+                >La clave es obligatoria</small
+              >
+              }
+            </div>
+
+            <div class="form-group">
+              <label>Nombre del Viaje: <span style="color: red">*</span></label>
+              <input
+                [(ngModel)]="newViaje.nombre_viaje"
+                name="nombre_viaje"
+                required
+                [disabled]="isLoading"
+                placeholder="Ej: Tour Europa 2024"
+                #nombreField="ngModel"
+              />
+              @if (nombreField.invalid && nombreField.touched) {
+              <small style="color: #c62828; font-size: 12px"
+                >El nombre es obligatorio</small
+              >
+              }
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label>Fecha de Partida: <span style="color: red">*</span></label>
+              <input
+                type="date"
+                [(ngModel)]="newViaje.fecha_partida"
+                name="fecha_partida"
+                required
+                [disabled]="isLoading"
+                #fechaPartidaField="ngModel"
+              />
+              @if (fechaPartidaField.invalid && fechaPartidaField.touched) {
+              <small style="color: #c62828; font-size: 12px"
+                >La fecha de partida es obligatoria</small
+              >
+              }
+            </div>
+
+            <div class="form-group">
+              <label>Fecha de Regreso: <span style="color: red">*</span></label>
+              <input
+                type="date"
+                [(ngModel)]="newViaje.fecha_regreso"
+                name="fecha_regreso"
+                required
+                [disabled]="isLoading"
+                #fechaRegresoField="ngModel"
+              />
+              @if (fechaRegresoField.invalid && fechaRegresoField.touched) {
+              <small style="color: #c62828; font-size: 12px"
+                >La fecha de regreso es obligatoria</small
+              >
+              }
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label
+              >Último Día para Pagar: <span style="color: red">*</span></label
+            >
+            <input
+              type="date"
+              [(ngModel)]="newViaje.ultimo_dia_pagar"
+              name="ultimo_dia_pagar"
+              required
+              [disabled]="isLoading"
+              #ultimoDiaField="ngModel"
+            />
+            @if (ultimoDiaField.invalid && ultimoDiaField.touched) {
+            <small style="color: #c62828; font-size: 12px"
+              >El último día para pagar es obligatorio</small
+            >
+            }
+          </div>
+        </div>
+
+        <div class="form-section">
+          <h4>Precios</h4>
+          <div class="form-row">
+            <div class="form-group">
+              <label>Precio Adulto: <span style="color: red">*</span></label>
+              <input
+                type="number"
+                [(ngModel)]="newViaje.precio_adulto"
+                name="precio_adulto"
+                required
+                min="0"
+                [disabled]="isLoading"
+                #precioAdultoField="ngModel"
+              />
+              @if (precioAdultoField.invalid && precioAdultoField.touched) {
+              <small style="color: #c62828; font-size: 12px"
+                >El precio adulto es obligatorio</small
+              >
+              }
+            </div>
+
+            <div class="form-group">
+              <label>Precio Menor:</label>
+              <input
+                type="number"
+                [(ngModel)]="newViaje.precio_menor"
+                name="precio_menor"
+                min="0"
+                [disabled]="isLoading"
+              />
+            </div>
+
+            <div class="form-group">
+              <label>Precio Infante:</label>
+              <input
+                type="number"
+                [(ngModel)]="newViaje.precio_infante"
+                name="precio_infante"
+                min="0"
+                [disabled]="isLoading"
+              />
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label
+              >Cantidad de Anticipo: <span style="color: red">*</span></label
+            >
+            <input
+              type="number"
+              [(ngModel)]="newViaje.cantidad_anticipo"
+              name="cantidad_anticipo"
+              required
+              min="0"
+              [disabled]="isLoading"
+              #anticipoField="ngModel"
+            />
+            @if (anticipoField.invalid && anticipoField.touched) {
+            <small style="color: #c62828; font-size: 12px"
+              >La cantidad de anticipo es obligatoria</small
+            >
+            }
+          </div>
+        </div>
+
+        <div class="form-section">
+          <h4>Servicios</h4>
+          <div class="form-group">
+            <label>Servicios Incluidos:</label>
+            <textarea
+              [(ngModel)]="incluyeTemporal"
+              name="servicios_incluidos"
+              [disabled]="isLoading"
+              placeholder="Transporte, Hospedaje, Guía turístico, Desayunos"
+              rows="3"
+            ></textarea>
+            <small style="color: #666"
+              >📝 Separar cada servicio con una coma</small
+            >
+          </div>
+
+          <div class="form-group">
+            <label>Servicios No Incluidos:</label>
+            <textarea
+              [(ngModel)]="noIncluyeTemporal"
+              name="servicios_no_incluidos"
+              [disabled]="isLoading"
+              placeholder="Alimentos, Propinas, Seguro médico, Bebidas"
+              rows="3"
+            ></textarea>
+            <small style="color: #666"
+              >📝 Separar cada servicio con una coma</small
+            >
+          </div>
+        </div>
+
+        <div class="form-section">
+          <h4>Información Adicional</h4>
+          <div class="form-group">
+            <label>Itinerario:</label>
+            <textarea
+              [(ngModel)]="newViaje.itinerario"
+              name="itinerario"
+              [disabled]="isLoading"
+              placeholder="Descripción detallada del itinerario del viaje..."
+              rows="4"
+            ></textarea>
+          </div>
+
+          <div class="form-group">
+            <label>Estado del Viaje: <span style="color: red">*</span></label>
+            <select
+              [(ngModel)]="newViaje.estado_viaje"
+              name="estado_viaje"
+              [disabled]="isLoading"
+              required
+            >
+              <option value="PROGRAMADO">Programado</option>
+              <option value="CANCELADO">Cancelado</option>
+            </select>
+          </div>
+        </div>
+
+        <input
+          type="hidden"
+          [(ngModel)]="newViaje.usuario_creacion"
+          name="usuario_creacion"
+        />
+
+        <div class="modal-actions">
+          <button
+            type="button"
+            class="cancel-btn"
+            (click)="closeModal()"
+            [disabled]="isLoading"
+          >
+            Cancelar
+          </button>
+          <button
+            type="submit"
+            class="save-btn"
+            [disabled]="isLoading || addForm.invalid"
+          >
+            @if (isLoading) { <span>⏳</span> Guardando... } @else { Guardar }
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+  }
+
+  <!-- Modal UPDATE :,v -->
+  @if (showModal && isEditMode && editingViaje) {
+  <div class="modal-overlay">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3>Editar Viaje</h3>
+        <button class="close-modal-btn" (click)="closeModal()">×</button>
+      </div>
+
+      @if (error()) {
+      <div class="error-message">{{ error() }}</div>
+      }
+
+      <form (ngSubmit)="updateViaje()" #editForm="ngForm">
+        <div class="form-section">
+          <h4>Información General</h4>
+          <div class="form-row">
+            <div class="form-group">
+              <label>Clave: <span style="color: red">*</span></label>
+              <input
+                [(ngModel)]="editingViaje.clave"
+                name="clave"
+                required
+                [disabled]="isLoading"
+                #claveField="ngModel"
+              />
+              @if (claveField.invalid && claveField.touched) {
+              <small style="color: #c62828; font-size: 12px"
+                >La clave es obligatoria</small
+              >
+              }
+            </div>
+
+            <div class="form-group">
+              <label>Nombre del Viaje: <span style="color: red">*</span></label>
+              <input
+                [(ngModel)]="editingViaje.nombre_viaje"
+                name="nombre_viaje"
+                required
+                [disabled]="isLoading"
+                #nombreField="ngModel"
+              />
+              @if (nombreField.invalid && nombreField.touched) {
+              <small style="color: #c62828; font-size: 12px"
+                >El nombre es obligatorio</small
+              >
+              }
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label>Fecha de Partida: <span style="color: red">*</span></label>
+              <input
+                type="date"
+                [(ngModel)]="editingViaje.fecha_partida"
+                name="fecha_partida"
+                required
+                [disabled]="isLoading"
+                #fechaPartidaField="ngModel"
+              />
+              @if (fechaPartidaField.invalid && fechaPartidaField.touched) {
+              <small style="color: #c62828; font-size: 12px"
+                >La fecha de partida es obligatoria</small
+              >
+              }
+            </div>
+
+            <div class="form-group">
+              <label>Fecha de Regreso: <span style="color: red">*</span></label>
+              <input
+                type="date"
+                [(ngModel)]="editingViaje.fecha_regreso"
+                name="fecha_regreso"
+                required
+                [disabled]="isLoading"
+                #fechaRegresoField="ngModel"
+              />
+              @if (fechaRegresoField.invalid && fechaRegresoField.touched) {
+              <small style="color: #c62828; font-size: 12px"
+                >La fecha de regreso es obligatoria</small
+              >
+              }
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label
+              >Último Día para Pagar: <span style="color: red">*</span></label
+            >
+            <input
+              type="date"
+              [(ngModel)]="editingViaje.ultimo_dia_pagar"
+              name="ultimo_dia_pagar"
+              required
+              [disabled]="isLoading"
+              #ultimoDiaField="ngModel"
+            />
+            @if (ultimoDiaField.invalid && ultimoDiaField.touched) {
+            <small style="color: #c62828; font-size: 12px"
+              >El último día para pagar es obligatorio</small
+            >
+            }
+          </div>
+        </div>
+
+        <div class="form-section">
+          <h4>Precios</h4>
+          <div class="form-row">
+            <div class="form-group">
+              <label>Precio Adulto: <span style="color: red">*</span></label>
+              <input
+                type="number"
+                [(ngModel)]="editingViaje.precio_adulto"
+                name="precio_adulto"
+                required
+                min="0"
+                [disabled]="isLoading"
+                #precioAdultoField="ngModel"
+              />
+              @if (precioAdultoField.invalid && precioAdultoField.touched) {
+              <small style="color: #c62828; font-size: 12px"
+                >El precio adulto es obligatorio</small
+              >
+              }
+            </div>
+
+            <div class="form-group">
+              <label>Precio Menor:</label>
+              <input
+                type="number"
+                [(ngModel)]="editingViaje.precio_menor"
+                name="precio_menor"
+                min="0"
+                [disabled]="isLoading"
+              />
+            </div>
+
+            <div class="form-group">
+              <label>Precio Infante:</label>
+              <input
+                type="number"
+                [(ngModel)]="editingViaje.precio_infante"
+                name="precio_infante"
+                min="0"
+                [disabled]="isLoading"
+              />
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label
+              >Cantidad de Anticipo: <span style="color: red">*</span></label
+            >
+            <input
+              type="number"
+              [(ngModel)]="editingViaje.cantidad_anticipo"
+              name="cantidad_anticipo"
+              required
+              min="0"
+              [disabled]="isLoading"
+              #anticipoField="ngModel"
+            />
+            @if (anticipoField.invalid && anticipoField.touched) {
+            <small style="color: #c62828; font-size: 12px"
+              >La cantidad de anticipo es obligatoria</small
+            >
+            }
+          </div>
+        </div>
+
+        <div class="form-section">
+          <h4>Servicios</h4>
+          <div class="form-group">
+            <label>Servicios Incluidos:</label>
+            <textarea
+              [(ngModel)]="incluyeTemporalEdit"
+              name="servicios_incluidos"
+              [disabled]="isLoading"
+              placeholder="Transporte, Hospedaje, Guía turístico, Desayunos"
+              rows="3"
+            ></textarea>
+            <small style="color: #666"
+              >📝 Separar cada servicio con una coma</small
+            >
+          </div>
+
+          <div class="form-group">
+            <label>Servicios No Incluidos:</label>
+            <textarea
+              [(ngModel)]="noIncluyeTemporalEdit"
+              name="servicios_no_incluidos"
+              [disabled]="isLoading"
+              placeholder="Alimentos, Propinas, Seguro médico, Bebidas"
+              rows="3"
+            ></textarea>
+            <small style="color: #666"
+              >📝 Separar cada servicio con una coma</small
+            >
+          </div>
+        </div>
+
+        <div class="form-section">
+          <h4>Información Adicional</h4>
+          <div class="form-group">
+            <label>Itinerario:</label>
+            <textarea
+              [(ngModel)]="editingViaje.itinerario"
+              name="itinerario"
+              [disabled]="isLoading"
+              placeholder="Descripción detallada del itinerario del viaje..."
+              rows="4"
+            ></textarea>
+          </div>
+
+          <!-- <div class="form-group">
+            <label>Estado del Viaje: <span style="color: red">*</span></label>
+            <select [(ngModel)]="editingViaje.estado_viaje" name="estado_viaje" [disabled]="isLoading" required>
+              <option value="programado">Programado</option>
+              <option value="completado">Completado</option>
+              <option value="cancelado">Cancelado</option>
+            </select>
+          </div> -->
+
+          <!-- <div class="form-group">
+            <label>Estado:</label>
+            <div class="checkbox-group">
+              <label>
+                <input type="checkbox" [(ngModel)]="editingViaje.activo" name="activo" [disabled]="isLoading" />
+                Viaje activo
+              </label>
+            </div>
+          </div> -->
+        </div>
+
+        <div class="modal-actions">
+          <button
+            type="button"
+            class="cancel-btn"
+            (click)="closeModal()"
+            [disabled]="isLoading"
+          >
+            Cancelar
+          </button>
+          <button
+            type="submit"
+            class="save-btn"
+            [disabled]="isLoading || editForm.invalid"
+          >
+            @if (isLoading) { <span>⏳</span> Actualizando... } @else {
+            Actualizar }
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+  }
+
+  <!-- Modal  To watch o.O -->
+  @if (showModal && isViewMode && viewingViaje) {
+  <div class="modal-overlay">
+    <div class="modal-content view-mode">
+      <div class="modal-header">
+        <h3>👁️ Visualizar Viaje</h3>
+        <button class="close-modal-btn" (click)="closeModal()">×</button>
+      </div>
+
+      <div class="client-details">
+        <div class="detail-section">
+          <h4>Información General</h4>
+          <div class="detail-grid">
+            <div class="detail-item">
+              <label>Clave:</label>
+              <span class="detail-value">{{ viewingViaje.clave }}</span>
+            </div>
+            <div class="detail-item">
+              <label>Nombre del Viaje:</label>
+              <span class="detail-value">{{ viewingViaje.nombre_viaje }}</span>
+            </div>
+            <div class="detail-item">
+              <label>Fecha de Partida:</label>
+              <span class="detail-value">{{
+                formatFecha(viewingViaje.fecha_partida)
+              }}</span>
+            </div>
+            <div class="detail-item">
+              <label>Fecha de Regreso:</label>
+              <span class="detail-value">{{
+                formatFecha(viewingViaje.fecha_regreso)
+              }}</span>
+            </div>
+            <div class="detail-item">
+              <label>Duración:</label>
+              <span class="detail-value"
+                >{{
+                  calcularDuracion(
+                    viewingViaje.fecha_partida,
+                    viewingViaje.fecha_regreso
+                  )
+                }}
+                días</span
+              >
+            </div>
+            <div class="detail-item">
+              <label>Último Día para Pagar:</label>
+              <span class="detail-value">{{
+                formatFecha(viewingViaje.ultimo_dia_pagar)
+              }}</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="detail-section">
+          <h4>Precios</h4>
+          <div class="detail-grid">
+            <div class="detail-item">
+              <label>Precio Adulto:</label>
+              <span class="detail-value"
+                >${{ viewingViaje.precio_adulto | number }}</span
+              >
+            </div>
+            <div class="detail-item">
+              <label>Precio Menor:</label>
+              <span class="detail-value"
+                >${{ viewingViaje.precio_menor | number }}</span
+              >
+            </div>
+            <div class="detail-item">
+              <label>Precio Infante:</label>
+              <span class="detail-value"
+                >${{ viewingViaje.precio_infante | number }}</span
+              >
+            </div>
+            <div class="detail-item">
+              <label>Anticipo:</label>
+              <span class="detail-value"
+                >${{ viewingViaje.cantidad_anticipo | number }}</span
+              >
+            </div>
+          </div>
+        </div>
+
+        <div class="detail-section">
+          <h4>Servicios</h4>
+          <div class="detail-subsection">
+            <label>Servicios Incluidos:</label>
+            <div class="detail-value">
+              {{ formatServicios(viewingViaje.servicios_incluidos) }}
+            </div>
+          </div>
+
+          <div class="detail-subsection">
+            <label>Servicios No Incluidos:</label>
+            <div class="detail-value">
+              {{ formatServicios(viewingViaje.servicios_no_incluidos) }}
+            </div>
+          </div>
+        </div>
+
+        <div class="detail-section">
+          <h4>Información Adicional</h4>
+          <div class="detail-subsection">
+            <label>Itinerario:</label>
+            <div class="detail-value">
+              @if (viewingViaje.itinerario) {
+              <pre style="white-space: pre-wrap; font-family: inherit">{{
+                viewingViaje.itinerario
+              }}</pre>
+              } @else {
+              <span style="color: #666; font-style: italic"
+                >No se especificó itinerario</span
+              >
+              }
+            </div>
+          </div>
+
+          <div class="detail-grid">
+            <div class="detail-item">
+              <label>Estado del Viaje:</label>
+              <span class="detail-value">
+                <span
+                  class="status-badge"
+                  [ngClass]="getEstadoClass(viewingViaje.estado_viaje ?? '')"
+                >
+                  <span class="status-dot"></span>
+                  {{ viewingViaje.estado_viaje }}
+                </span>
+              </span>
+            </div>
+            <div class="detail-item">
+              <label>Estado:</label>
+              <span class="detail-value">
+                <span
+                  class="status-badge"
+                  [ngClass]="viewingViaje.activo ? 'activo' : 'inactivo'"
+                >
+                  <span class="status-dot"></span>
+                  {{ viewingViaje.activo ? "Activo" : "Inactivo" }}
+                </span>
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <div class="detail-section">
+          <h4>Información del Sistema</h4>
+          <div class="detail-grid">
+            <div class="detail-item">
+              <label>ID Viaje:</label>
+              <span class="detail-value">{{ viewingViaje.id_viaje }}</span>
+            </div>
+            <div class="detail-item">
+              <label>Fecha de Creación:</label>
+              <span class="detail-value">{{
+                viewingViaje.fecha_creacion | date : "dd/MM/yyyy HH:mm"
+              }}</span>
+            </div>
+            @if (viewingViaje.fecha_modificacion) {
+            <div class="detail-item">
+              <label>Última Modificación:</label>
+              <span class="detail-value">{{
+                viewingViaje.fecha_modificacion | date : "dd/MM/yyyy HH:mm"
+              }}</span>
+            </div>
+            }
+            <div class="detail-item">
+              <label>Creado por:</label>
+              <span class="detail-value">{{
+                viewingViaje.usuario_creacion || "Sistema"
+              }}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="modal-actions">
+        <button type="button" class="cancel-btn" (click)="closeModal()">
+          Cerrar
+        </button>
+        <button
+          type="button"
+          class="edit-btn"
+          (click)="openEditModal(viewingViaje!)"
+        >
+          ✏️ Editar Viaje
+        </button>
+      </div>
+    </div>
+  </div>
+  }
 </div>
