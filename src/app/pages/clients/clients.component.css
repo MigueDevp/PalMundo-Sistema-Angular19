@@ -30,7 +30,7 @@
 }
 
 /* Tabla - ESTILOS ACTUALIZADOS basados en table.component.css */
-.table-wrapper {
+.table-container {
   background: white;
   border-radius: 8px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
@@ -48,7 +48,9 @@
   width: 100%;
   border-collapse: collapse;
   font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-  font-size: 14px;
+  font-size: 12px;
+    background: white;
+
 }
 
 .clients-table th {

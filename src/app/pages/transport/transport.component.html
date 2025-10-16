@@ -5,42 +5,55 @@
     <app-button-add (click)="openAddModal()">Añadir Transportes</app-button-add>
   </div>
 
-  <div class="table-container">
-    <table class="clients-table">
-      <thead>
-        <tr>
-          <th>ID</th>
-          <th>Nombre del Viaje</th>
-          <th>Punto de Salida</th>
-          <th>Fecha Salida</th>
-          <th>Fecha Regreso</th>
-          <th>Transporte</th>
-          <th>Conductor</th>
-          <th>Hora Salida</th>
-          <th>Hora Regreso</th>
-          <th>Acciones</th>
-        </tr>
-      </thead>
-      <tbody>
-        @for (tv of transportesViaje(); track tv.id) {
-        <tr>
-          <td>{{ tv.id }}</td>
-          <td>{{ tv.nombreViaje }}</td>
-          <td>{{ tv.puntoSalida }}</td>
-          <td>{{ tv.fechaSalida }}</td>
-          <td>{{ tv.fechaRegreso }}</td>
-          <td>{{ tv.transporteElegido }}</td>
-          <td>{{ tv.conductor }}</td>
-          <td>{{ tv.horaSalida }}</td>
-          <td>{{ tv.horaRegreso }}</td>
-          <td>
-            <button class="edit-btn">Editar</button>
-            <button class="delete-btn">Eliminar</button>
+  <!-- Aplicar estilos del componente tabla -->
+  <div class="table-wrapper">
+    <div class="table-container">
+      <table class="custom-table">
+        <thead>
+          <tr>
+            <th>Nombre del Viaje</th>
+            <th>Punto de Salida</th>
+            <th>Fecha Salida</th>
+            <th>Fecha Regreso</th>
+            <th>Transporte</th>
+            <th>Conductor</th>
+            <th>Hora Salida</th>
+            <th>Hora Regreso</th>
+            <th class="actions-cell">Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (tv of transportesViaje(); track tv.id; let even = $even; let odd = $odd) {
+          <tr [class.even]="even" [class.odd]="odd">
+            <td>{{ tv.nombreViaje }}</td>
+            <td>{{ tv.puntoSalida }}</td>
+            <td>{{ tv.fechaSalida }}</td>
+            <td>{{ tv.fechaRegreso }}</td>
+            <td>{{ tv.transporteElegido }}</td>
+            <td>{{ tv.conductor }}</td>
+            <td>{{ tv.horaSalida }}</td>
+            <td>{{ tv.horaRegreso }}</td>
+            <td class="actions">
+            <app-actionsbuttons
+              type="view"
+             
+            ></app-actionsbuttons>
+
+            <app-actionsbuttons
+              type="edit"
+              
+            ></app-actionsbuttons>
+
+            <app-actionsbuttons
+              type="delete"
+              
+            ></app-actionsbuttons>
           </td>
-        </tr>
-        }
-      </tbody>
-    </table>
+          </tr>
+          }
+        </tbody>
+      </table>
+    </div>
   </div>
 
   @if (showModal) {
