@@ -63,7 +63,7 @@
   </div>
 
   <div class="table-container">
-    <table class="clients-table">
+     <table class="clients-table">
       <thead>
         <tr>
           <th>Nombre</th>
@@ -149,7 +149,71 @@
         </tr>
         }
       </tbody>
-    </table>
+    </table> 
+
+   <!--  <app-table
+      [columns]="tableColumns"
+      [data]="clients()"
+      [emptyMessage]="
+        'No hay clientes registrados. ¡Agrega el primero haciendo
+    clic en Añadir cliente'"
+      [loading]="isLoading"
+      [showActions]="true"
+      [actionsTemplate]="actionsTemplate"
+    ></app-table>
+
+    <ng-template #nameTemplate let-client>
+      <div class="name-container">
+        <div class="client-name">{{ client.nombre }}</div>
+        <div class="client-age">
+          Edad: {{ calculateAge(client.fecha_nacimiento) }}
+        </div>
+      </div>
+    </ng-template>
+
+    <ng-template #dateTemplate let-client>
+      {{ client.fecha_nacimiento | date : "yyyy-MM-dd" }}
+    </ng-template>
+
+    <ng-template #statusTemplate let-client>
+      <span
+        class="status-badge"
+        [class.active]="client.activo"
+        [class.inactive]="!client.activo"
+      >
+        <span class="status-dot"></span>
+        {{ client.activo ? "Activo" : "Inactivo" }}
+      </span>
+    </ng-template>
+
+    <ng-template #emailTemplate let-client>
+      {{ client.correo || "N/A" }}
+    </ng-template>
+
+    <ng-template #actionsTemplate let-client>
+      <div class="actions-container">
+        <app-actionsbuttons
+          type="view"
+          [disabled]="isLoading"
+          (actionClick)="openViewModal(client)"
+        >
+        </app-actionsbuttons>
+
+        <app-actionsbuttons
+          type="edit"
+          [disabled]="isLoading"
+          (actionClick)="openEditModal(client)"
+        >
+        </app-actionsbuttons>
+
+        <app-actionsbuttons
+          type="delete"
+          [disabled]="isLoading"
+          (actionClick)="deleteClient(client.id_cliente!)"
+        >
+        </app-actionsbuttons>
+      </div>
+    </ng-template> -->
   </div>
 
   @if (showModal && !isEditMode) {

@@ -1,4 +1,4 @@
-import { Component, signal, OnInit, OnDestroy } from '@angular/core';
+import { Component, signal, OnInit, OnDestroy, TemplateRef } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { ButtonAddComponent } from '../../components/button-add/button-add.component';
@@ -7,10 +7,11 @@ import { faUser } from '@fortawesome/free-solid-svg-icons';
 import { Subscription } from 'rxjs';
 import { ActionsbuttonsComponent } from '../../components/actionsbuttons/actionsbuttons.component';
 
+
 import {
   ClientService,
   Client,
-  ClientResponse,
+  ClientResponse
 } from '../../services/client/client.service';
 
 @Component({
@@ -51,7 +52,6 @@ export class ClientsComponent implements OnInit, OnDestroy {
     activo: true,
     usuario_creacion: 'admin', // current user from my system :v
   };
-
   calculateAge(fechaNacimiento: string): number {
     if (!fechaNacimiento) return 0;
     const birth = new Date(fechaNacimiento);
@@ -414,4 +414,10 @@ export class ClientsComponent implements OnInit, OnDestroy {
     this.error.set(null);
     this.resetForm();
   }
+
+
+
+
+
+  
 }

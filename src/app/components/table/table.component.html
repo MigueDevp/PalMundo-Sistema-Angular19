@@ -1,0 +1,84 @@
+<div class="table-wrapper">
+  <div class="table-container">
+    <table class="custom-table" [class.loading]="loading">
+      <thead>
+        <tr>
+          @for (column of columns; track column.key) {
+            <th>{{ column.label }}</th>
+          }
+          @if (showActions) {
+            <th>Acciones</th>
+          }
+        </tr>
+      </thead>
+      <tbody>
+        <!-- Estado de carga -->
+        @if (loading && (!data || data.length === 0)) {
+          <tr>
+            <td [colSpan]="columns.length + (showActions ? 1 : 0)" class="loading-state">
+              <div class="loading-content">
+                <span class="spinner"></span>
+                <span>Cargando datos...</span>
+              </div>
+            </td>
+          </tr>
+        }
+
+        <!-- Estado vacío -->
+        @if (!loading && (!data || data.length === 0)) {
+          <tr>
+            <td [colSpan]="columns.length + (showActions ? 1 : 0)" class="empty-state">
+              <div class="empty-content">
+                <span class="empty-icon">📊</span>
+                <span>{{ emptyMessage || 'No hay datos disponibles' }}</span>
+              </div>
+            </td>
+          </tr>
+        }
+
+        <!-- Datos -->
+        @for (item of data; track item.id_cliente; let i = $index) {
+          <tr [class.even]="i % 2 === 0"
+              [class.odd]="i % 2 === 1"
+              [class.selected]="isSelected(item)">
+            @for (column of columns; track column.key) {
+              <td [class]="column.class || ''">
+                @if (column.template) {
+                  <ng-container [ngTemplateOutlet]="column.template" [ngTemplateOutletContext]="{ $implicit: item }"></ng-container>
+                } @else {
+                  {{ getProperty(item, column.key) }}
+                }
+              </td>
+            }
+            
+            @if (showActions) {
+              <td class="actions-cell">
+                @if (actionsTemplate) {
+                  <ng-container [ngTemplateOutlet]="actionsTemplate" [ngTemplateOutletContext]="{ $implicit: item }"></ng-container>
+                }
+              </td>
+            }
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Paginación -->
+  @if (showPagination) {
+    <div class="pagination-container">
+      <div class="pagination-info">
+        Mostrando {{ getStartIndex() }} - {{ getEndIndex() }} de {{ totalItems }} registros
+      </div>
+      <div class="pagination-controls">
+        <button (click)="previousPage()" [disabled]="currentPage === 1" class="pagination-btn">
+          ‹ Anterior
+        </button>
+        <span class="page-info">Página {{ currentPage }} de {{ totalPages }}</span>
+        <button (click)="nextPage()" [disabled]="currentPage === totalPages" class="pagination-btn">
+          Siguiente ›
+        </button>
+      </div>
+    </div>
+  }
+</div>

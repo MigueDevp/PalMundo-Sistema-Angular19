@@ -29,31 +29,73 @@
   font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
 }
 
-/* Tabla */
+/* Tabla - ESTILOS ACTUALIZADOS basados en table.component.css */
+.table-wrapper {
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  border: 1px solid #e1e5e9;
+}
+
 .table-container {
   overflow-x: auto;
-  margin-bottom: 20px;
+  border-radius: 8px;
+  margin-top: 25px;
 }
 
 .clients-table {
   width: 100%;
   border-collapse: collapse;
-  margin-top: 15px;
-}
-
-.clients-table th,
-.clients-table td {
-  padding: 12px 15px;
-  text-align: left;
-  border-bottom: 1px solid #e0e0e0;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  font-size: 14px;
 }
 
 .clients-table th {
-  background-color: #f5f7fa;
+  background: #13317d;
+  color: white;
   font-weight: 600;
-  color: #333;
+  padding: 16px 12px;
+  text-align: left;
+  position: relative;
+  white-space: nowrap;
 }
 
+.clients-table th:not(:last-child)::after {
+  content: "";
+  position: absolute;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  height: 60%;
+  width: 1px;
+  background: rgba(255, 255, 255, 0.3);
+}
+
+.clients-table td {
+  padding: 14px 12px;
+  border-bottom: 1px solid #f0f0f0;
+  transition: all 0.2s ease;
+}
+
+.clients-table tbody tr {
+  transition: all 0.2s ease;
+}
+
+.clients-table tbody tr:hover {
+  background-color: #f8f9ff;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.clients-table tbody tr.even {
+  background-color: #fafbff;
+}
+
+.clients-table tbody tr.odd {
+  background-color: #ffffff;
+}
+/* 
 .add-btn {
   background-color: #4caf50;
   color: white;
@@ -81,7 +123,7 @@
   border: none;
   border-radius: 4px;
   cursor: pointer;
-}
+}  */
 
 .modal-overlay {
   position: fixed;
@@ -100,39 +142,44 @@
   display: flex;
   flex-direction: column;
 }
+
+/* Status badges - ESTILOS ACTUALIZADOS */
 .status-badge {
-  display: inline-flex;
-  align-items: center;
-  padding: 4px 10px;
-  border-radius: 12px;
-  font-size: 11px;
-  font-weight: 500;
-  color: #1f2937;
-  min-width: 70px;
-  justify-content: center;
+  display: inline-flex !important;
+  align-items: center !important;
+  padding: 4px 10px !important;
+  border-radius: 12px !important;
+  font-size: 11px !important;
+  font-weight: 500 !important;
+  color: #1f2937 !important;
+  min-width: 70px !important;
+  justify-content: center !important;
 }
 
 .status-dot {
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  margin-right: 6px;
+  width: 8px !important;
+  height: 8px !important;
+  border-radius: 50% !important;
+  margin-right: 6px !important;
+  display: inline-block !important;
 }
 
 .status-badge.active {
-  background-color: #b8f1c7;
+  background-color: #b8f1c7 !important;
+  border-color: #2e7d32 !important;
 }
 
 .status-badge.active .status-dot {
-  background-color: #2e7d32; /* verde oscuro */
+  background-color: #2e7d32 !important;
 }
 
 .status-badge.inactive {
-  background-color: #ffb3b3;
+  background-color: #ffb3b3 !important;
+  border-color: #b71c1c !important;
 }
 
 .status-badge.inactive .status-dot {
-  background-color: #b71c1c;
+  background-color: #b71c1c !important;
 }
 
 .client-name {
@@ -201,6 +248,7 @@
   border-radius: 4px;
   cursor: pointer;
 }
+
 .btn-add-client {
   padding: 10px 15px;
   border: none;
@@ -315,4 +363,55 @@
 
 .client-details::-webkit-scrollbar-thumb:hover {
   background: #a8a8a8;
+}
+
+/* Estados de carga y vacío */
+.loading-state,
+.empty-state {
+  text-align: center;
+  padding: 60px 20px !important;
+  color: #666;
+}
+
+.loading-content,
+.empty-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+
+.spinner {
+  width: 24px;
+  height: 24px;
+  border: 3px solid #f3f3f3;
+  border-top: 3px solid #667eea;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+.empty-icon {
+  font-size: 2rem;
+  opacity: 0.5;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .custom-table {
+    font-size: 13px;
+  }
+
+  .custom-table th,
+  .custom-table td {
+    padding: 12px 8px;
+  }
 }
