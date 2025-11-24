@@ -117,10 +117,8 @@
       <!-- Chart Placeholder -->
       <div class="chart-container">
         <h3 class="chart-title">Ventas y Abonos del Mes</h3>
-        <div class="chart-placeholder">
-          <fa-icon [icon]="faChartLine" class="chart-icon"></fa-icon>
-          <p>Gráfica de ventas por día</p>
-          <small>Próximamente: integración con Chart.js</small>
+        <div class="chart-canvas-wrapper">
+          <canvas #salesChart></canvas>
         </div>
       </div>
     </section>

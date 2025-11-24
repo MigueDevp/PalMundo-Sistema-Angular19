@@ -1,1 +1,40 @@
-<p>payments works!</p>
+<div class="payments-container">
+  <!-- Header -->
+  <div class="payments-header">
+    <h1>
+      <fa-icon [icon]="paymentOptions[0].icon" class="header-icon"></fa-icon>
+      Tipos de Pagos
+    </h1>
+   <!--  <p class="payments-subtitle">Gestiona todos los aspectos de pagos y cobros</p> -->
+  </div>
+
+  <!-- Payment Options Grid -->
+  <div class="payment-options-grid">
+    <div 
+      *ngFor="let option of paymentOptions" 
+      class="payment-card"
+      [attr.data-color]="option.color"
+      (click)="navigateTo(option.route)">
+      
+      <!-- Card Header with Icon -->
+      <div class="card-icon-wrapper" [style.background]="option.color">
+        <fa-icon [icon]="option.icon" class="card-icon"></fa-icon>
+      </div>
+
+      <!-- Card Content -->
+      <div class="card-content">
+        <h3 class="card-title">{{ option.title }}</h3>
+        <p class="card-description">{{ option.description }}</p>
+      </div>
+
+      <!-- Card Footer with Action Button -->
+      <div class="card-footer">
+        <button class="card-action-btn" [style.background]="option.color">
+          Acceder
+          <fa-icon [icon]="faArrowRight" class="btn-icon"></fa-icon>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+

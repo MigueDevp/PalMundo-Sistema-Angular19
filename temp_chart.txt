@@ -1,0 +1,3 @@
+﻿        <div class="chart-canvas-wrapper">
+          <canvas #salesChart></canvas>
+        </div>
