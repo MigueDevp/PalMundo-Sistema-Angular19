@@ -1,15 +1,14 @@
-<div class="clients-container">
+<div class="transport-container">
   <div class="header-section">
-    <h2>Registro de Transportes</h2>
+    <h2>Registro de Transportes <fa-icon [icon]="faBus"/></h2>
     <hr />
     <app-button-add (click)="openAddModal()">Añadir Un Transporte</app-button-add>
   </div>
 
   <div class="table-container">
-    <table class="clients-table">
+    <table class="transport-table">
       <thead>
         <tr>
-          <th>ID</th>
           <th>Clave</th>
           <th>Nombre</th>
           <th>Asientos</th>
@@ -23,17 +22,45 @@
       <tbody>
         @for (transporte of transportes(); track transporte.id) {
         <tr>
-          <td>{{ transporte.id }}</td>
-          <td>{{ transporte.clave }}</td>
-          <td>{{ transporte.nombre }}</td>
+          <td>
+            <span class="transport-code">{{ transporte.clave }}</span>
+          </td>
+          <td>
+            <div class="transport-name">{{ transporte.nombre }}</div>
+          </td>
           <td class="centered">{{ transporte.asientos }}</td>
           <td>{{ transporte.chofer }}</td>
-          <td class="centered">{{ transporte.bano }}</td>
-          <td class="centered">{{ transporte.aire }}</td>
-          <td [class.rentado]="transporte.rentado === 'Sí'">{{ transporte.rentado }}</td>
+          <td class="centered">
+            <span class="badge" [ngClass]="transporte.bano === 'Sí' ? 'badge-yes' : 'badge-no'">
+              {{ transporte.bano }}
+            </span>
+          </td>
+          <td class="centered">
+            <span class="badge" [ngClass]="transporte.aire === 'Sí' ? 'badge-yes' : 'badge-no'">
+              {{ transporte.aire }}
+            </span>
+          </td>
+          <td>
+            <span class="status-badge" [ngClass]="transporte.rentado === 'Sí' ? 'rented' : 'available'">
+              <span class="status-dot"></span>
+              {{ transporte.rentado === 'Sí' ? 'Rentado' : 'Disponible' }}
+            </span>
+          </td>
           <td class="actions">
-            <button class="edit-btn">Editar</button>
-            <button class="delete-btn">Eliminar</button>
+            <app-actionsbuttons
+              type="view"
+              (actionClick)="viewTransporte(transporte)"
+            ></app-actionsbuttons>
+
+            <app-actionsbuttons
+              type="edit"
+              (actionClick)="editTransporte(transporte)"
+            ></app-actionsbuttons>
+
+            <app-actionsbuttons
+              type="delete"
+              (actionClick)="deleteTransporte(transporte.id)"
+            ></app-actionsbuttons>
           </td>
         </tr>
         }
@@ -47,39 +74,41 @@
       <h3>Agregar Nuevo Transporte</h3>
       <form (submit)="addTransporte()">
         <div class="form-group">
-          <label>Clave:</label>
+          <label>Clave: <span class="required">*</span></label>
           <input [(ngModel)]="newTransporte.clave" name="clave" required placeholder="Ej: PM2025-09" />
         </div>
 
         <div class="form-group">
-          <label>Nombre del transporte:</label>
-          <input [(ngModel)]="newTransporte.nombre" name="nombre" required />
+          <label>Nombre del transporte: <span class="required">*</span></label>
+          <input [(ngModel)]="newTransporte.nombre" name="nombre" required placeholder="Ej: Autobús Mercedes-Benz" />
         </div>
 
         <div class="form-group">
-          <label>Número de asientos:</label>
-          <input type="number" [(ngModel)]="newTransporte.asientos" name="asientos" required min="1" />
+          <label>Número de asientos: <span class="required">*</span></label>
+          <input type="number" [(ngModel)]="newTransporte.asientos" name="asientos" required min="1" placeholder="Ej: 45" />
         </div>
 
         <div class="form-group">
-          <label>Nombre del chofer:</label>
-          <input [(ngModel)]="newTransporte.chofer" name="chofer" required />
+          <label>Nombre del chofer: <span class="required">*</span></label>
+          <input [(ngModel)]="newTransporte.chofer" name="chofer" required placeholder="Ej: Juan Pérez" />
         </div>
 
-        <div class="form-group">
-          <label>¿Tiene baño?</label>
-          <select [(ngModel)]="newTransporte.bano" name="bano">
-            <option value="Sí">Sí</option>
-            <option value="No">No</option>
-          </select>
-        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>¿Tiene baño?</label>
+            <select [(ngModel)]="newTransporte.bano" name="bano">
+              <option value="Sí">Sí</option>
+              <option value="No">No</option>
+            </select>
+          </div>
 
-        <div class="form-group">
-          <label>¿Tiene aire acondicionado?</label>
-          <select [(ngModel)]="newTransporte.aire" name="aire">
-            <option value="Sí">Sí</option>
-            <option value="No">No</option>
-          </select>
+          <div class="form-group">
+            <label>¿Tiene aire acondicionado?</label>
+            <select [(ngModel)]="newTransporte.aire" name="aire">
+              <option value="Sí">Sí</option>
+              <option value="No">No</option>
+            </select>
+          </div>
         </div>
 
         <div class="form-group">
@@ -94,7 +123,7 @@
           <button type="button" class="cancel-btn" (click)="closeModal()">
             Cancelar
           </button>
-          <button type="submit" class="save-btn">Guardar</button>
+          <button type="submit" class="save-btn">Guardar Transporte</button>
         </div>
       </form>
     </div>

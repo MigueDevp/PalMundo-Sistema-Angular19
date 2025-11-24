@@ -2,16 +2,20 @@ import { Component, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { ButtonAddComponent } from '../../components/button-add/button-add.component';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { faBus } from '@fortawesome/free-solid-svg-icons';
+import { ActionsbuttonsComponent } from '../../components/actionsbuttons/actionsbuttons.component';
 
 @Component({
   selector: 'app-my-transport',
-  imports: [FormsModule, CommonModule, ButtonAddComponent],
+  imports: [FormsModule, CommonModule, ButtonAddComponent, FontAwesomeModule, ActionsbuttonsComponent],
   templateUrl: './my-transport.component.html',
   styleUrl: './my-transport.component.css'
 })
 
 
 export class MyTransportComponent {
+  faBus = faBus;
  transportes = signal([
     { 
       id: 1,
@@ -133,6 +137,26 @@ export class MyTransportComponent {
         }
       ]);
       this.closeModal();
+    }
+  }
+
+  // Métodos para las acciones de los botones
+  viewTransporte(transporte: any) {
+    console.log('Ver transporte:', transporte);
+    // Aquí puedes implementar la lógica para ver detalles
+    alert(`Detalles del transporte:\n\nClave: ${transporte.clave}\nNombre: ${transporte.nombre}\nAsientos: ${transporte.asientos}\nChofer: ${transporte.chofer}`);
+  }
+
+  editTransporte(transporte: any) {
+    console.log('Editar transporte:', transporte);
+    // Aquí puedes implementar la lógica para editar
+    alert(`Editar transporte: ${transporte.nombre}`);
+  }
+
+  deleteTransporte(id: number) {
+    if (confirm('¿Estás seguro de que deseas eliminar este transporte?')) {
+      this.transportes.update(list => list.filter(t => t.id !== id));
+      console.log('Transporte eliminado:', id);
     }
   }
 }
