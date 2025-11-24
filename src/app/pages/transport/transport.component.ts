@@ -1,13 +1,13 @@
 import { Component, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { CommonModule } from '@angular/common';
+
 import { ButtonAddComponent } from '../../components/button-add/button-add.component';
 import { ActionsbuttonsComponent } from '../../components/actionsbuttons/actionsbuttons.component';
 
 
 @Component({
   selector: 'app-transport',
-  imports: [FormsModule, CommonModule, ButtonAddComponent, ActionsbuttonsComponent],
+  imports: [FormsModule, ButtonAddComponent, ActionsbuttonsComponent],
   standalone: true,
   templateUrl: './transport.component.html',
   styleUrl: './transport.component.css',

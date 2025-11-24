@@ -1,5 +1,5 @@
 import { Component, Input, EventEmitter, Output } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { FormsModule } from '@angular/forms';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { faSearch
@@ -7,7 +7,7 @@ import { faSearch
 
 @Component({
   selector: 'app-search-input',
-  imports: [CommonModule, FormsModule, FontAwesomeModule],
+  imports: [FormsModule, FontAwesomeModule],
   templateUrl: './search-input.component.html',
   styleUrl: './search-input.component.css'
 })

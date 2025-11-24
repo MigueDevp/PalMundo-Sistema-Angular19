@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { Router } from '@angular/router';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { 
@@ -23,7 +23,7 @@ interface PaymentOption {
 @Component({
   selector: 'app-payments',
   standalone: true,
-  imports: [CommonModule, FontAwesomeModule],
+  imports: [FontAwesomeModule],
   templateUrl: './payments.component.html',
   styleUrl: './payments.component.css'
 })

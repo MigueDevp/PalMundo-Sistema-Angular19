@@ -28,215 +28,222 @@
             <span>Anticipo requerido:</span>
             <span class="amount"
               >${{ viajeSeleccionado.anticipo | number }}</span
-            >
-          </div>
-          <div class="payment-deadline">
-            <span>Último día para pagar:</span>
-            <span>{{ viajeSeleccionado.ultimoDiaPago | date }}</span>
-          </div>
-        </div>
-
-        <!-- Detalles completos del viaje -->
-        <div class="full-details">
-          <h4>Detalles completos del viaje</h4>
-
-          <div class="detail-item">
-            <span class="detail-label">ID del viaje:</span>
-            <span class="detail-value">{{ viajeSeleccionado.id }}</span>
+              >
+            </div>
+            <div class="payment-deadline">
+              <span>Último día para pagar:</span>
+              <span>{{ viajeSeleccionado.ultimoDiaPago | date }}</span>
+            </div>
           </div>
 
-          <div class="detail-item">
-            <span class="detail-label">Fecha exacta de salida:</span>
-            <span class="detail-value">{{
-              viajeSeleccionado.fechaPartida | date : "full"
-            }}</span>
-          </div>
+          <!-- Detalles completos del viaje -->
+          <div class="full-details">
+            <h4>Detalles completos del viaje</h4>
 
-          <div class="detail-item">
-            <span class="detail-label">Fecha exacta de regreso:</span>
-            <span class="detail-value">{{
-              viajeSeleccionado.fechaRegreso | date : "full"
-            }}</span>
-          </div>
-
-          <div class="detail-item">
-            <span class="detail-label">Duración:</span>
-            <span class="detail-value">{{ calcularDuracionViaje() }} días</span>
-          </div>
-
-          <div class="detail-item">
-            <span class="detail-label">Descripción:</span>
-            <span class="detail-value">{{
-              viajeSeleccionado.descripcion
-            }}</span>
-          </div>
-
-          <div *ngIf="mostrarDetallesExtendidos">
             <div class="detail-item">
-              <span class="detail-label">Itinerario:</span>
+              <span class="detail-label">ID del viaje:</span>
+              <span class="detail-value">{{ viajeSeleccionado.id }}</span>
+            </div>
+
+            <div class="detail-item">
+              <span class="detail-label">Fecha exacta de salida:</span>
               <span class="detail-value">{{
-                viajeSeleccionado.itinerario
+                viajeSeleccionado.fechaPartida | date : "full"
               }}</span>
             </div>
 
             <div class="detail-item">
-              <span class="detail-label">Incluye:</span>
-              <span class="detail-value">{{ viajeSeleccionado.incluye }}</span>
+              <span class="detail-label">Fecha exacta de regreso:</span>
+              <span class="detail-value">{{
+                viajeSeleccionado.fechaRegreso | date : "full"
+              }}</span>
             </div>
-          </div>
-        </div>
 
-        <button class="details-btn" (click)="toggleDetallesExtendidos()">
-          {{ mostrarDetallesExtendidos ? "Mostrar menos" : "Más detalles" }}
-        </button>
-      </div>
-    </div>
-
-    <!-- Sección del formulario (derecha) -->
-    <div class="client-form-section">
-      <div class="client-form-container">
-        <h2 class="form-title">Datos del Cliente</h2>
-
-        <!-- Búsqueda de cliente existente -->
-        <div class="client-search" *ngIf="!isNewClient">
-          <div class="search-container">
-            <app-search-input
-              [(value)]="searchTerm"
-              (search)="buscarClientes()"
-              placeholder="Buscar cliente por nombre..."
-            ></app-search-input>
-          </div>
-
-          <div class="search-results" *ngIf="clientesEncontrados.length > 0">
-            <div
-              class="result-item"
-              *ngFor="let cliente of clientesEncontrados"
-              (click)="seleccionarCliente(cliente)"
-            >
-              {{ cliente.nombre }} -
-              {{ calcularEdad(cliente.fechaNacimiento) }} años
+            <div class="detail-item">
+              <span class="detail-label">Duración:</span>
+              <span class="detail-value">{{ calcularDuracionViaje() }} días</span>
             </div>
-          </div>
 
-          <div class="new-client-toggle">
-            <label>
-              <input
-                type="checkbox"
-                [(ngModel)]="isNewClient"
-                (change)="toggleNewClient()"
-              />
-              Nuevo cliente
-            </label>
-          </div>
-        </div>
-
-        <!-- Formulario de cliente -->
-        <form class="client-form" *ngIf="isNewClient || cliente.nombre">
-          <div class="form-group">
-            <label>Nombre completo*</label>
-            <input
-              type="text"
-              [(ngModel)]="cliente.nombre"
-              name="nombre"
-              required
-            />
-          </div>
-          <div class="form-row">
-            <div class="form-group">
-              <label>Fecha de nacimiento*</label>
-              <input
-                type="date"
-                [(ngModel)]="cliente.fechaNacimiento"
-                name="fechaNacimiento"
-                required
-              />
-              <span class="age-display"
-                >Edad: {{ calcularEdad(cliente.fechaNacimiento) }} años</span
-              >
+            <div class="detail-item">
+              <span class="detail-label">Descripción:</span>
+              <span class="detail-value">{{
+                viajeSeleccionado.descripcion
+              }}</span>
             </div>
-            <div class="form-group">
-              <label>Sexo*</label>
-              <select [(ngModel)]="cliente.sexo" name="sexo" required>
-                <option value="Masculino">Masculino</option>
-                <option value="Femenino">Femenino</option>
-                <option value="Otro">Otro</option>
-              </select>
-            </div>
-          </div>
-          <div class="form-group">
-            <label>Dirección*</label>
-            <input
-              type="text"
-              [(ngModel)]="cliente.direccion"
-              name="direccion"
-              required
-            />
-          </div>
-          <div class="form-row">
-            <div class="form-group">
-              <label>Teléfono*</label>
-              <input
-                type="tel"
-                [(ngModel)]="cliente.telefono"
-                name="telefono"
-                required
-              />
-            </div>
-            <div class="form-group">
-              <label>Correo electrónico</label>
-              <input type="email" [(ngModel)]="cliente.email" name="email" />
-            </div>
-          </div>
-        </form>
 
-        <!-- Sección de acompañantes -->
-        <div class="companions-section" *ngIf="cliente.nombre">
-          <h3>Acompañantes</h3>
-
-          <app-button-add (click)="agregarAcompanante()" class="btn-add">Agregar</app-button-add>
-
-          <div class="companion-list">
-            <div
-              class="companion-item"
-              *ngFor="let acompanante of acompanantes; let i = index"
-            >
-              <div class="companion-form">
-                <div class="form-group">
-                  <label>Nombre completo</label>
-                  <input
-                    type="text"
-                    [(ngModel)]="acompanante.nombre"
-                    [name]="'acompananteNombre' + i"
-                  />
+            @if (mostrarDetallesExtendidos) {
+              <div>
+                <div class="detail-item">
+                  <span class="detail-label">Itinerario:</span>
+                  <span class="detail-value">{{
+                    viajeSeleccionado.itinerario
+                  }}</span>
                 </div>
-
-                <div class="form-group">
-                  <label>Edad</label>
-                  <input
-                    type="number"
-                    [(ngModel)]="acompanante.edad"
-                    [name]="'acompananteEdad' + i"
-                  />
+                <div class="detail-item">
+                  <span class="detail-label">Incluye:</span>
+                  <span class="detail-value">{{ viajeSeleccionado.incluye }}</span>
                 </div>
               </div>
-
-              <button
-                class="remove-companion-btn"
-                (click)="eliminarAcompanante(i)"
-              >
-                <fa-icon [icon]="faXmark"></fa-icon>
-              </button>
-            </div>
+            }
           </div>
-        </div>
 
-        <!-- Botón para generar contrato -->
-        <div class="generate-contract" *ngIf="cliente.nombre">
-          <button class="generate-btn" (click)="continuarASeleccionAsientos()">
-            Continuar
+          <button class="details-btn" (click)="toggleDetallesExtendidos()">
+            {{ mostrarDetallesExtendidos ? "Mostrar menos" : "Más detalles" }}
           </button>
         </div>
       </div>
-    </div>
-  </div>
-</div>
+
+      <!-- Sección del formulario (derecha) -->
+      <div class="client-form-section">
+        <div class="client-form-container">
+          <h2 class="form-title">Datos del Cliente</h2>
+
+          <!-- Búsqueda de cliente existente -->
+          @if (!isNewClient) {
+            <div class="client-search">
+              <div class="search-container">
+                <app-search-input
+                  [(value)]="searchTerm"
+                  (search)="buscarClientes()"
+                  placeholder="Buscar cliente por nombre..."
+                ></app-search-input>
+              </div>
+              @if (clientesEncontrados.length > 0) {
+                <div class="search-results">
+                  @for (cliente of clientesEncontrados; track cliente) {
+                    <div
+                      class="result-item"
+                      (click)="seleccionarCliente(cliente)"
+                      >
+                      {{ cliente.nombre }} -
+                      {{ calcularEdad(cliente.fechaNacimiento) }} años
+                    </div>
+                  }
+                </div>
+              }
+              <div class="new-client-toggle">
+                <label>
+                  <input
+                    type="checkbox"
+                    [(ngModel)]="isNewClient"
+                    (change)="toggleNewClient()"
+                    />
+                    Nuevo cliente
+                  </label>
+                </div>
+              </div>
+            }
+
+            <!-- Formulario de cliente -->
+            @if (isNewClient || cliente.nombre) {
+              <form class="client-form">
+                <div class="form-group">
+                  <label>Nombre completo*</label>
+                  <input
+                    type="text"
+                    [(ngModel)]="cliente.nombre"
+                    name="nombre"
+                    required
+                    />
+                  </div>
+                  <div class="form-row">
+                    <div class="form-group">
+                      <label>Fecha de nacimiento*</label>
+                      <input
+                        type="date"
+                        [(ngModel)]="cliente.fechaNacimiento"
+                        name="fechaNacimiento"
+                        required
+                        />
+                        <span class="age-display"
+                          >Edad: {{ calcularEdad(cliente.fechaNacimiento) }} años</span
+                          >
+                        </div>
+                        <div class="form-group">
+                          <label>Sexo*</label>
+                          <select [(ngModel)]="cliente.sexo" name="sexo" required>
+                            <option value="Masculino">Masculino</option>
+                            <option value="Femenino">Femenino</option>
+                            <option value="Otro">Otro</option>
+                          </select>
+                        </div>
+                      </div>
+                      <div class="form-group">
+                        <label>Dirección*</label>
+                        <input
+                          type="text"
+                          [(ngModel)]="cliente.direccion"
+                          name="direccion"
+                          required
+                          />
+                        </div>
+                        <div class="form-row">
+                          <div class="form-group">
+                            <label>Teléfono*</label>
+                            <input
+                              type="tel"
+                              [(ngModel)]="cliente.telefono"
+                              name="telefono"
+                              required
+                              />
+                            </div>
+                            <div class="form-group">
+                              <label>Correo electrónico</label>
+                              <input type="email" [(ngModel)]="cliente.email" name="email" />
+                            </div>
+                          </div>
+                        </form>
+                      }
+
+                      <!-- Sección de acompañantes -->
+                      @if (cliente.nombre) {
+                        <div class="companions-section">
+                          <h3>Acompañantes</h3>
+                          <app-button-add (click)="agregarAcompanante()" class="btn-add">Agregar</app-button-add>
+                          <div class="companion-list">
+                            @for (acompanante of acompanantes; track acompanante; let i = $index) {
+                              <div
+                                class="companion-item"
+                                >
+                                <div class="companion-form">
+                                  <div class="form-group">
+                                    <label>Nombre completo</label>
+                                    <input
+                                      type="text"
+                                      [(ngModel)]="acompanante.nombre"
+                                      [name]="'acompananteNombre' + i"
+                                      />
+                                    </div>
+                                    <div class="form-group">
+                                      <label>Edad</label>
+                                      <input
+                                        type="number"
+                                        [(ngModel)]="acompanante.edad"
+                                        [name]="'acompananteEdad' + i"
+                                        />
+                                      </div>
+                                    </div>
+                                    <button
+                                      class="remove-companion-btn"
+                                      (click)="eliminarAcompanante(i)"
+                                      >
+                                      <fa-icon [icon]="faXmark"></fa-icon>
+                                    </button>
+                                  </div>
+                                }
+                              </div>
+                            </div>
+                          }
+
+                          <!-- Botón para generar contrato -->
+                          @if (cliente.nombre) {
+                            <div class="generate-contract">
+                              <button class="generate-btn" (click)="continuarASeleccionAsientos()">
+                                Continuar
+                              </button>
+                            </div>
+                          }
+                        </div>
+                      </div>
+                    </div>
+                  </div>

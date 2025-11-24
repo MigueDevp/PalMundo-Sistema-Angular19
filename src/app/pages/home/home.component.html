@@ -10,7 +10,7 @@
 
   <!-- Main Grid Layout -->
   <div class="dashboard-grid">
-    
+
     <!-- Section 1: Upcoming Trips -->
     <section class="dashboard-section trips-section">
       <div class="section-header">
@@ -21,45 +21,43 @@
       </div>
 
       <div class="trips-container">
-        <div class="trip-card" *ngFor="let trip of upcomingTrips">
-          <div class="trip-header">
-            <h3 class="trip-name">{{ trip.name }}</h3>
-            <span class="trip-date">
-              <fa-icon [icon]="faCalendarAlt"></fa-icon>
-              {{ formatDate(trip.departureDate) }}
-            </span>
-          </div>
-
-          <div class="trip-stats">
-            <div class="stat-item">
-              <fa-icon [icon]="faUsers" class="stat-icon occupied"></fa-icon>
-              <div class="stat-info">
-                <span class="stat-label">Ocupación</span>
-                <span class="stat-value">{{ trip.occupiedSeats }} / {{ trip.totalSeats }}</span>
+        @for (trip of upcomingTrips; track trip) {
+          <div class="trip-card">
+            <div class="trip-header">
+              <h3 class="trip-name">{{ trip.name }}</h3>
+              <span class="trip-date">
+                <fa-icon [icon]="faCalendarAlt"></fa-icon>
+                {{ formatDate(trip.departureDate) }}
+              </span>
+            </div>
+            <div class="trip-stats">
+              <div class="stat-item">
+                <fa-icon [icon]="faUsers" class="stat-icon occupied"></fa-icon>
+                <div class="stat-info">
+                  <span class="stat-label">Ocupación</span>
+                  <span class="stat-value">{{ trip.occupiedSeats }} / {{ trip.totalSeats }}</span>
+                </div>
+              </div>
+              <div class="stat-item">
+                <fa-icon [icon]="faChair" class="stat-icon available"></fa-icon>
+                <div class="stat-info">
+                  <span class="stat-label">Disponibles</span>
+                  <span class="stat-value">{{ trip.availableSeats }}</span>
+                </div>
               </div>
             </div>
-
-            <div class="stat-item">
-              <fa-icon [icon]="faChair" class="stat-icon available"></fa-icon>
-              <div class="stat-info">
-                <span class="stat-label">Disponibles</span>
-                <span class="stat-value">{{ trip.availableSeats }}</span>
+            <!-- Occupation Bar -->
+            <div class="occupation-bar-container">
+              <div class="occupation-bar">
+                <div class="occupation-fill"
+                  [style.width.%]="getOccupationPercentage(trip)">
+                </div>
               </div>
+              <span class="occupation-percentage">{{ getOccupationPercentage(trip) | number:'1.0-0' }}%</span>
             </div>
+            <button class="view-trip-btn">Ver viaje</button>
           </div>
-
-          <!-- Occupation Bar -->
-          <div class="occupation-bar-container">
-            <div class="occupation-bar">
-              <div class="occupation-fill" 
-                   [style.width.%]="getOccupationPercentage(trip)">
-              </div>
-            </div>
-            <span class="occupation-percentage">{{ getOccupationPercentage(trip) | number:'1.0-0' }}%</span>
-          </div>
-
-          <button class="view-trip-btn">Ver viaje</button>
-        </div>
+        }
       </div>
     </section>
 
@@ -144,19 +142,21 @@
             </tr>
           </thead>
           <tbody>
-            <tr *ngFor="let contract of recentContracts">
-              <td class="contract-id">{{ contract.id }}</td>
-              <td class="contract-client">{{ contract.clientName }}</td>
-              <td>
-                <span class="contract-type-badge" 
-                      [class.trip-type]="contract.type === 'Viaje'"
-                      [class.service-type]="contract.type === 'Servicio Individual'">
-                  {{ contract.type }}
-                </span>
-              </td>
-              <td class="contract-date">{{ formatDate(contract.date) }}</td>
-              <td class="contract-amount">{{ formatCurrency(contract.amount) }}</td>
-            </tr>
+            @for (contract of recentContracts; track contract) {
+              <tr>
+                <td class="contract-id">{{ contract.id }}</td>
+                <td class="contract-client">{{ contract.clientName }}</td>
+                <td>
+                  <span class="contract-type-badge"
+                    [class.trip-type]="contract.type === 'Viaje'"
+                    [class.service-type]="contract.type === 'Servicio Individual'">
+                    {{ contract.type }}
+                  </span>
+                </td>
+                <td class="contract-date">{{ formatDate(contract.date) }}</td>
+                <td class="contract-amount">{{ formatCurrency(contract.amount) }}</td>
+              </tr>
+            }
           </tbody>
         </table>
       </div>

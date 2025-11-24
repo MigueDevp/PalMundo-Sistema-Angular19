@@ -19,253 +19,271 @@
           [(ngModel)]="searchTerm"
           (input)="buscarClientes()"
           class="search-input"
-        />
-        <button 
-          class="search-btn" 
-          (click)="buscarClientes()" 
-          type="button"
-          [disabled]="!searchTerm.trim()">
-          <fa-icon [icon]="faSearch"></fa-icon>
-          Buscar
-        </button>
-      </div>
-
-      <!-- Search Results Dropdown -->
-      <div class="search-results" *ngIf="searchResults.length > 0">
-        <div class="results-header">
-          <span>{{ searchResults.length }} resultado(s) encontrado(s)</span>
+          />
+          <button
+            class="search-btn"
+            (click)="buscarClientes()"
+            type="button"
+            [disabled]="!searchTerm.trim()">
+            <fa-icon [icon]="faSearch"></fa-icon>
+            Buscar
+          </button>
         </div>
-        <div 
-          class="result-item"
-          *ngFor="let result of searchResults"
-          (click)="seleccionarCliente(result)">
-          <div class="result-info">
-            <fa-icon [icon]="faUser" class="result-icon"></fa-icon>
-            <div class="result-details">
-              <span class="result-name">{{ result.titular }}</span>
-              <span class="result-folio">Folio: {{ result.folio }}</span>
+
+        <!-- Search Results Dropdown -->
+        @if (searchResults.length > 0) {
+          <div class="search-results">
+            <div class="results-header">
+              <span>{{ searchResults.length }} resultado(s) encontrado(s)</span>
             </div>
+            @for (result of searchResults; track result) {
+              <div
+                class="result-item"
+                (click)="seleccionarCliente(result)">
+                <div class="result-info">
+                  <fa-icon [icon]="faUser" class="result-icon"></fa-icon>
+                  <div class="result-details">
+                    <span class="result-name">{{ result.titular }}</span>
+                    <span class="result-folio">Folio: {{ result.folio }}</span>
+                  </div>
+                </div>
+                <fa-icon [icon]="faEye" class="result-action"></fa-icon>
+              </div>
+            }
           </div>
-          <fa-icon [icon]="faEye" class="result-action"></fa-icon>
-        </div>
+        }
       </div>
     </div>
-  </div>
 
-  <!-- Filters Section - Always Visible -->
-  <div class="filters-container">
-    <button class="filters-toggle-btn" (click)="toggleFilters()">
-      <fa-icon [icon]="faFilter"></fa-icon>
-      {{ showFilters ? 'Ocultar Filtros' : 'Mostrar Filtros' }}
-      <span *ngIf="hasActiveFilters()" class="active-filters-badge">{{ getActiveFiltersCount() }}</span>
-    </button>
-
-    <div *ngIf="showFilters" class="filters-panel">
-      <div class="filters-grid">
-        <!-- Service Type Filter -->
-        <div class="filter-group">
-          <label class="filter-label">
-            <fa-icon [icon]="faClipboardList" class="filter-icon"></fa-icon>
-            Tipo de Servicio
-          </label>
-          <select [(ngModel)]="filterServiceType" class="filter-select" (change)="applyFilters()">
-            <option value="">Todos los servicios</option>
-            <option *ngFor="let service of getUniqueServiceTypes()" [value]="service">
-              {{ service }}
-            </option>
-          </select>
-        </div>
-
-        <!-- Date From Filter -->
-        <div class="filter-group">
-          <label class="filter-label">
-            <fa-icon [icon]="faCalendarAlt" class="filter-icon"></fa-icon>
-            Fecha Desde
-          </label>
-          <input 
-            type="date" 
-            [(ngModel)]="filterDateFrom" 
-            class="filter-input"
-            (change)="applyFilters()"
-          />
-        </div>
-
-        <!-- Date To Filter -->
-        <div class="filter-group">
-          <label class="filter-label">
-            <fa-icon [icon]="faCalendarAlt" class="filter-icon"></fa-icon>
-            Fecha Hasta
-          </label>
-          <input 
-            type="date" 
-            [(ngModel)]="filterDateTo" 
-            class="filter-input"
-            (change)="applyFilters()"
-          />
-        </div>
-
-        <!-- Amount Min Filter -->
-        <div class="filter-group">
-          <label class="filter-label">
-            <fa-icon [icon]="faDollarSign" class="filter-icon"></fa-icon>
-            Monto Mínimo
-          </label>
-          <input 
-            type="number" 
-            [(ngModel)]="filterAmountMin" 
-            class="filter-input"
-            placeholder="$0"
-            min="0"
-            (input)="applyFilters()"
-          />
-        </div>
-
-        <!-- Amount Max Filter -->
-        <div class="filter-group">
-          <label class="filter-label">
-            <fa-icon [icon]="faDollarSign" class="filter-icon"></fa-icon>
-            Monto Máximo
-          </label>
-          <input 
-            type="number" 
-            [(ngModel)]="filterAmountMax" 
-            class="filter-input"
-            placeholder="$999,999"
-            min="0"
-            (input)="applyFilters()"
-          />
-        </div>
-      </div>
-
-      <div class="filters-actions">
-        <button class="clear-filters-btn" (click)="clearFilters()" *ngIf="hasActiveFilters()">
-          <fa-icon [icon]="faFilterCircleXmark"></fa-icon>
-          Limpiar Filtros
-        </button>
-      </div>
-    </div>
-  </div>
-
-  <!-- Contracts Table Section -->
-  <div class="contracts-section" *ngIf="hasActiveFilters() || filteredContracts.length > 0">
-    <div class="section-header">
-      <h2>
-        <fa-icon [icon]="faClipboardList" class="section-icon"></fa-icon>
-        <span *ngIf="!hasActiveFilters()">Todos los Contratos</span>
-        <span *ngIf="hasActiveFilters()">Contratos Filtrados ({{ filteredContracts.length }})</span>
-      </h2>
-      <button class="clear-btn" (click)="clearFilters()" *ngIf="hasActiveFilters()">
-        <fa-icon [icon]="faTimes"></fa-icon>
-        Limpiar Filtros
+    <!-- Filters Section - Always Visible -->
+    <div class="filters-container">
+      <button class="filters-toggle-btn" (click)="toggleFilters()">
+        <fa-icon [icon]="faFilter"></fa-icon>
+        {{ showFilters ? 'Ocultar Filtros' : 'Mostrar Filtros' }}
+        @if (hasActiveFilters()) {
+          <span class="active-filters-badge">{{ getActiveFiltersCount() }}</span>
+        }
       </button>
-    </div>
 
-    <div class="table-container">
-      <table class="contracts-table" *ngIf="filteredContracts.length > 0">
-        <thead>
-          <tr>
-            <th>Folio</th>
-            <th>Fecha</th>
-            <th>Servicio</th>
-            <th>Monto</th>
-            <th>Acciones</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr *ngFor="let contrato of filteredContracts">
-            <td>
-              <span class="folio-badge">{{ contrato.folio }}</span>
-            </td>
-            <td>
-              <div class="date-cell">
-                <fa-icon [icon]="faCalendarAlt" class="cell-icon"></fa-icon>
-                {{ contrato.fecha }}
+      @if (showFilters) {
+        <div class="filters-panel">
+          <div class="filters-grid">
+            <!-- Service Type Filter -->
+            <div class="filter-group">
+              <label class="filter-label">
+                <fa-icon [icon]="faClipboardList" class="filter-icon"></fa-icon>
+                Tipo de Servicio
+              </label>
+              <select [(ngModel)]="filterServiceType" class="filter-select" (change)="applyFilters()">
+                <option value="">Todos los servicios</option>
+                @for (service of getUniqueServiceTypes(); track service) {
+                  <option [value]="service">
+                    {{ service }}
+                  </option>
+                }
+              </select>
+            </div>
+            <!-- Date From Filter -->
+            <div class="filter-group">
+              <label class="filter-label">
+                <fa-icon [icon]="faCalendarAlt" class="filter-icon"></fa-icon>
+                Fecha Desde
+              </label>
+              <input
+                type="date"
+                [(ngModel)]="filterDateFrom"
+                class="filter-input"
+                (change)="applyFilters()"
+                />
               </div>
-            </td>
-            <td>
-              <span class="service-name">{{ contrato.servicio }}</span>
-            </td>
-            <td>
-              <div class="amount-cell">
-                <fa-icon [icon]="faDollarSign" class="cell-icon"></fa-icon>
-                <span class="amount">{{ contrato.monto | currency:'MXN' }}</span>
+              <!-- Date To Filter -->
+              <div class="filter-group">
+                <label class="filter-label">
+                  <fa-icon [icon]="faCalendarAlt" class="filter-icon"></fa-icon>
+                  Fecha Hasta
+                </label>
+                <input
+                  type="date"
+                  [(ngModel)]="filterDateTo"
+                  class="filter-input"
+                  (change)="applyFilters()"
+                  />
+                </div>
+                <!-- Amount Min Filter -->
+                <div class="filter-group">
+                  <label class="filter-label">
+                    <fa-icon [icon]="faDollarSign" class="filter-icon"></fa-icon>
+                    Monto Mínimo
+                  </label>
+                  <input
+                    type="number"
+                    [(ngModel)]="filterAmountMin"
+                    class="filter-input"
+                    placeholder="$0"
+                    min="0"
+                    (input)="applyFilters()"
+                    />
+                  </div>
+                  <!-- Amount Max Filter -->
+                  <div class="filter-group">
+                    <label class="filter-label">
+                      <fa-icon [icon]="faDollarSign" class="filter-icon"></fa-icon>
+                      Monto Máximo
+                    </label>
+                    <input
+                      type="number"
+                      [(ngModel)]="filterAmountMax"
+                      class="filter-input"
+                      placeholder="$999,999"
+                      min="0"
+                      (input)="applyFilters()"
+                      />
+                    </div>
+                  </div>
+                  <div class="filters-actions">
+                    @if (hasActiveFilters()) {
+                      <button class="clear-filters-btn" (click)="clearFilters()">
+                        <fa-icon [icon]="faFilterCircleXmark"></fa-icon>
+                        Limpiar Filtros
+                      </button>
+                    }
+                  </div>
+                </div>
+              }
+            </div>
+
+            <!-- Contracts Table Section -->
+            @if (hasActiveFilters() || filteredContracts.length > 0) {
+              <div class="contracts-section">
+                <div class="section-header">
+                  <h2>
+                    <fa-icon [icon]="faClipboardList" class="section-icon"></fa-icon>
+                    @if (!hasActiveFilters()) {
+                      <span>Todos los Contratos</span>
+                    }
+                    @if (hasActiveFilters()) {
+                      <span>Contratos Filtrados ({{ filteredContracts.length }})</span>
+                    }
+                  </h2>
+                  @if (hasActiveFilters()) {
+                    <button class="clear-btn" (click)="clearFilters()">
+                      <fa-icon [icon]="faTimes"></fa-icon>
+                      Limpiar Filtros
+                    </button>
+                  }
+                </div>
+                <div class="table-container">
+                  @if (filteredContracts.length > 0) {
+                    <table class="contracts-table">
+                      <thead>
+                        <tr>
+                          <th>Folio</th>
+                          <th>Fecha</th>
+                          <th>Servicio</th>
+                          <th>Monto</th>
+                          <th>Acciones</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        @for (contrato of filteredContracts; track contrato) {
+                          <tr>
+                            <td>
+                              <span class="folio-badge">{{ contrato.folio }}</span>
+                            </td>
+                            <td>
+                              <div class="date-cell">
+                                <fa-icon [icon]="faCalendarAlt" class="cell-icon"></fa-icon>
+                                {{ contrato.fecha }}
+                              </div>
+                            </td>
+                            <td>
+                              <span class="service-name">{{ contrato.servicio }}</span>
+                            </td>
+                            <td>
+                              <div class="amount-cell">
+                                <fa-icon [icon]="faDollarSign" class="cell-icon"></fa-icon>
+                                <span class="amount">{{ contrato.monto | currency:'MXN' }}</span>
+                              </div>
+                            </td>
+                            <td>
+                              <button class="view-btn" (click)="verContrato(contrato)">
+                                <fa-icon [icon]="faEye"></fa-icon>
+                                Ver Detalle
+                              </button>
+                            </td>
+                          </tr>
+                        }
+                      </tbody>
+                    </table>
+                  }
+                  <!-- No Results Message -->
+                  @if (filteredContracts.length === 0) {
+                    <div class="no-results-message">
+                      <fa-icon [icon]="faSearch" class="no-results-icon"></fa-icon>
+                      <h3>No se encontraron contratos</h3>
+                      @if (hasActiveFilters()) {
+                        <p>
+                          No hay contratos que coincidan con los filtros aplicados.
+                          <button class="inline-clear-btn" (click)="clearFilters()">Limpiar filtros</button>
+                        </p>
+                      }
+                      @if (!hasActiveFilters()) {
+                        <p>
+                          No hay contratos disponibles.
+                        </p>
+                      }
+                    </div>
+                  }
+                </div>
               </div>
-            </td>
-            <td>
-              <button class="view-btn" (click)="verContrato(contrato)">
-                <fa-icon [icon]="faEye"></fa-icon>
-                Ver Detalle
-              </button>
-            </td>
-          </tr>
-        </tbody>
-      </table>
+            }
 
-      <!-- No Results Message -->
-      <div *ngIf="filteredContracts.length === 0" class="no-results-message">
-        <fa-icon [icon]="faSearch" class="no-results-icon"></fa-icon>
-        <h3>No se encontraron contratos</h3>
-        <p *ngIf="hasActiveFilters()">
-          No hay contratos que coincidan con los filtros aplicados.
-          <button class="inline-clear-btn" (click)="clearFilters()">Limpiar filtros</button>
-        </p>
-        <p *ngIf="!hasActiveFilters()">
-          No hay contratos disponibles.
-        </p>
-      </div>
-    </div>
-  </div>
-
-  <!-- Contract Detail Modal -->
-  <div *ngIf="viewedContract" class="contract-detail-modal">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h3>Detalle del Contrato</h3>
-        <button class="close-icon-btn" (click)="cerrarDetalleContrato()">
-          <fa-icon [icon]="faTimes"></fa-icon>
-        </button>
-      </div>
-      
-      <div class="modal-body">
-        <div class="detail-row">
-          <span class="detail-label">
-            <fa-icon [icon]="faFileContract"></fa-icon> Folio
-          </span>
-          <span class="detail-value folio">{{ viewedContract.folio }}</span>
-        </div>
-        
-        <div class="detail-row">
-          <span class="detail-label">
-            <fa-icon [icon]="faCalendarAlt"></fa-icon> Fecha
-          </span>
-          <span class="detail-value">{{ viewedContract.fecha }}</span>
-        </div>
-        
-        <div class="detail-row">
-          <span class="detail-label">
-            <fa-icon [icon]="faClipboardList"></fa-icon> Servicio
-          </span>
-          <span class="detail-value">{{ viewedContract.servicio }}</span>
-        </div>
-        
-        <div class="detail-row">
-          <span class="detail-label">
-            <fa-icon [icon]="faDollarSign"></fa-icon> Monto
-          </span>
-          <span class="detail-value amount">{{ viewedContract.monto | currency:'MXN' }}</span>
-        </div>
-        
-        <div class="detail-description">
-          <span class="detail-label">Descripción</span>
-          <p>{{ viewedContract.descripcion }}</p>
-        </div>
-      </div>
-
-      <div class="modal-footer">
-        <button class="close-btn" (click)="cerrarDetalleContrato()">
-          Cerrar
-        </button>
-      </div>
-    </div>
-  </div>
-</div>
+            <!-- Contract Detail Modal -->
+            @if (viewedContract) {
+              <div class="contract-detail-modal">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h3>Detalle del Contrato</h3>
+                    <button class="close-icon-btn" (click)="cerrarDetalleContrato()">
+                      <fa-icon [icon]="faTimes"></fa-icon>
+                    </button>
+                  </div>
+                  <div class="modal-body">
+                    <div class="detail-row">
+                      <span class="detail-label">
+                        <fa-icon [icon]="faFileContract"></fa-icon> Folio
+                      </span>
+                      <span class="detail-value folio">{{ viewedContract.folio }}</span>
+                    </div>
+                    <div class="detail-row">
+                      <span class="detail-label">
+                        <fa-icon [icon]="faCalendarAlt"></fa-icon> Fecha
+                      </span>
+                      <span class="detail-value">{{ viewedContract.fecha }}</span>
+                    </div>
+                    <div class="detail-row">
+                      <span class="detail-label">
+                        <fa-icon [icon]="faClipboardList"></fa-icon> Servicio
+                      </span>
+                      <span class="detail-value">{{ viewedContract.servicio }}</span>
+                    </div>
+                    <div class="detail-row">
+                      <span class="detail-label">
+                        <fa-icon [icon]="faDollarSign"></fa-icon> Monto
+                      </span>
+                      <span class="detail-value amount">{{ viewedContract.monto | currency:'MXN' }}</span>
+                    </div>
+                    <div class="detail-description">
+                      <span class="detail-label">Descripción</span>
+                      <p>{{ viewedContract.descripcion }}</p>
+                    </div>
+                  </div>
+                  <div class="modal-footer">
+                    <button class="close-btn" (click)="cerrarDetalleContrato()">
+                      Cerrar
+                    </button>
+                  </div>
+                </div>
+              </div>
+            }
+          </div>

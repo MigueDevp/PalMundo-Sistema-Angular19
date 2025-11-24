@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { RouterLink } from '@angular/router';
-import { CommonModule } from '@angular/common';
+
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { 
   faHome, faUsers, faRoute, faListAlt, faCashRegister,
@@ -11,7 +11,7 @@ import {
 @Component({
   selector: 'app-menu',
   standalone: true,
-  imports: [RouterLink, CommonModule, FontAwesomeModule],
+  imports: [RouterLink, FontAwesomeModule],
   templateUrl: './menu.component.html',
   styleUrls: ['./menu.component.css']
 })

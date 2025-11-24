@@ -1,5 +1,5 @@
 import { Component, signal, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { FormsModule } from '@angular/forms';
 import { RouterModule, Router, ActivatedRoute } from '@angular/router';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
@@ -31,7 +31,7 @@ interface ContractData {
 @Component({
   selector: 'app-seat-selection',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterModule, FontAwesomeModule],
+  imports: [FormsModule, RouterModule, FontAwesomeModule],
   templateUrl: './seat-selection.component.html',
   styleUrls: ['./seat-selection.component.css']
 })
