@@ -1,1 +1,168 @@
-que royo plebada
+<div class="dashboard-container">
+  <!-- Header -->
+  <div class="dashboard-header">
+    <h1>
+      <fa-icon [icon]="faChartLine" class="header-icon"></fa-icon>
+      Dashboard Principal
+    </h1>
+    <p class="dashboard-subtitle">Resumen general de operaciones</p>
+  </div>
+
+  <!-- Main Grid Layout -->
+  <div class="dashboard-grid">
+    
+    <!-- Section 1: Upcoming Trips -->
+    <section class="dashboard-section trips-section">
+      <div class="section-header">
+        <h2>
+          <fa-icon [icon]="faBus" class="section-icon"></fa-icon>
+          Próximos Viajes
+        </h2>
+      </div>
+
+      <div class="trips-container">
+        <div class="trip-card" *ngFor="let trip of upcomingTrips">
+          <div class="trip-header">
+            <h3 class="trip-name">{{ trip.name }}</h3>
+            <span class="trip-date">
+              <fa-icon [icon]="faCalendarAlt"></fa-icon>
+              {{ formatDate(trip.departureDate) }}
+            </span>
+          </div>
+
+          <div class="trip-stats">
+            <div class="stat-item">
+              <fa-icon [icon]="faUsers" class="stat-icon occupied"></fa-icon>
+              <div class="stat-info">
+                <span class="stat-label">Ocupación</span>
+                <span class="stat-value">{{ trip.occupiedSeats }} / {{ trip.totalSeats }}</span>
+              </div>
+            </div>
+
+            <div class="stat-item">
+              <fa-icon [icon]="faChair" class="stat-icon available"></fa-icon>
+              <div class="stat-info">
+                <span class="stat-label">Disponibles</span>
+                <span class="stat-value">{{ trip.availableSeats }}</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Occupation Bar -->
+          <div class="occupation-bar-container">
+            <div class="occupation-bar">
+              <div class="occupation-fill" 
+                   [style.width.%]="getOccupationPercentage(trip)">
+              </div>
+            </div>
+            <span class="occupation-percentage">{{ getOccupationPercentage(trip) | number:'1.0-0' }}%</span>
+          </div>
+
+          <button class="view-trip-btn">Ver viaje</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 2: Mini Finances -->
+    <section class="dashboard-section finances-section">
+      <div class="section-header">
+        <h2>
+          <fa-icon [icon]="faDollarSign" class="section-icon"></fa-icon>
+          Balance del Mes
+        </h2>
+      </div>
+
+      <!-- KPIs -->
+      <div class="kpi-grid">
+        <div class="kpi-card total-sold">
+          <div class="kpi-icon-wrapper">
+            <fa-icon [icon]="faDollarSign" class="kpi-icon"></fa-icon>
+          </div>
+          <div class="kpi-content">
+            <span class="kpi-label">Total Vendido</span>
+            <span class="kpi-value">{{ formatCurrency(monthlyFinances.totalSold) }}</span>
+            <span class="kpi-growth positive">
+              <fa-icon [icon]="faArrowUp"></fa-icon>
+              {{ monthlyFinances.salesGrowth }}%
+            </span>
+          </div>
+        </div>
+
+        <div class="kpi-card total-collected">
+          <div class="kpi-icon-wrapper">
+            <fa-icon [icon]="faDollarSign" class="kpi-icon"></fa-icon>
+          </div>
+          <div class="kpi-content">
+            <span class="kpi-label">Total Recaudado</span>
+            <span class="kpi-value">{{ formatCurrency(monthlyFinances.totalCollected) }}</span>
+            <span class="kpi-growth positive">
+              <fa-icon [icon]="faArrowUp"></fa-icon>
+              {{ monthlyFinances.collectionGrowth }}%
+            </span>
+          </div>
+        </div>
+
+        <div class="kpi-card total-pending">
+          <div class="kpi-icon-wrapper">
+            <fa-icon [icon]="faDollarSign" class="kpi-icon"></fa-icon>
+          </div>
+          <div class="kpi-content">
+            <span class="kpi-label">Total Pendiente</span>
+            <span class="kpi-value">{{ formatCurrency(monthlyFinances.totalPending) }}</span>
+            <span class="kpi-info">Por cobrar</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Chart Placeholder -->
+      <div class="chart-container">
+        <h3 class="chart-title">Ventas y Abonos del Mes</h3>
+        <div class="chart-placeholder">
+          <fa-icon [icon]="faChartLine" class="chart-icon"></fa-icon>
+          <p>Gráfica de ventas por día</p>
+          <small>Próximamente: integración con Chart.js</small>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 3: Recent Contracts -->
+    <section class="dashboard-section contracts-section">
+      <div class="section-header">
+        <h2>
+          <fa-icon [icon]="faFileContract" class="section-icon"></fa-icon>
+          Contratos Recientes
+        </h2>
+      </div>
+
+      <div class="contracts-table-container">
+        <table class="contracts-table">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Cliente</th>
+              <th>Tipo</th>
+              <th>Fecha</th>
+              <th>Monto</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let contract of recentContracts">
+              <td class="contract-id">{{ contract.id }}</td>
+              <td class="contract-client">{{ contract.clientName }}</td>
+              <td>
+                <span class="contract-type-badge" 
+                      [class.trip-type]="contract.type === 'Viaje'"
+                      [class.service-type]="contract.type === 'Servicio Individual'">
+                  {{ contract.type }}
+                </span>
+              </td>
+              <td class="contract-date">{{ formatDate(contract.date) }}</td>
+              <td class="contract-amount">{{ formatCurrency(contract.amount) }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+  </div>
+</div>

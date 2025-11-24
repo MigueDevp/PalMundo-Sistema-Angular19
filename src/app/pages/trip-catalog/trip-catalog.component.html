@@ -1,12 +1,30 @@
 <div class="catalog-container">
   
-  <div class="header-section">
-    <h2>Catálogo de Viajes Disponibles <fa-icon [icon]="faPlane"/></h2> 
-    
-    <div class="filter-section">
-      <div class="search-container">
-        <input type="text" placeholder="Buscar viaje..." [(ngModel)]="searchTerm" (input)="filterViajes()">
-        <select [(ngModel)]="priceFilter" (change)="filterViajes()">
+  <!-- Header Section -->
+  <div class="catalog-header">
+    <h1>
+      <fa-icon [icon]="faPlane" class="header-icon"></fa-icon>
+      Catálogo de Viajes Disponibles
+    </h1>
+    <p class="catalog-subtitle">Explora nuestros destinos y reserva tu próxima aventura</p>
+  </div>
+
+  <!-- Filter Section -->
+  <div class="filter-section">
+    <div class="search-container">
+      <div class="search-input-wrapper">
+        <fa-icon [icon]="faSearch" class="search-icon"></fa-icon>
+        <input 
+          type="text" 
+          placeholder="Buscar por nombre o clave..." 
+          [(ngModel)]="searchTerm" 
+          (input)="filterViajes()"
+          class="search-input">
+      </div>
+      
+      <div class="filter-wrapper">
+        <fa-icon [icon]="faFilter" class="filter-icon"></fa-icon>
+        <select [(ngModel)]="priceFilter" (change)="filterViajes()" class="filter-select">
           <option value="">Todos los precios</option>
           <option value="low">Menos de $5,000</option>
           <option value="medium">$5,000 - $10,000</option>
@@ -16,39 +34,84 @@
     </div>
   </div>
 
-  <div class="travel-cards">
+  <!-- Travel Cards Grid -->
+  <div class="travel-cards-grid">
     @for (viaje of filteredViajes; track viaje.id) {
-    <div class="travel-card" (click)="selectViaje(viaje)">
-      <div class="card-header">
-        <h3>{{ viaje.nombre }}</h3>
-        <span class="travel-code">{{ viaje.clave }}</span>
-      </div>
-      
-      <div class="card-dates">
-        <div class="date-group">
-          <span class="date-label">Salida:</span>
-          <span class="date-value">{{ formatFechaHora(viaje.fechaPartida) }}</span>
+      <div class="travel-card" (click)="selectViaje(viaje)">
+        
+        <!-- Card Header -->
+        <div class="card-header">
+          <div class="header-content">
+            <h3 class="travel-name">{{ viaje.nombre }}</h3>
+            <span class="travel-code">{{ viaje.clave }}</span>
+          </div>
+          <div class="card-icon">
+            <fa-icon [icon]="faMapMarkerAlt"></fa-icon>
+          </div>
         </div>
-        <div class="date-group">
-          <span class="date-label">Regreso:</span>
-          <span class="date-value">{{ formatFechaHora(viaje.fechaRegreso) }}</span>
-        </div>
-      </div>
 
-      <div class="card-payment">
-        <div class="advance-payment">
-          <span>Anticipo requerido:</span>
-          <span class="amount">${{ viaje.anticipo | number }}</span>
-        </div>
-        <div class="payment-deadline">
-          <span>Último día para pagar:</span>
-          <span>{{ formatFecha(viaje.ultimoDiaPago) }}</span>
-        </div>
-      </div>
+        <!-- Card Dates -->
+        <div class="card-dates">
+          <div class="date-item">
+            <div class="date-icon-wrapper departure">
+              <fa-icon [icon]="faCalendarAlt"></fa-icon>
+            </div>
+            <div class="date-info">
+              <span class="date-label">Salida</span>
+              <span class="date-value">{{ formatFechaHora(viaje.fechaPartida) }}</span>
+            </div>
+          </div>
 
-      <button class="select-btn" [routerLink]="['/contract-service']" routerLinkActive="router-link-active" >Seleccionar este viaje</button>
-    </div>
+          <div class="date-item">
+            <div class="date-icon-wrapper return">
+              <fa-icon [icon]="faCalendarAlt"></fa-icon>
+            </div>
+            <div class="date-info">
+              <span class="date-label">Regreso</span>
+              <span class="date-value">{{ formatFechaHora(viaje.fechaRegreso) }}</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Card Payment Info -->
+        <div class="card-payment">
+          <div class="payment-item anticipo">
+            <div class="payment-icon-wrapper">
+              <fa-icon [icon]="faDollarSign"></fa-icon>
+            </div>
+            <div class="payment-info">
+              <span class="payment-label">Anticipo requerido</span>
+              <span class="payment-amount">${{ viaje.anticipo | number }}</span>
+            </div>
+          </div>
+
+          <div class="payment-item deadline">
+            <div class="deadline-icon-wrapper">
+              <fa-icon [icon]="faClock"></fa-icon>
+            </div>
+            <div class="deadline-info">
+              <span class="deadline-label">Último día para pagar</span>
+              <span class="deadline-date">{{ formatFecha(viaje.ultimoDiaPago) }}</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Select Button -->
+        <button class="select-trip-btn" [routerLink]="['/contract-service']" routerLinkActive="router-link-active">
+          Seleccionar este viaje
+        </button>
+      </div>
     }
   </div>
+
+  <!-- No Results Message -->
+  @if (filteredViajes.length === 0) {
+    <div class="no-results">
+      <fa-icon [icon]="faPlane" class="no-results-icon"></fa-icon>
+      <h3>No se encontraron viajes</h3>
+      <p>Intenta ajustar los filtros de búsqueda</p>
+    </div>
+  }
+
 </div>
 <router-outlet></router-outlet>

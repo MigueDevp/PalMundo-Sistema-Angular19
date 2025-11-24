@@ -4,11 +4,23 @@ import { FormsModule } from '@angular/forms';
 import { RouterModule, Router } from '@angular/router';
 import { SearchInputComponent } from '../../../components/search-input/search-input.component';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
-import { faFileSignature } from '@fortawesome/free-solid-svg-icons';
+import { 
+  faFileSignature,
+  faXmark,
+  faPlane,
+  faCalendarAlt,
+  faDollarSign,
+  faClock,
+  faUser,
+  faPhone,
+  faEnvelope,
+  faMapMarkerAlt,
+  faUsers,
+  faChevronDown,
+  faChevronUp,
+  faSearch
+} from '@fortawesome/free-solid-svg-icons';
 import { ButtonAddComponent } from '../../../components/button-add/button-add.component';
-import { faXmark } from '@fortawesome/free-solid-svg-icons';
-
-
 
 interface Viaje {
   id: number;
@@ -49,7 +61,22 @@ interface Acompanante {
 export class ContractServiceComponent {
   constructor(private router: Router) {}
 
+  // Icons
   faXmark = faXmark;
+  faFileSignature = faFileSignature;
+  faPlane = faPlane;
+  faCalendarAlt = faCalendarAlt;
+  faDollarSign = faDollarSign;
+  faClock = faClock;
+  faUser = faUser;
+  faPhone = faPhone;
+  faEnvelope = faEnvelope;
+  faMapMarkerAlt = faMapMarkerAlt;
+  faUsers = faUsers;
+  faChevronDown = faChevronDown;
+  faChevronUp = faChevronUp;
+  faSearch = faSearch;
+
   // Datos del viaje seleccionado (simulados)
   viajeSeleccionado: Viaje = {
     id: 1,
@@ -59,27 +86,14 @@ export class ContractServiceComponent {
     fechaRegreso: '2025-03-22T20:00:00',
     ultimoDiaPago: '2025-02-28',
     anticipo: 4500,
-    // Añadimos más detalles para mostrar
     descripcion: 'Viaje todo incluido a Mazatlán con hospedaje en hotel 5 estrellas, comidas ilimitadas y acceso a todas las instalaciones.',
     itinerario: 'Día 1: Llegada y check-in | Día 2: Tour por la ciudad | Día 3: Isla de la Piedra | Día 4: Día libre | Día 5: Avistamiento de ballenas | Día 6-7: Actividades recreativas',
     incluye: 'Hospedaje, alimentos, bebidas no alcohólicas, transporte local, tours incluidos',
     noIncluye: 'Bebidas alcohólicas, gastos personales, propinas',
     requisitos: 'Pasaporte vigente (para extranjeros), identificación oficial, pago del anticipo'
   };
-  mostrarDetallesExtendidos = false;
-
   
-  calcularDuracionViaje(): number {
-    const inicio = new Date(this.viajeSeleccionado.fechaPartida);
-    const fin = new Date(this.viajeSeleccionado.fechaRegreso);
-    const diff = fin.getTime() - inicio.getTime();
-    return Math.ceil(diff / (1000 * 60 * 60 * 24));
-  }
-
-  toggleDetallesExtendidos(): void {
-    this.mostrarDetallesExtendidos = !this.mostrarDetallesExtendidos;
-  }
-
+  mostrarDetallesExtendidos = false;
   showViajeDetails = false;
   isNewClient = false;
   searchingClient = false;
@@ -117,6 +131,17 @@ export class ContractServiceComponent {
     }
   ];
   
+  calcularDuracionViaje(): number {
+    const inicio = new Date(this.viajeSeleccionado.fechaPartida);
+    const fin = new Date(this.viajeSeleccionado.fechaRegreso);
+    const diff = fin.getTime() - inicio.getTime();
+    return Math.ceil(diff / (1000 * 60 * 60 * 24));
+  }
+
+  toggleDetallesExtendidos(): void {
+    this.mostrarDetallesExtendidos = !this.mostrarDetallesExtendidos;
+  }
+  
   calcularEdad(fechaNacimiento: Date): number {
     const hoy = new Date();
     const nacimiento = new Date(fechaNacimiento);
@@ -136,7 +161,6 @@ export class ContractServiceComponent {
       return;
     }
     
-    // Simulación de búsqueda con delay
     setTimeout(() => {
       this.clientesEncontrados = this.mockClientes.filter(cliente =>
         cliente.nombre.toLowerCase().includes(this.searchTerm.toLowerCase())
@@ -192,6 +216,4 @@ export class ContractServiceComponent {
   continuarASeleccionAsientos(): void {
     this.router.navigate(['/seat-selection']);
   }
-
-  faFileSignature = faFileSignature;
 }

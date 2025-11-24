@@ -4,7 +4,14 @@ import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
-import { faPlane
+import { 
+  faPlane,
+  faCalendarAlt,
+  faDollarSign,
+  faSearch,
+  faFilter,
+  faClock,
+  faMapMarkerAlt
 } from '@fortawesome/free-solid-svg-icons';
 
 @Component({
@@ -18,10 +25,17 @@ export class TripCatalogComponent {
   searchTerm: string = '';
   priceFilter: string = '';
   
+  // Icons
+  faPlane = faPlane;
+  faCalendarAlt = faCalendarAlt;
+  faDollarSign = faDollarSign;
+  faSearch = faSearch;
+  faFilter = faFilter;
+  faClock = faClock;
+  faMapMarkerAlt = faMapMarkerAlt;
+  
   // Usamos los mismos datos que en tu lista de viajes
   viajes = [
-    
-    
   {
     id: 1,
     clave: 'QRO-MAZ-0325',
@@ -157,18 +171,25 @@ export class TripCatalogComponent {
   }
 
   formatFechaHora(fecha: string): string {
-    return new Date(fecha).toLocaleString();
+    return new Date(fecha).toLocaleString('es-MX', {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit'
+    });
   }
 
   formatFecha(fecha: string): string {
-    return new Date(fecha).toLocaleDateString();
+    return new Date(fecha).toLocaleDateString('es-MX', {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric'
+    });
   }
 
   selectViaje(viaje: any) {
-  // Navegación relativa al path actual (trip-catalog)
-  this.router.navigate(['contract', viaje.id], { relativeTo: this.route });
-}
-
-  faPlane = faPlane;
-
+    // Navegación relativa al path actual (trip-catalog)
+    this.router.navigate(['contract', viaje.id], { relativeTo: this.route });
+  }
 }
